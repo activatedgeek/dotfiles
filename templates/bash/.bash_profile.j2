@@ -1,0 +1,112 @@
+if [ -f "${HOME}/.bashrc" ]; then
+  source "${HOME}/.bashrc"
+fi
+
+__src_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+## Directories.
+export STORE_HOME=${STORE_HOME:-"{{ store_home if store_home is not none else '${HOME}' }}"}
+export PROJECT_HOME=${PROJECT_HOME:-${STORE_HOME}/projects}
+
+export CACHE_HOME=${STORE_HOME}/.cache
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-${CACHE_HOME}}
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"${HOME}/.config"}
+
+export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
+
+export HF_HOME=${HF_HOME:-"${STORE_HOME}/huggingface"}
+
+export WANDB_DIR=${CACHE_HOME}/wandb
+mkdir -p "${WANDB_DIR}"
+
+export PATH="${PATH}":"$(dirname ${__src_dir})/bin"
+
+if [[ -f "${STORE_HOME}/uv/.venv/bin/python" ]]; then
+    EXTRA_VIRTUAL_ENV=${VIRTUAL_ENV:-"${STORE_HOME}/uv/.venv"}
+    export PATH="${PATH}":"${EXTRA_VIRTUAL_ENV}/bin"
+fi
+
+## Config Vars.
+
+export INVENTORY_HOSTNAME={{ inventory_hostname | d('unknown') }}
+
+export GIT_CONFIG_PARAMETERS="'user.name={{ git_name }}' 'user.email={{ git_email }}'"
+
+export DISABLE_OPENCOLLECTIVE=1
+export ADBLOCK=1
+export NPM_CONFIG_AUDIT=false
+
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-4}
+export XLA_PYTHON_CLIENT_PREALLOCATE=false
+export TF_CPP_MIN_LOG_LEVEL=${TF_CPP_MIN_LOG_LEVEL:-3}
+export VLLM_WORKER_MULTIPROC_METHOD=${VLLM_WORKER_MULTIPROC_METHOD:-spawn}
+
+export WANDB_DISABLE_CODE=true
+
+## Secret Vars.
+
+{% if goatcounter_site is not none %}
+export GOATCOUNTER_SITE={{ goatcounter_site }}
+{% endif %}
+
+{% if mapbox_access_token is not none %}
+export PUBLIC_MAPBOX_ACCESS_TOKEN={{ mapbox_access_token }}
+{% endif %}
+
+{% if wandb_api_key is not none %}
+export WANDB_API_KEY=${WANDB_API_KEY:-"{{ wandb_api_key }}"}
+export WANDB_USERNAME=${WANDB_USERNAME:-"{{ wandb_username | d() }}"}
+export WANDB_ENTITY=${WANDB_ENTITY:-"{{ wandb_entity | d() }}"}
+{% endif %}
+
+{% if hf_token is not none %}
+export HF_TOKEN=${HF_TOKEN:-"{{ hf_token }}"}
+{% endif %}
+
+{% if openai_api_key is not none %}
+export OPENAI_API_KEY=${OPENAI_API_KEY:-"{{ openai_api_key }}"}
+{% endif %}
+
+{% if google_gemini_api_key is not none %}
+export GOOGLE_API_KEY=${GOOGLE_API_KEY:-"{{ google_gemini_api_key }}"}  ## Gemini.
+{% endif %}
+
+{% if discord_webhook_token is not none %}
+export DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN:-"{{ discord_webhook_token }}"}
+{% endif %}
+
+for env_file in ${__src_dir}/.env*; do
+    [ -f "${env_file}" ] || continue
+    
+    source "${env_file}"
+done
+
+## Dynamic Profiles.
+
+### brew.
+if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    if [[ -f $(brew --prefix)/etc/bash_completion ]]; then
+        . $(brew --prefix)/etc/bash_completion
+    fi
+fi
+
+### starship.
+if [[ -x "$(command -v starship)" ]]; then
+    eval "$(starship init bash)"
+fi
+
+for profile_file in ${__src_dir}/.*_profile; do
+    [[ (-f "${profile_file}") && ("${profile_file}" != "${BASH_SOURCE[0]}") ]] || continue
+    
+    source "${profile_file}"
+done
+
+for aliases_file in ${__src_dir}/.*_aliases; do
+    [ -f "${aliases_file}" ] || continue
+    
+    source "${aliases_file}"
+done
+
+unset __src_dir

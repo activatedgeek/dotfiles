@@ -1,0 +1,37 @@
+#!/usr/bin/env -S bash -l
+
+if [[ -n "${PUEUE_JOB_ID}" ]]; then
+  PUEUE_STATUS=STARTED pnotify ${PUEUE_JOB_ID}
+
+  function __exit {
+    trap - EXIT
+    pnotify ${PUEUE_JOB_ID}
+    exit ${PUEUE_EXIT_CODE}
+  }
+
+  trap 'PUEUE_EXIT_CODE=${PUEUE_EXIT_CODE:-$?} PUEUE_STATUS=$([[ $PUEUE_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") __exit' EXIT
+  trap 'PUEUE_EXIT_CODE=143 PUEUE_STATUS=CANCELLED __exit' TERM
+
+  export JOB_ID="${PUEUE_JOB_ID}"
+fi
+
+if [[ -e /dev/nvidia0 && $GPUS -gt 0 ]]; then
+  if [[ -n "${CUDA_VISIBLE_DEVICES}" ]]; then
+    IFS=',' read -r -a __gpu_ids <<< "${CUDA_VISIBLE_DEVICES}"
+  else
+    IFS=',' read -r -a __gpu_ids <<< "$(seq -s, 0 1 $(( $(uv run python -c "import torch; print(torch.cuda.device_count())") - 1)))"
+  fi
+  
+  __gpu_ids=("${__gpu_ids[@]:$(( GPUS * PUEUE_WORKER_ID )):$GPUS}")
+
+  if [[ ${#__gpu_ids[@]} -ne $GPUS ]]; then
+    exit 19 ## ENODEV
+  fi
+
+  __gpu_ids=$(printf ",%s" "${__gpu_ids[@]}")
+  export CUDA_VISIBLE_DEVICES=${__gpu_ids:1}
+else
+  export CUDA_VISIBLE_DEVICES=-1
+fi
+
+"${@}"

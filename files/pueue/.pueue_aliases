@@ -1,0 +1,105 @@
+alias puc='pueue clean'
+alias puf='pueue follow'
+alias pug='pueue group'
+alias pup='pueue parallel -g ${PUEUE_GROUP:-$(basename "$(pwd)")}'
+alias puga='pueue group add'
+alias pugpz='pueue pause -g ${PUEUE_GROUP:-$(basename "$(pwd)")}'
+alias pugrm='pueue group remove'
+alias pugst='pueue start -g ${PUEUE_GROUP:-$(basename "$(pwd)")}'
+alias pul='pueue log -f'
+alias puq='pueue status columns=id,status,start,end,label'
+alias puk='pueue kill -s KILL'
+
+function __pbatch {
+  sleep 1  ## Avoid date race condition.
+  __job_id=$(date +"%g%m%d%H%M%S")
+  __job_name=${JOB_NAME:-$(basename "$(pwd)")}
+
+  PUEUE_JOB_ID=${__job_id} \
+  PUEUE_JOB_NAME=${__job_name} \
+  pueue add \
+    --group=${PUEUE_GROUP:-$(basename "$(pwd)")} \
+    --label="${__job_id}:${__job_name}" \
+    "${@}"
+}
+function puv { __pbatch prun uv run "${@}"; }
+
+function pjob {
+  pueue status -j \
+    | jq -r '.tasks | to_entries | .[] | select(.value.label | contains("'${1}'")) | .value | { "id": .id, "name": .label, "workdir": .path, "cmd": .original_command, "start": .start, "submit": .enqueued_at, "end": .end }'
+}
+
+function pnotify {
+  if [[ -z "${1}" ]]; then
+    echo "[ERROR]: Missing argument PUEUE_JOB_ID."
+    return
+  fi
+  __job_info=$(pjob ${1})
+
+  __status=${PUEUE_STATUS:-UNKNOWN}  ## FIXME: unknown status.
+  case ${__status} in
+
+    PENDING)
+      __status_emoji="vertical_traffic_light"
+      ;;
+
+    STARTED)
+      __status_emoji="green_circle"
+      ;;
+
+    RUNNING)
+      __status_emoji="bulb"
+      ;;
+
+    TIMEOUT)
+      __status_emoji="hourglass"
+      ;;
+
+    CANCELLED)
+      __status_emoji="warning"
+      ;;
+
+    COMPLETED)
+      __status_emoji="white_check_mark"
+      ;;
+
+    FAILED)
+      __status_emoji="x"
+      ;;
+
+    *)
+      __status=UNKNOWN
+      __status_emoji="alien"
+      ;;
+  esac
+
+  __name=$(echo "${__job_info}" | jq -r '.name' | cut -d: -f2)
+  __extra_id=$(echo "${__job_info}" | jq -r '.name' | cut -d: -f1)
+  __id=$(echo "${__job_info}" | jq -r '.id')
+  __start=$(date -d"$(echo "${__job_info}" | jq -r '.start')" +"%b %d %Y %r")
+  __waittime=$(echo $(( $(date -d"$(echo "${__job_info}" | jq -r '.start')" +"%s") - $(date -d"$(echo "${__job_info}" | jq -r '.submit')" +"%s") )) | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
+  __cmd=$(echo "${__job_info}" | jq -r '.cmd')
+  __workdir=$(echo "${__job_info}" | jq -r '.workdir')
+  __end="$(echo "${__job_info}" | jq -r '.end')"
+  [[ "${__end}" = "null" ]] && __end=$(date +"%s") || __end=$(date -d"${__end}" +"%s")
+  __runtime=$(echo $(( ${__end} - $(date -d"$(echo "${__job_info}" | jq -r '.start')" +"%s") )) | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
+  __exit_code=${PUEUE_EXIT_CODE:-22}  ## FIXME: EINVAL by default.
+
+  __wandb_run_url=$(pueue log -f ${__id} | grep -m 1 "View run at")
+  IFS=$' ' read -rd '' -a __wandb_run_url <<<"${__wandb_run_url}"
+  __wandb_run_url=$(echo ${__wandb_run_url[-1]} | xargs)
+  if [[ ! -z "${__wandb_run_url}" ]]; then
+    __wandb_run_url=" |  :chart_with_upwards_trend: <${__wandb_run_url}|W&B Run>"
+  fi
+
+cat << _EOF | apprise discord://PUEUE'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
+## :${__status_emoji}:  ${__name}
+-#  :id: ${__id} (${__extra_id})  |  :rocket:  ${__start}  |  :hourglass_flowing_sand: ${__waittime}
+
+> \`\`\`
+> ${__cmd}
+> \`\`\`
+
+-# :desktop_computer:  ${INVENTORY_HOSTNAME}:${__workdir}  |  :clock4:  ${__runtime}  |  :${__status_emoji}: _${__status}_ (Exit Code: ${__exit_code}) ${__wandb_run_url}
+_EOF
+}

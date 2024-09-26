@@ -1,0 +1,27 @@
+[eos]
+type = sftp
+ssh = ssh eos
+shell_type = unix
+
+[dr]
+type = sftp
+ssh = ssh dc-dr
+shell_type = unix
+
+[cs]
+type = sftp
+ssh = ssh dc-cs
+shell_type = unix
+
+[cs-icl]
+type = alias
+remote = cs:{{ cs_store_home }}/projects/icl-order-robustness
+
+[dr-icl]
+type = alias
+remote = dr:{{ dr_store_home }}/projects/icl-order-robustness
+
+[eos-icl]
+type = alias
+remote = eos:{{ eos_store_home }}/projects/icl-order-robustness
+

@@ -1,0 +1,147 @@
+## Singularity.
+alias scc='singularity cache clean'
+alias spull='singularity pull'
+
+## Slurm.
+export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}
+export SINGULARITY_CACHEDIR=${XDG_CACHE_HOME}
+
+export SLURM_LOGDIR="${STORE_HOME}/.slurm/logs"
+export SBATCH_ERROR="${SLURM_LOGDIR}/%j.err"
+export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.out"
+
+# export SBATCH_EXCLUDE_LIST=cs001
+# export SBATCH_EXCLUDE_LIST=rose[1-4],vine[3,6,11-12],hpc[1-8]
+
+alias si='sinfo -lNe'
+function __sbatch {
+  if [[ ! -z "${GPUS}" ]]; then
+    __gres="gpu:${GPUS}"
+
+    IFS=":" read -a __gres_split <<< "${__gres}"
+    __gpus=${__gres_split[-1]}
+
+    __cpus="$((${CPUS:-4} * ${__gpus}))"
+    __gres="--gres=${__gres}"
+  else
+    __cpus="${CPUS:-4}"
+  fi
+
+  if [[ ! -z "${SBATCH_DEPENDENCY}" ]]; then
+    __dependency="--dependency=${SBATCH_DEPENDENCY}"
+  fi
+
+  sbatch --signal=B:USR1@30 \
+    --job-name="${JOB_NAME:-$(basename $(pwd))}" \
+    --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} ${__dependency} \
+    "${@}"
+}
+function __srun {
+  if [[ ! -z "${GPUS}" ]]; then
+    __gres="gpu:${GPUS}"
+
+    IFS=":" read -a __gres_split <<< "${__gres}"
+    __gpus=${__gres_split[-1]}
+
+    __cpus="$((${CPUS:-4} * ${__gpus}))"
+    __gres="--gres=${__gres}"
+  else
+    __cpus="${CPUS:-4}"
+  fi
+  unset GPUS
+
+  srun --pty \
+    --job-name="${JOB_NAME:-$(basename $(pwd))-pty}" \
+    --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} \
+    "${@}"
+}
+function sdocker { __sbatch srun-docker "${@}"; }
+function sdocker-it { JOB_NAME=${JOB_NAME:-terminal} __srun srun-docker bash -l; }
+
+function sle { less "${SLURM_LOGDIR}/${1}.err"; }
+function slo { less "${SLURM_LOGDIR}/${1}.out"; }
+function ste { tail -n100 -f "${SLURM_LOGDIR}/${1}.err"; }
+function sto { tail -n100 -f "${SLURM_LOGDIR}/${1}.out"; }
+
+alias scancel='scancel -u "${USER}"'
+alias skill='scancel -s SIGKILL'
+# | %.12F %.10K
+alias sq='squeue -u "${USER}" -o "%.10A | %.8T | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
+function sjob {
+  sacct --json -P -o state -j ${1} | \
+  jq -r '.jobs[0] | {id: .job_id, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code.number, status: .state.current[0]}'
+}
+
+function snotify {
+  __job_info=$(sjob ${1})
+  if [[ $? -ne 0 ]]; then
+    echo "[ERROR]: Missing job id."
+    return
+  fi
+
+  __status=${SLURM_STATUS:-$(echo "${__job_info}" | jq -r '.status')}
+  case ${__status} in
+
+    PENDING)
+      __status_emoji="vertical_traffic_light"
+      ;;
+
+    STARTED)
+      __status_emoji="green_circle"
+      ;;
+
+    RUNNING)
+      __status_emoji="bulb"
+      ;;
+
+    TIMEOUT)
+      __status_emoji="hourglass"
+      ;;
+
+    CANCELLED)
+      __status_emoji="warning"
+      ;;
+
+    COMPLETED)
+      __status_emoji="white_check_mark"
+      ;;
+
+    FAILED)
+      __status_emoji="x"
+      ;;
+
+    *)
+      __status=UNKNOWN
+      __status_emoji="alien"
+      ;;
+  esac
+
+  __name=$(echo "${__job_info}" | jq -r '.name')
+  __id=$(echo "${__job_info}" | jq -r '.id')
+  __start=$(date -d @"$(echo "${__job_info}" | jq -r '.start')" +"%b %d %Y %r")
+  __waittime=$(echo "${__job_info}" | jq -r '.waittime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
+  __cmd=$(echo "${__job_info}" | jq -r '.cmd')
+  __workdir=$(echo "${__job_info}" | jq -r '.workdir')
+  __runtime=$(echo "${__job_info}" | jq -r '.runtime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
+  __exit_code=${SLURM_EXIT_CODE:-$(echo "${__job_info}" | jq -r '.exit_code')}
+
+  if [[ -f "${SLURM_LOGDIR}/${1}.out" ]]; then
+    __wandb_run_url=$(cat ${SLURM_LOGDIR}/${1}.out | grep -m 1 "View run at")
+    IFS=$' ' read -rd '' -a __wandb_run_url <<<"${__wandb_run_url}"
+    __wandb_run_url=$(echo ${__wandb_run_url[-1]} | xargs)
+    if [[ ! -z "${__wandb_run_url}" ]]; then
+      __wandb_run_url=" |  :chart_with_upwards_trend: <${__wandb_run_url}|W&B Run>"
+    fi
+  fi
+
+cat << _EOF | apprise discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
+## :${__status_emoji}:  ${__name}
+-#  :id: ${__id}  |  :rocket:  ${__start}  |  :hourglass_flowing_sand: ${__waittime}
+
+> \`\`\`
+> ${__cmd}
+> \`\`\`
+
+-# :desktop_computer:  ${INVENTORY_HOSTNAME}:${__workdir}  |  :clock4:  ${__runtime}  |  :${__status_emoji}: _${__status}_ (Exit Code: ${__exit_code}) ${__wandb_run_url}
+_EOF
+}

@@ -1,0 +1,71 @@
+#!/usr/bin/env -S bash -l
+
+if [[ -n "${SLURM_JOB_ID}" ]]; then
+  sleep 5  ## Wait for scontrol.
+  if [[ $SLURM_PROCID -eq 0 ]]; then
+    SLURM_STATUS=STARTED snotify ${SLURM_JOB_ID}
+  fi
+
+  function __exit {
+    trap - EXIT
+    if [[ $SLURM_PROCID -eq 0 ]]; then
+      snotify ${SLURM_JOB_ID}
+    fi
+    exit ${SLURM_EXIT_CODE}
+  }
+
+  trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") __exit' EXIT
+  trap 'SLURM_EXIT_CODE=142 SLURM_STATUS=TIMEOUT __exit' USR1
+  trap 'SLURM_EXIT_CODE=143 SLURM_STATUS=CANCELLED __exit' TERM
+
+  IFS="=" read -r -a __sctrl <<< "$(scontrol show job "${SLURM_JOB_ID}" | grep -o 'BatchFlag=\w')"
+  __is_sbatch=${__sctrl[-1]}
+
+  export JOB_ID="${SLURM_JOB_ID}"
+fi
+
+## https://stackoverflow.com/questions/1668649/how-to-keep-quotes-in-bash-arguments
+__args=''
+for i in "${@}"; do
+  i="${i//\\/\\\\}"
+  __args="${__args} \"${i//\"/\\\"}\""
+done
+
+__repo_user=$(git remote get-url origin | cut -d/ -f4)
+__repo_name=$(git remote get-url origin | cut -d/ -f5 | cut -d. -f1)
+__docker_name=${DOCKER_IMAGE:-gitlab-master.nvidia.com/${__repo_user}/${__repo_name}}
+__docker_tag=${DOCKER_TAG:-latest}
+__container_image="${PROJECT_HOME}/$(basename "$(pwd)")/squashfs/${__repo_user}+${__repo_name}+${__docker_tag}.sqsh"
+if [[ ! -f "${__container_image}" ]]; then
+  __container_image=${__docker_name}:${__docker_tag}
+fi
+
+export PYTHONPATH=$(pwd):${PYTHONPATH}
+export NNODES=${SLURM_NNODES}
+export NPROC_PER_NODE=${SLURM_GPUS_ON_NODE}
+export MPROC_GROUPID=${SLURM_JOB_ID}
+export MPROC_HOST=$(hostname)
+export MPROC_PORT=$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
+
+for i in $(seq 0 $(( SLURM_NNODES - 1 ))); do
+  export MRANK=${i}
+
+  srun -N 1 -n 1 \
+      --no-container-remap-root --container-mount-home \
+      --container-image=${__container_image} \
+      --container-mounts=${STORE_HOME}:/store:rw,$(pwd):"/code/$(basename "$(pwd)")" \
+      --container-workdir="/code/$(basename "$(pwd)")" \
+        bash -l -c "${__args}" &
+
+  __pids[i]=$!
+
+done
+
+SLURM_EXIT_CODE=$?
+for p in "${__pids[@]}"; do
+  wait ${p}
+  __exit_code=$?
+  if [[ $__exit_code -ne 0 ]]; then
+    SLURM_EXIT_CODE=$__exit_code
+  fi
+done

@@ -1,0 +1,11 @@
+## Files
+*~
+*.DS_Store
+*.out
+*.err
+*.env
+
+## Folders
+/.vscode
+/.idea
+/wandb

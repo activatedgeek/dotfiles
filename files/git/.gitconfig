@@ -1,0 +1,43 @@
+[alias]
+	a = add -A
+	c = clone
+	d = difftool
+	f = fetch --all -p
+	l = -c diff.external=difft log --ext-diff
+	m = commit -m
+	p = pull
+	r = remote -v
+	s = status
+	sub = submodule update --init --recursive
+[branch]
+	sort = -committerdate
+[core]
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+[diff]
+	tool = difftastic
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+[fetch]
+	prune = true
+	prunetags = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+	process = git-lfs filter-process
+[init]
+	defaultBranch = main
+[pager]
+	difftool = true
+[pull]
+	rebase = true
+[push]
+	default = current
+	autoSetupRemote = true
+[rebase]
+	autostash = true
+[url "git@github.com:"]
+	insteadOf = "https://github.com/"

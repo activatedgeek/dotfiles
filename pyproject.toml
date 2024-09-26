@@ -1,0 +1,48 @@
+[build-system]
+requires = [
+    "setuptools",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = [
+    "version",
+]
+
+name = "myinfra"
+license = { text = "Apache License 2.0" }
+
+requires-python = ">=3.11"
+dependencies = [
+    "bitwarden-sdk",
+    "cloudflare",
+    "python-dotenv",
+    "pyinfra",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.dynamic]
+version = { attr = "myinfra.__init__.__version__" }
+
+[tool.setuptools.packages.find]
+exclude = [
+    "*files.*",
+    "*files",
+    "*inventories.*",
+    "*inventories",
+    "*tasks.*",
+    "*tasks",
+    "*templates.*",
+    "*templates",
+]
+
+[tool.uv]
+python-preference = "only-managed"
