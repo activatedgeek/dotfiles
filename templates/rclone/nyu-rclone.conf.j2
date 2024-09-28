@@ -5,10 +5,6 @@ client_secret = {{ rclone_nyu_drive_client_secret }}
 scope = drive
 token = {"access_token":"{{ rclone_nyu_drive_access_token }}","token_type":"Bearer","refresh_token":"{{ rclone_nyu_drive_refresh_token }}","expiry":"{{ rclone_nyu_drive_expiry }}"}
 
-[ct]
+[llmo]
 type = alias
-remote = nyu:Research/calibration-tuning
-
-[pac]
-type = alias
-remote = nyu:Research/pac-bayes-llm
+remote = nyu:Research/llm-orchestration

@@ -96,6 +96,10 @@ def apply_srv_records(zone_id):
 def apply_txt_records(zone_id):
     txt_records = [
         dict(record="@", value="v=spf1 include:spf.messagingengine.com ?all"),
+        dict(
+            record="_dmarc",
+            value="v=DMARC1; p=none; rua=mailto:b08cb9aa760740028e2d0078380bc16e@dmarc-reports.cloudflare.net",
+        ),
     ]
     for r in txt_records:
         cloudflare.dns(
