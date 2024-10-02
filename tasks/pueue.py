@@ -48,12 +48,6 @@ def apply_config(teardown=False):
         present=not teardown,
     )
 
-    files.file(
-        name="Remove prunexec [DELETE]",
-        path=f"{host.get_fact(server_facts.Home)}/.local/bin/prunexec",
-        present=False,
-    )
-
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}prun",
         src="files/pueue/prun",

@@ -75,6 +75,10 @@ export GOOGLE_API_KEY=${GOOGLE_API_KEY:-"{{ google_gemini_api_key }}"}  ## Gemin
 export DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN:-"{{ discord_webhook_token }}"}
 {% endif %}
 
+{% if docker_username is not none %}
+export DOCKER_USERNAME=${DOCKER_USERNAME:-"{{ docker_username }}"}
+{% endif %}
+
 for env_file in ${__src_dir}/.env*; do
     [ -f "${env_file}" ] || continue
     

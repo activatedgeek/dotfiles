@@ -13,7 +13,6 @@ _EXTENSIONS = [
     "ms-azuretools.vscode-docker",
     "ms-python.python",
     "ms-toolsai.jupyter",
-    "ms-vscode-remote.remote-containers",
     "ms-vscode-remote.remote-ssh",
     "teabyii.ayu",
 ]

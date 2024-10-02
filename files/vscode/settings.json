@@ -5,7 +5,7 @@
     "jupyter.askForKernelRestart": false,
     "python.terminal.activateEnvInCurrentTerminal": false,
     "python.terminal.activateEnvironment": false,
-    "remote.SSH.enableRemoteCommand": true,
+    "remote.SSH.enableRemoteCommand": false,
     "remote.SSH.serverInstallPath": {
     },
     "terminal.explorerKind": "integrated",

@@ -16,6 +16,8 @@ alias oldrm='find . -mtime +2 -exec rm {} \;'
 
 alias repip='pip install --no-cache-dir -UI'
 
+alias xargs='xargs '
+
 ## docker.
 alias cst='colima start'
 alias cstop='colima stop'
@@ -49,8 +51,8 @@ function rcpush() {
 ## ruff.
 alias ruffmt='uv run ruff format'
 alias ruffck='uv run ruff check'
-alias gruffmt='git ls-files --other --modified --exclude-standard -- "*.py" | xargs uv run ruff format'
-alias gruffck='git ls-files --other --modified --exclude-standard -- "*.py" | xargs uv run ruff check'
+alias gruffmt='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffmt'
+alias gruffck='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffck'
 
 ## setfacl.
 alias setfaclnogo='setfacl -m g::-,o::-'

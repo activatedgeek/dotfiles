@@ -1,5 +1,9 @@
 #!/usr/bin/env -S bash -l
 
+if [[ -f .srunrc ]]; then
+  source .srunrc
+fi
+
 if [[ -n "${SLURM_JOB_ID}" ]]; then
   sleep 5  ## Wait for scontrol.
   if [[ $SLURM_PROCID -eq 0 ]]; then
@@ -31,13 +35,15 @@ for i in "${@}"; do
   __args="${__args} \"${i//\"/\\\"}\""
 done
 
+export PYTHONPATH="$(pwd):${PYTHONPATH}"
+
 if [[ -e /dev/nvidia0 ]]; then __nv_args="--nv"; fi
 
 if [[ -f "${IMAGENET_DIR}/imagenet-train.sqf" ]]; then
   __overlay_args="${__overlay_args} --overlay ${IMAGENET_DIR}/imagenet-train.sqf:ro --overlay ${IMAGENET_DIR}/imagenet-val.sqf:ro"
 fi
 
-__docker_image=docker://${DOCKER_IMAGE:-${SINGULARITY_DOCKER_IMAGE}}  ## FIXME: default.
+__docker_image=docker://${DOCKER_IMAGE:-"${DOCKER_USERNAME}/$(basename "$(pwd)"):cu124-py311-torch"}
 
 if [[ $__is_sbatch -eq 0 ]]; then
 
@@ -48,7 +54,6 @@ if [[ $__is_sbatch -eq 0 ]]; then
   exit
 fi
 
-export PYTHONPATH=$(pwd):${PYTHONPATH}
 export NNODES=${SLURM_NNODES}
 export NPROC_PER_NODE=${SLURM_GPUS_ON_NODE}
 export MPROC_GROUPID=${SLURM_JOB_ID}

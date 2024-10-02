@@ -1,6 +1,6 @@
 ## Singularity.
 alias scc='singularity cache clean'
-alias spull='singularity pull'
+function spull { singularity pull docker://${1:-"${DOCKER_USERNAME}/$(basename "$(pwd)"):cu124-py311-torch"}; }
 
 ## Slurm.
 export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}

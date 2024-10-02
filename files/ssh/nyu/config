@@ -39,8 +39,6 @@ Host gw
   LocalForward 6876 greene.hpc.nyu.edu:22
   LocalForward 6877 gdtn.hpc.nyu.edu:22
 
-Host calibration-tuning.code
-
 Host gdtn *.code *.aim
   Port 6877
 
@@ -60,7 +58,7 @@ Match originalhost *.code
   RequestTTY yes
   TCPKeepAlive yes
   ServerAliveInterval 10
-  RemoteCommand source ~/.bash_profile; cd ~/$(echo %n | cut -d. -f1); sdocker-it
+  RemoteCommand source ~/.bash_profile; cd ~/$(echo %n | cut -d. -f1); srun-docker bash -l
 
 Match originalhost *.aim
   RequestTTY yes
