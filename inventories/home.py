@@ -6,8 +6,9 @@ mac = (
         (
             "@local",
             dict(
-                backup_dir="~/MEGA/Backups",
+                backup_dir="~/Cloud\ Drive/Credentials",
                 vault_pass=config.INVENTORY_VARS["VAULT_PASS"],
+                nyu_pass=config.INVENTORY_VARS["NYU_PASS"],
                 cloudflare_email=config.INVENTORY_VARS["EMAIL"],
                 cloudflare_api_key=config.INVENTORY_VARS["CLOUDFLARE_API_KEY"],
                 goatcounter_site=config.INVENTORY_VARS["GOATCOUNTER_SITE"],

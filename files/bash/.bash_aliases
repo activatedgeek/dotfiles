@@ -1,7 +1,4 @@
-function bloop {
-  for __i in $(seq 1 "${COUNT:-1}"); do "${@}"; done
-}
-
+## Misc.
 alias buba='brew upgrade && brew autoremove && brew cleanup -s'
 
 alias dnsflush='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
@@ -17,6 +14,10 @@ alias oldrm='find . -mtime +2 -exec rm {} \;'
 alias repip='pip install --no-cache-dir -UI'
 
 alias xargs='xargs '
+
+alias rsync='rsync -avzhEP --stats'
+
+alias nyu-gw='sshpass -f ~/.config/nyu/pass ssh gw'
 
 ## docker.
 alias cst='colima start'

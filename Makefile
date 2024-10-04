@@ -1,6 +1,7 @@
 LIMIT ?= '*'
 
 install:
+	@rm -f uv.lock
 	@uv sync --refresh --extra dev
 	@uv pip install -e .[dev]
 

@@ -28,7 +28,7 @@ def apply_macos(teardown=False):
 
     for ext in _EXTENSIONS:
         vscode.extension(
-            name=f"{'Remove ' if teardown else ''} {ext}",
+            name=f"{'Remove ' if teardown else ''}Extension {ext}",
             extension=ext,
             present=not teardown,
         )

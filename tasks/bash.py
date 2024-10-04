@@ -47,6 +47,7 @@ def apply_config(teardown=False):
         store_home=host.data.get("store_home", None),
         goatcounter_site=host.data.get("goatcounter_site", None),
         mapbox_access_token=host.data.get("mapbox_access_token", None),
+        cloudflare_api_key=host.data.get("cloudflare_api_key", None),
         discord_webhook_token=host.data.get("discord_webhook_token", None),
         wandb_api_key=host.data.get("wandb_api_key", None),
         wandb_username=host.data.get("wandb_username", None),

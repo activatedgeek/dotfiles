@@ -53,6 +53,10 @@ export GOATCOUNTER_SITE={{ goatcounter_site }}
 export PUBLIC_MAPBOX_ACCESS_TOKEN={{ mapbox_access_token }}
 {% endif %}
 
+{% if cloudflare_api_key is not none %}
+export CLOUDFLARE_API_KEY={{ cloudflare_api_key }}
+{% endif %}
+
 {% if wandb_api_key is not none %}
 export WANDB_API_KEY=${WANDB_API_KEY:-"{{ wandb_api_key }}"}
 export WANDB_USERNAME=${WANDB_USERNAME:-"{{ wandb_username | d() }}"}

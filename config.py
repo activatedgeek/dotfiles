@@ -33,7 +33,7 @@ def setup_inventory_vars(env_file=".env", cache_file=".env.inventory"):
         all_secrets = []
         for secret in client.secrets().list(bws_org_id).data.data:
             secret = client.secrets().get(secret.id).data
-            all_secrets.append(f"{secret.key}={secret.value}\n")
+            all_secrets.append(f"{secret.key}='{secret.value}'\n")
 
         with open(cache_file, "w") as f:
             f.writelines(all_secrets)

@@ -40,6 +40,7 @@ Host gw
   LocalForward 6877 gdtn.hpc.nyu.edu:22
 
 Host gdtn *.code *.aim
+  RequestTTY yes
   Port 6877
 
 Host greene gdtn *.code *.aim
@@ -52,18 +53,14 @@ Host greene gdtn *.code *.aim
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   LogLevel ERROR
+  TCPKeepAlive yes
+  ServerAliveInterval 60
 
 ### Verify VSCode config from https://stackoverflow.com/a/66950533/2425365.
 Match originalhost *.code
-  RequestTTY yes
-  TCPKeepAlive yes
-  ServerAliveInterval 10
   RemoteCommand source ~/.bash_profile; cd ~/$(echo %n | cut -d. -f1); srun-docker bash -l
 
 Match originalhost *.aim
-  RequestTTY yes
-  TCPKeepAlive yes
-  ServerAliveInterval 10
   LocalForward 43800 localhost:43800
   RemoteCommand source ~/.bash_profile; cd ${PROJECT_HOME}/$(echo %n | cut -d. -f1); DOCKER_IMAGE=aimstack/aim:latest srun-docker aim up -p 43800
 
