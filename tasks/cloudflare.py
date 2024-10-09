@@ -3,7 +3,7 @@ from pyinfra.api import deploy
 from pyinfra.operations import server
 
 from myinfra.operations import cloudflare
-from myinfra.facts import cloudflare as cf_facts
+from myinfra.facts import cloudflare as cf_facts, brew as brew_facts
 
 
 @deploy("A Records")
@@ -116,7 +116,7 @@ def apply_backup(zone_id, teardown=False):
     ## Backup everyday at 6pm.
     server.crontab(
         name="Zone File",
-        command=f'. ~/.bash_profile; curl --request GET --url https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/export --header "Content-Type: application/json" --header "X-Auth-Email: $(git config --get user.email)" --header "X-Auth-Key: ${{CLOUDFLARE_API_KEY}}" -o {host.data.backup_dir}/sanyamkapoor.com.zone >>/tmp/zone-export.cf.log 2>&1',
+        command=f'export SHELL={host.get_fact(brew_facts.BrewPrefix)}/bin/bash; source ~/.local/profile/.bash_env; curl --request GET --url https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/export --header "Content-Type: application/json" --header "X-Auth-Email: {host.data.cloudflare_email}" --header "X-Auth-Key: ${{CLOUDFLARE_API_KEY}}" -o {host.data.backup_dir}/sanyamkapoor.com.zone >>/tmp/zone-export.cf.log 2>&1',
         minute="0",
         hour="*/18",
         month="*",

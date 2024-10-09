@@ -1,9 +1,3 @@
-if [ -f "${HOME}/.bashrc" ]; then
-  source "${HOME}/.bashrc"
-fi
-
-__src_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 ## Directories.
 export STORE_HOME=${STORE_HOME:-"{{ store_home if store_home is not none else '${HOME}' }}"}
 export PROJECT_HOME=${PROJECT_HOME:-${STORE_HOME}/projects}
@@ -17,7 +11,9 @@ export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 export HF_HOME=${HF_HOME:-"${STORE_HOME}/huggingface"}
 
 export WANDB_DIR=${CACHE_HOME}/wandb
-mkdir -p "${WANDB_DIR}"
+if [[ ! -d  "${WANDB_DIR}" ]]; then
+    mkdir -p "${WANDB_DIR}"
+fi
 
 export PATH="${PATH}":"$(dirname ${__src_dir})/bin"
 
@@ -82,39 +78,3 @@ export DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN:-"{{ discord_webhook_token 
 {% if docker_username is not none %}
 export DOCKER_USERNAME=${DOCKER_USERNAME:-"{{ docker_username }}"}
 {% endif %}
-
-for env_file in ${__src_dir}/.env*; do
-    [ -f "${env_file}" ] || continue
-    
-    source "${env_file}"
-done
-
-## Dynamic Profiles.
-
-### brew.
-if [[ -f /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-
-    if [[ -f $(brew --prefix)/etc/bash_completion ]]; then
-        . $(brew --prefix)/etc/bash_completion
-    fi
-fi
-
-### starship.
-if [[ -x "$(command -v starship)" ]]; then
-    eval "$(starship init bash)"
-fi
-
-for profile_file in ${__src_dir}/.*_profile; do
-    [[ (-f "${profile_file}") && ("${profile_file}" != "${BASH_SOURCE[0]}") ]] || continue
-    
-    source "${profile_file}"
-done
-
-for aliases_file in ${__src_dir}/.*_aliases; do
-    [ -f "${aliases_file}" ] || continue
-    
-    source "${aliases_file}"
-done
-
-unset __src_dir

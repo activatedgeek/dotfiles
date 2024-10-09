@@ -33,10 +33,19 @@ def apply_config(teardown=False):
         recursive=True,
     )
 
-    myfiles.template(
+    myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
-        src="templates/bash/.bash_profile.j2",
+        src="files/bash/.bash_profile",
         dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.bash_profile",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Env",
+        src="templates/bash/.bash_env.j2",
+        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.bash_env",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
