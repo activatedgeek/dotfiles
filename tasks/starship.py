@@ -5,8 +5,13 @@ from pyinfra.facts import server as server_facts
 
 from myinfra.operations import files as myfiles
 
+
 ## https://github.com/starship/starship/releases
-starship_version = "1.20.1"
+class Starship:
+    version = "1.21.1"
+
+    class Linux:
+        sha256sum = "8c219b2c219308383e53b5a9daed07e31fefedb660492cc89cd0983f85ac2213"
 
 
 @deploy("Config")
@@ -34,8 +39,9 @@ def apply_macos(teardown=False):
 def apply_linux(teardown=False):
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/starship/starship/releases/download/v{starship_version}/starship-x86_64-unknown-linux-gnu.tar.gz",
+        src=f"https://github.com/starship/starship/releases/download/v{Starship.version}/starship-x86_64-unknown-linux-gnu.tar.gz",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/starship",
+        sha256sum=Starship.Linux.sha256sum,
         present=not teardown,
         mode=755,
     )

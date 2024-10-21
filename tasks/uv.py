@@ -7,7 +7,11 @@ from myinfra.operations import files as myfiles
 
 
 ## https://github.com/astral-sh/uv/releases
-uv_version = "0.4.0"
+class Uv:
+    version = "0.4.25"
+
+    class Linux:
+        sha256sum = "70f64e59f8d0401794c4fdd6846ace6e2b7c01a8bb7cfab951c67b2e02a44034"
 
 
 @deploy("Linux")
@@ -26,9 +30,10 @@ def apply_linux(teardown=False):
     else:
         myfiles.download(
             name=f"{'Uni' if teardown else 'I'}nstall",
-            src=f"https://github.com/astral-sh/uv/releases/download/{uv_version}/uv-x86_64-unknown-linux-gnu.tar.gz",
+            src=f"https://github.com/astral-sh/uv/releases/download/{Uv.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
             src_dir="uv-x86_64-unknown-linux-gnu",
             dest=f"{host.get_fact(server_facts.Home)}/.local/bin/uv",
+            sha256sum=Uv.Linux.sha256sum,
             present=not teardown,
             mode=755,
         )

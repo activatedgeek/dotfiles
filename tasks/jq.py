@@ -5,7 +5,11 @@ from pyinfra.facts import server as server_facts
 
 
 ## https://github.com/jqlang/jq/releases
-jq_version = "1.7.1"
+class Jq:
+    version = "1.7.1"
+
+    class Linux:
+        sha256sum = "5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5"
 
 
 @deploy("MacOS")
@@ -28,8 +32,9 @@ def apply_linux(teardown=False):
     else:
         files.download(
             name="Install",
-            src=f"https://github.com/jqlang/jq/releases/download/jq-{jq_version}/jq-linux64",
+            src=f"https://github.com/jqlang/jq/releases/download/jq-{Jq.version}/jq-linux64",
             dest=f"{host.get_fact(server_facts.Home)}/.local/bin/jq",
+            sha256sum=Jq.Linux.sha256sum,
             mode=755,
         )
 

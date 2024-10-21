@@ -5,16 +5,22 @@ from pyinfra.facts import server as server_facts
 
 from myinfra.operations import files as myfiles
 
+
 ## https://github.com/ClementTsang/bottom/releases
-bottom_version = "0.10.2"
+class Btm:
+    version = "0.10.2"
+
+    class Linux:
+        sha256sum = "b9c9a7bcb8a7056471700428357604643a37ca174ad1833cbbc45c31aff48a67"
 
 
 @deploy("Linux")
 def apply_linux(teardown=False):
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/ClementTsang/bottom/releases/download/{bottom_version}/bottom_x86_64-unknown-linux-musl.tar.gz",
+        src=f"https://github.com/ClementTsang/bottom/releases/download/{Btm.version}/bottom_x86_64-unknown-linux-musl.tar.gz",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/btm",
+        sha256sum=Btm.Linux.sha256sum,
         present=not teardown,
         mode=755,
     )

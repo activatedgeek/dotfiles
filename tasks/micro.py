@@ -5,8 +5,13 @@ from pyinfra.facts import server as server_facts
 
 from myinfra.operations import files as myfiles
 
+
 ## https://github.com/zyedidia/micro/releases
-micro_version = "2.0.13"
+class Micro:
+    version = "2.0.14"
+
+    class Linux:
+        sha256sum = "30af93533603f0bfa41ca0add2a395bd3be4830bb06e1f27d428683bf627ca39"
 
 
 @deploy("MacOS")
@@ -22,9 +27,10 @@ def apply_macos(teardown=False):
 def apply_linux(teardown=False):
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/zyedidia/micro/releases/download/v{micro_version}/micro-{micro_version}-linux64.tar.gz",
-        src_dir=f"micro-{micro_version}",
+        src=f"https://github.com/zyedidia/micro/releases/download/v{Micro.version}/micro-{Micro.version}-linux64.tar.gz",
+        src_dir=f"micro-{Micro.version}",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/micro",
+        sha256sum=Micro.Linux.sha256sum,
         mode=755,
         present=not teardown,
     )

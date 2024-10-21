@@ -7,7 +7,11 @@ from myinfra.operations import files as myfiles
 
 
 ## https://downloads.rclone.org/
-rclone_version = "1.67.0"
+class Rclone:
+    version = "1.68.1"
+
+    class Linux:
+        sha256sum = "3afdc72c395651badd72426cc218b0420249ceb10960c03b539939e56e60bf2e"
 
 
 @deploy("MacOS")
@@ -23,9 +27,10 @@ def apply_macos(teardown=False):
 def apply_linux(teardown=False):
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://downloads.rclone.org/v{rclone_version}/rclone-v{rclone_version}-linux-amd64.zip",
-        src_dir=f"rclone-v{rclone_version}-linux-amd64",
+        src=f"https://downloads.rclone.org/v{Rclone.version}/rclone-v{Rclone.version}-linux-amd64.zip",
+        src_dir=f"rclone-v{Rclone.version}-linux-amd64",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/rclone",
+        sha256sum=Rclone.Linux.sha256sum,
         present=not teardown,
         mode=755,
     )

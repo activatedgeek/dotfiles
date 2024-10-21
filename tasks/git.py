@@ -5,8 +5,13 @@ from pyinfra.facts import server as server_facts
 
 from myinfra.operations import files as myfiles
 
+
 ## https://github.com/Wilfred/difftastic/releases
-difftastic_version = "0.60.0"
+class Difftastic:
+    version = "0.60.0"
+
+    class Linux:
+        sha256sum = "385b0f0834a7b1eb05589dd414ff435b262ff143f385a119817a6958b26696e9"
 
 
 @deploy("MacOS")
@@ -26,8 +31,9 @@ def apply_macos(teardown=False):
 def apply_difft(teardown=False):
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/Wilfred/difftastic/releases/download/{difftastic_version}/difft-x86_64-unknown-linux-gnu.tar.gz",
+        src=f"https://github.com/Wilfred/difftastic/releases/download/{Difftastic.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/difft",
+        sha256sum=Difftastic.Linux.sha256sum,
         mode=755,
         present=not teardown,
     )

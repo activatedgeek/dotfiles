@@ -15,7 +15,7 @@ if [[ ! -d  "${WANDB_DIR}" ]]; then
     mkdir -p "${WANDB_DIR}"
 fi
 
-export PATH="${PATH}":"$(dirname ${__src_dir})/bin"
+export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 
 if [[ -f "${STORE_HOME}/uv/.venv/bin/python" ]]; then
     EXTRA_VIRTUAL_ENV=${VIRTUAL_ENV:-"${STORE_HOME}/uv/.venv"}

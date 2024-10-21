@@ -6,6 +6,7 @@ from pyinfra.operations import files
 from pyinfra.facts import files as file_facts
 
 from . import archive
+from ..facts import checksum as checksum_facts
 
 
 @operation()
@@ -73,39 +74,48 @@ def template(
 
 
 @operation()
-def download(src, dest, src_dir=None, present=True, mode=None):
-    info = host.get_fact(file_facts.File, path=dest)
+def download(src, dest, src_dir=None, sha256sum=None, present=True, mode=None):
+    if present:
+        info = host.get_fact(file_facts.File, path=dest)
+        if info is not None and sha256sum is not None:
+            cur_sha256sum = host.get_fact(checksum_facts.SHA256Sum, path=dest)
+            if cur_sha256sum != sha256sum:
+                yield from files.file._inner(path=dest, present=False)
 
-    if info is None and present:
-        temp_dir = Path(host._get_temp_directory())
+                info = host.get_fact(file_facts.File, path=dest)
 
-        yield from files.download._inner(
-            src=src,
-            dest=str(temp_dir / Path(src).name),
-        )
+        if info is None:
+            temp_dir = Path(host._get_temp_directory())
 
-        if src.endswith(".tar.gz"):
-            yield from archive.untar._inner(path=str(temp_dir / Path(src).name))
-        elif src.endswith(".tar.bz2"):
-            yield from archive.untar._inner(
-                path=str(temp_dir / Path(src).name), flags="j"
+            yield from files.download._inner(
+                src=src,
+                dest=str(temp_dir / Path(src).name),
             )
-        elif src.endswith(".zip"):
-            yield from archive.unzip._inner(path=str(temp_dir / Path(src).name))
-        else:
-            raise exceptions.OperationError(f"Unsupported file type in {src}.")
 
-        yield from files.file._inner(path=str(temp_dir / Path(src).name), present=False)
+            if src.endswith(".tar.gz"):
+                yield from archive.untar._inner(path=str(temp_dir / Path(src).name))
+            elif src.endswith(".tar.bz2"):
+                yield from archive.untar._inner(
+                    path=str(temp_dir / Path(src).name), flags="j"
+                )
+            elif src.endswith(".zip"):
+                yield from archive.unzip._inner(path=str(temp_dir / Path(src).name))
+            else:
+                raise exceptions.OperationError(f"Unsupported file type in {src}.")
 
-        yield StringCommand(
-            "mv",
-            QuoteString(str(temp_dir / (src_dir or "") / Path(dest).name)),
-            QuoteString(str(Path(dest).parent)),
-        )
-
-        if src_dir:
-            yield from files.directory._inner(
-                path=str(temp_dir / src_dir), present=False
+            yield from files.file._inner(
+                path=str(temp_dir / Path(src).name), present=False
             )
+
+            yield StringCommand(
+                "mv",
+                QuoteString(str(temp_dir / (src_dir or "") / Path(dest).name)),
+                QuoteString(str(Path(dest).parent)),
+            )
+
+            if src_dir:
+                yield from files.directory._inner(
+                    path=str(temp_dir / src_dir), present=False
+                )
 
     yield from files.file._inner(path=dest, present=present, mode=mode)

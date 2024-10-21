@@ -5,8 +5,18 @@ from pyinfra.facts import server as server_facts
 
 from myinfra.operations import files as myfiles
 
+
 ## https://github.com/Nukesor/pueue/releases
-pueue_version = "3.4.1"
+class Pueue:
+    version = "3.4.1"
+
+    class Linux:
+        sha256sum = "2396dabbb9c7506ad120e1bce7d92c33917c6e5bb7d0a53e8d762d9d59d6b869"
+
+
+class Pueued(Pueue):
+    class Linux:
+        sha256sum = "5f095cdf8c417def4bc29bf37b713e72a406ea3302d3e91f6a92d0398fe0c70d"
 
 
 @deploy("Linux")
@@ -25,14 +35,16 @@ def apply_linux(teardown=False):
     else:
         files.download(
             name="pueue",
-            src=f"https://github.com/Nukesor/pueue/releases/download/v{pueue_version}/pueue-linux-x86_64",
+            src=f"https://github.com/Nukesor/pueue/releases/download/v{Pueue.version}/pueue-linux-x86_64",
             dest=f"{host.get_fact(server_facts.Home)}/.local/bin/pueue",
+            sha256sum=Pueue.Linux.sha256sum,
             mode=755,
         )
         files.download(
             name="pueued",
-            src=f"https://github.com/Nukesor/pueue/releases/download/v{pueue_version}/pueued-linux-x86_64",
+            src=f"https://github.com/Nukesor/pueue/releases/download/v{Pueued.version}/pueued-linux-x86_64",
             dest=f"{host.get_fact(server_facts.Home)}/.local/bin/pueued",
+            sha256sum=Pueued.Linux.sha256sum,
             mode=755,
         )
 
