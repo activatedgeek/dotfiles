@@ -17,8 +17,6 @@ alias xargs='xargs '
 
 alias rsync='rsync -avzhEP --stats'
 
-alias nyu-gw='sshpass -f ~/.config/nyu/pass ssh gw'
-
 ## docker.
 alias cst='colima start'
 alias cstop='colima stop'

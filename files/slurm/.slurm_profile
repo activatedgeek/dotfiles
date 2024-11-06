@@ -32,7 +32,7 @@ function __sbatch {
   fi
 
   sbatch --signal=B:USR1@30 \
-    --job-name="${JOB_NAME:-$(basename $(pwd))}" \
+    --job-name="$(basename $(pwd)):${JOB_NAME}" \
     --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} ${__dependency} \
     "${@}"
 }
@@ -51,7 +51,7 @@ function __srun {
   unset GPUS
 
   srun --pty \
-    --job-name="${JOB_NAME:-$(basename $(pwd))-pty}" \
+    --job-name="$(basename $(pwd)):${JOB_NAME}" \
     --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} \
     "${@}"
 }
