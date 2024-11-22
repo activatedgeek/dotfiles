@@ -14,6 +14,7 @@ export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.out"
 # export SBATCH_EXCLUDE_LIST=rose[1-4],vine[3,6,11-12],hpc[1-8]
 
 alias si='sinfo -lNe'
+alias sshare='sshare -u $USER'
 function __sbatch {
   if [[ ! -z "${GPUS}" ]]; then
     __gres="gpu:${GPUS}"
@@ -32,7 +33,7 @@ function __sbatch {
   fi
 
   sbatch --signal=B:USR1@30 \
-    --job-name="$(basename $(pwd)):${JOB_NAME}" \
+    --account="${SBATCH_ACCOUNT:-"users"}" --job-name="$(basename $(pwd)):${JOB_NAME}" \
     --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} ${__dependency} \
     "${@}"
 }
@@ -51,7 +52,7 @@ function __srun {
   unset GPUS
 
   srun --pty \
-    --job-name="$(basename $(pwd)):${JOB_NAME}" \
+    --account="${SBATCH_ACCOUNT:-users}" --job-name="$(basename $(pwd)):${JOB_NAME}" \
     --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} \
     "${@}"
 }
@@ -66,7 +67,7 @@ function sto { tail -n100 -f "${SLURM_LOGDIR}/${1}.out"; }
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'
 # | %.12F %.10K
-alias sq='squeue -u "${USER}" -o "%.10A | %.8T | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
+alias sq='squeue -u "${USER}" -o "%.10A | %.8a | %.8T | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
 function sjob {
   sacct --json -P -o state -j ${1} | \
   jq -r '.jobs[0] | {id: .job_id, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code.number, status: .state.current[0]}'

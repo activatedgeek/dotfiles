@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://github.com/astral-sh/uv/releases
 class Uv:
-    version = "0.4.30"
+    version = "0.5.0"
 
     class Linux:
-        sha256sum = "47c57557026af801edcfcfc78fb9d8e5ac1406e35effe8d084e9b720f53722eb"
+        sha256sum = "abdd9f0430b8b763f1a90043d69b1b0159304537f6e35d1f420962f8ff4b928e"
 
 
 @deploy("Linux")

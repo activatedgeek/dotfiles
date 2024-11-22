@@ -28,6 +28,7 @@ def apply_cname_records(zone_id):
         ## Cloudflare Pages
         dict(record="@", value="copernicus.pages.dev", proxied=True),
         dict(record="maps", value="mercator.pages.dev", proxied=True),
+        dict(record="films", value="sutra-7zg.pages.dev", proxied=True),
         ## Github Pages
         dict(record="latex", value="activatedgeek.github.io", proxied=True),
         ## Fastmail
@@ -101,6 +102,7 @@ def apply_txt_records(zone_id):
             record="_dmarc",
             value="v=DMARC1; p=none; rua=mailto:b08cb9aa760740028e2d0078380bc16e@dmarc-reports.cloudflare.net",
         ),
+        dict(record="_atproto", value="did=did:plc:r65ialxtka33wyid523oipsk"),
     ]
     for r in txt_records:
         cloudflare.dns(

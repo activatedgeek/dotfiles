@@ -21,7 +21,6 @@ def deploy_tasks():
         "node",
         "obsidian",
         "pandoc",
-        "pdfexpert",
         "python",
         "raycast",
         "rclone",

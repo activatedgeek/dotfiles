@@ -36,6 +36,9 @@ Match host *.cims.nyu.edu,*.cs.nyu.edu
 Host gw
   User sk6876
   HostName gw.hpc.nyu.edu
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  LogLevel ERROR
   LocalForward 6876 greene.hpc.nyu.edu:22
   LocalForward 6877 gdtn.hpc.nyu.edu:22
 
