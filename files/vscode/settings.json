@@ -3,6 +3,8 @@
     "editor.fontFamily": "Inconsolata Nerd Font, Menlo, Monaco, 'Courier New', monospace",
     "gitlens.codeLens.enabled": false,
     "jupyter.askForKernelRestart": false,
+    "latex-workshop.docker.enabled": true,
+    "latex-workshop.docker.image.latex": "raabf/latex-versions:texlive2022",
     "python.terminal.activateEnvInCurrentTerminal": false,
     "python.terminal.activateEnvironment": false,
     "remote.SSH.enableRemoteCommand": false,

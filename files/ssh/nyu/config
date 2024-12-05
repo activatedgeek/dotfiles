@@ -42,9 +42,12 @@ Host gw
   LocalForward 6876 greene.hpc.nyu.edu:22
   LocalForward 6877 gdtn.hpc.nyu.edu:22
 
-Host gdtn *.code *.aim
-  RequestTTY yes
+Host gdtn 
   Port 6877
+
+Host *.code *.aim
+  RequestTTY yes
+  Port 6876
 
 Host greene gdtn *.code *.aim
   User sk6876
