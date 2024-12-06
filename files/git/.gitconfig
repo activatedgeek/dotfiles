@@ -9,6 +9,7 @@
 	r = remote -v
 	s = status
 	sub = submodule update --init --recursive
+	t = log --tags --decorate --simplify-by-decoration
 [branch]
 	sort = -committerdate
 [core]

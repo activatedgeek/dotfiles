@@ -8,7 +8,6 @@ def deploy_tasks():
         "bitwarden",
         "cleanmymac",
         "cloudflare",
-        "deskpad",
         "discord",
         "docker",
         "filen",
