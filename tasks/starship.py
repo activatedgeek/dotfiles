@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://github.com/starship/starship/releases
 class Starship:
-    version = "1.21.1"
+    version = "1.22.1"
 
     class Linux:
-        sha256sum = "8c219b2c219308383e53b5a9daed07e31fefedb660492cc89cd0983f85ac2213"
+        sha256sum = "08eb5b058e95358a62ff986f273b6b3d8264f7fc5f3889a21a3a99f1955b3388"
 
 
 @deploy("Config")

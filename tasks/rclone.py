@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://downloads.rclone.org/
 class Rclone:
-    version = "1.68.1"
+    version = "1.69.0"
 
     class Linux:
-        sha256sum = "3afdc72c395651badd72426cc218b0420249ceb10960c03b539939e56e60bf2e"
+        sha256sum = "919f659f63612a429297efc2c0b8bc1e9000a0f0b97a8602a697ca5090ac37bf"
 
 
 @deploy("MacOS")

@@ -42,8 +42,15 @@ Host gw
   LocalForward 6876 greene.hpc.nyu.edu:22
   LocalForward 6877 gdtn.hpc.nyu.edu:22
 
-Host gdtn 
-  Port 6877
+Host greene gdtn
+  # HostName localhost
+  HostName %h.hpc.nyu.edu
+
+# Host greene
+#  Port 6876
+
+# Host gdtn
+#  Port 6877
 
 Host *.code *.aim
   RequestTTY yes
@@ -54,8 +61,6 @@ Host greene gdtn *.code *.aim
   IdentityFile ~/.ssh/config.d/nyu/id_ed25519
   AddKeysToAgent yes
   ForwardAgent yes
-  HostName localhost
-  Port 6876
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   LogLevel ERROR
