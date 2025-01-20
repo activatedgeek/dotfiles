@@ -9,7 +9,6 @@ from myinfra.operations import vscode, files as myfiles
 _EXTENSIONS = [
     "astro-build.astro-vscode",
     "eamodio.gitlens",
-    "james-yu.latex-workshop",
     "ms-azuretools.vscode-docker",
     "ms-python.python",
     "ms-toolsai.jupyter",

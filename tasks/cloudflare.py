@@ -28,7 +28,7 @@ def apply_cname_records(zone_id):
         ## Cloudflare Pages
         dict(record="@", value="copernicus.pages.dev", proxied=True),
         dict(record="maps", value="mercator.pages.dev", proxied=True),
-        dict(record="films", value="sutra-7zg.pages.dev", proxied=True),
+        dict(record="dash", value="sutra-7zg.pages.dev", proxied=True),
         ## Github Pages
         dict(record="latex", value="activatedgeek.github.io", proxied=True),
         ## Fastmail

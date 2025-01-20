@@ -5,6 +5,8 @@ alias dnsflush='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
 alias duh='du -h --max-depth=1 --threshold=1G . | sort -hr'
 
+alias ls='ls --color=auto'
+
 alias mrun='micro run.sh && chmod +x run.sh && ./run.sh && rm run.sh'
 
 alias nano=micro
