@@ -9,6 +9,7 @@
     "python.terminal.activateEnvironment": false,
     "remote.SSH.enableRemoteCommand": false,
     "remote.SSH.serverInstallPath": {
+        "example.code": "/path/.vscode-remote-containers/example"
     },
     "terminal.explorerKind": "integrated",
     "terminal.integrated.defaultProfile.linux": "bash",
