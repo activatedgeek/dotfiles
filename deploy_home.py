@@ -21,7 +21,6 @@ def deploy_tasks():
         "obsidian",
         "pandoc",
         "python",
-        "raycast",
         "rclone",
         "slack",
         "spotify",
