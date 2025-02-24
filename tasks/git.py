@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://github.com/Wilfred/difftastic/releases
 class Difftastic:
-    version = "0.62.0"
+    version = "0.63.0"
 
     class Linux:
-        sha256sum = "6a04777017aa876d496e6e8b750498fae5847fc96e5040037b8eee5bd12e8fb8"
+        sha256sum = "9d51d2a258b1a6cc1f6b1ed97e1961409d44c8f6fbae1f3947d9cdad76987307"
 
 
 @deploy("MacOS")

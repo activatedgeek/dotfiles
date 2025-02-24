@@ -43,14 +43,14 @@ Host gw
   LocalForward 6877 gdtn.hpc.nyu.edu:22
 
 Host greene gdtn
-  # HostName localhost
-  HostName %h.hpc.nyu.edu
+  HostName localhost
+# HostName %h.hpc.nyu.edu
 
-# Host greene
-#  Port 6876
+Host greene
+  Port 6876
 
-# Host gdtn
-#  Port 6877
+Host gdtn
+  Port 6877
 
 Host *.code *.aim
   RequestTTY yes
