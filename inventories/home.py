@@ -13,6 +13,7 @@ mac = (
                 goatcounter_site=config.INVENTORY_VARS["GOATCOUNTER_SITE"],
                 mapbox_access_token=config.INVENTORY_VARS["MAPBOX_ACCESS_TOKEN"],
                 discord_webhook_token=config.INVENTORY_VARS["DISCORD_WEBHOOK_TOKEN"],
+                hcloud_token=config.INVENTORY_VARS["HCLOUD_TOKEN"],
             ),
         )
     ],

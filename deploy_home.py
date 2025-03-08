@@ -23,7 +23,6 @@ def deploy_tasks():
         "python",
         "rclone",
         "slack",
-        "spotify",
         "ssh",
         "starship",
         "tailscale",

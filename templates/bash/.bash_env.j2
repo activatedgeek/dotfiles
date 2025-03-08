@@ -78,3 +78,7 @@ export DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN:-"{{ discord_webhook_token 
 {% if docker_username is not none %}
 export DOCKER_USERNAME=${DOCKER_USERNAME:-"{{ docker_username }}"}
 {% endif %}
+
+{% if hcloud_token is not none %}
+export HCLOUD_TOKEN={{ hcloud_token }}
+{% endif %}
