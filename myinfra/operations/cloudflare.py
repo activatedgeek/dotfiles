@@ -17,6 +17,7 @@ def dns(
     type,
     record,
     value,
+    zone_name=None,
     proxied=False,
     ttl=1,
     priority=None,
@@ -25,6 +26,7 @@ def dns(
     dns_record_id = host.get_fact(
         cf_facts.DNSRecord,
         zone_id=zone_id,
+        zone_name=zone_name,
         type=type,
         record=record,
         value=value,

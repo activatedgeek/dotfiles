@@ -45,11 +45,30 @@ def apply_cname_records(zone_id):
         dict(record="maps.gc", value="psiyum-maps.goatcounter.com"),
         ## Upptime
         dict(record="status", value="activatedgeek.github.io", proxied=True),
+        ## Clerk
+        dict(record="clerk.oidc", value="frontend-api.clerk.services", proxied=False),
+        dict(record="accounts.oidc", value="accounts.clerk.services", proxied=False),
+        dict(
+            record="clk._domainkey.oidc",
+            value="dkim1.ddniet4lpbo0.clerk.services",
+            proxied=False,
+        ),
+        dict(
+            record="clk2._domainkey.oidc",
+            value="dkim2.ddniet4lpbo0.clerk.services",
+            proxied=False,
+        ),
+        dict(
+            record="clkmail.oidc",
+            value="mail.ddniet4lpbo0.clerk.services",
+            proxied=False,
+        ),
     ]
     for r in cname_records:
         cloudflare.dns(
             name=f"{'' if r.get('present', True) else 'Remove '}{r['record']}",
             zone_id=zone_id,
+            zone_name="sanyamkapoor.com",
             type="CNAME",
             **r,
         )
@@ -65,6 +84,7 @@ def apply_mx_records(zone_id):
         cloudflare.dns(
             name=f"{'' if r.get('present', True) else 'Remove '}{r['record']}",
             zone_id=zone_id,
+            zone_name="sanyamkapoor.com",
             type="MX",
             **r,
         )
@@ -108,6 +128,7 @@ def apply_txt_records(zone_id):
         cloudflare.dns(
             name=f"{'' if r.get('present', True) else 'Remove '}{r['record']}",
             zone_id=zone_id,
+            zone_name="sanyamkapoor.com",
             type="TXT",
             **r,
         )

@@ -23,7 +23,7 @@ class Zone(FactBase):
 
 
 class DNSRecord(FactBase):
-    def command(self, zone_id, type, record, value):
+    def command(self, zone_id, type, record, value, zone_name=None):
         results = client.dns.records.list(
             match="any",
             type=type,
@@ -36,7 +36,7 @@ class DNSRecord(FactBase):
             r
             for r in results
             if (r.type == type)
-            and (r.name == r.zone_name if record == "@" else r.name.startswith(record))
+            and (r.name == zone_name if record == "@" else r.name.startswith(record))
             and (r.content == value)
         ]
 
