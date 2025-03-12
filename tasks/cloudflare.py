@@ -46,23 +46,11 @@ def apply_cname_records(zone_id):
         ## Upptime
         dict(record="status", value="activatedgeek.github.io", proxied=True),
         ## Clerk
-        dict(record="clerk.oidc", value="frontend-api.clerk.services", proxied=False),
-        dict(record="accounts.oidc", value="accounts.clerk.services", proxied=False),
-        dict(
-            record="clk._domainkey.oidc",
-            value="dkim1.ddniet4lpbo0.clerk.services",
-            proxied=False,
-        ),
-        dict(
-            record="clk2._domainkey.oidc",
-            value="dkim2.ddniet4lpbo0.clerk.services",
-            proxied=False,
-        ),
-        dict(
-            record="clkmail.oidc",
-            value="mail.ddniet4lpbo0.clerk.services",
-            proxied=False,
-        ),
+        dict(record="clerk.oidc", value="frontend-api.clerk.services"),
+        dict(record="accounts.oidc", value="accounts.clerk.services"),
+        dict(record="clk._domainkey.oidc", value="dkim1.ddniet4lpbo0.clerk.services"),
+        dict(record="clk2._domainkey.oidc", value="dkim2.ddniet4lpbo0.clerk.services"),
+        dict(record="clkmail.oidc", value="mail.ddniet4lpbo0.clerk.services"),
     ]
     for r in cname_records:
         cloudflare.dns(
@@ -118,10 +106,7 @@ def apply_srv_records(zone_id):
 def apply_txt_records(zone_id):
     txt_records = [
         dict(record="@", value="v=spf1 include:spf.messagingengine.com ?all"),
-        dict(
-            record="_dmarc",
-            value="v=DMARC1; p=none; rua=mailto:b08cb9aa760740028e2d0078380bc16e@dmarc-reports.cloudflare.net",
-        ),
+        dict(record="_dmarc", value="v=DMARC1; p=none;"),
         dict(record="_atproto", value="did=did:plc:r65ialxtka33wyid523oipsk"),
     ]
     for r in txt_records:
