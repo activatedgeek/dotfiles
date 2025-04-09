@@ -8,6 +8,7 @@ def deploy_tasks():
         "git",
         "jq",
         "micro",
+        "micromamba",
         "pueue",
         "python",
         "rclone",
