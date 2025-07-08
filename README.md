@@ -34,7 +34,7 @@ BWS_ACCESS_TOKEN="<token>"
 
 Generate SSH keys using,
 ```shell
-ssh-keygen -t ed25519
+ssh-keygen -t ed25519 -f "$(pwd)/id_ed25519" -C "$(whoami)"
 ```
 and move to appropriate folder under [SSH files](./files/ssh).
 See SSH [`task`](./tasks/ssh.py) for accessed paths.

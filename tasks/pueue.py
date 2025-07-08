@@ -8,15 +8,15 @@ from myinfra.operations import files as myfiles
 
 ## https://github.com/Nukesor/pueue/releases
 class Pueue:
-    version = "4.0.0"
+    version = "4.0.1"
 
     class Linux:
-        sha256sum = "8be0d92b8766441b4ef9a89a9a817ad76043b00884297c326bc5a585741b23ca"
+        sha256sum = "16aea6654b3915c6495bb2f456184fd7f3d418de3f74afb5eab04ae953cdfedf"
 
 
 class Pueued(Pueue):
     class Linux:
-        sha256sum = "1a07c82b86115d495fcfa2a1310fc2fe9659b3802b94b7d4ad1f6960d90a5130"
+        sha256sum = "8a97b176f55929e37cda49577b28b66ea345151adf766b9d8efa8c9d81525a0b"
 
 
 @deploy("Linux")

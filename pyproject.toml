@@ -13,7 +13,7 @@ dynamic = [
 name = "myinfra"
 license = { text = "Apache License 2.0" }
 
-requires-python = ">=3.11"
+requires-python = ">=3.11,<3.13"
 dependencies = [
     "bitwarden-sdk",
     "cloudflare",

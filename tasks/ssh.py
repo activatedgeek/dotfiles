@@ -4,19 +4,19 @@ from pyinfra.operations import files
 from pyinfra.facts import server as server_facts
 
 
-@deploy("Home")
-def apply_config_home(teardown=False):
+@deploy("NVDA")
+def apply_config_nvda(teardown=False):
     if teardown:
         files.directory(
             name="Delete",
-            path=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nyu",
+            path=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda",
             present=False,
         )
     else:
         files.sync(
             name="Sync",
-            src="files/ssh/nyu",
-            dest=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nyu",
+            src="files/ssh/nvda",
+            dest=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda",
             dir_mode=700,
             mode=600,
             delete=True,
@@ -25,7 +25,7 @@ def apply_config_home(teardown=False):
     files.line(
         name="Include",
         path=f"{host.get_fact(server_facts.Home)}/.ssh/config",
-        line="Include config.d/nyu/config",
+        line="Include config.d/nvda/config",
         present=not teardown,
     )
 
@@ -40,8 +40,8 @@ def apply_config(teardown=False):
         recursive=True,
     )
 
-    if host.data.get("org", "") == "me":
-        apply_config_home(teardown=teardown)
+    if host.name == "@local" and host.data.get("org", "") == "nvda":
+        apply_config_nvda(teardown=teardown)
 
 
 def apply():

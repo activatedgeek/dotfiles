@@ -14,6 +14,17 @@ def apply_macos(teardown=False):
         present=not teardown,
     )
 
+    # server.shell(
+    #     name="Change shell to bash",
+    #     commands=[
+    #         "chsh",
+    #         "-s",
+    #         f"{host.get_fact(brew_facts.BrewPrefix)}/bin/bash",
+    #     ],
+    #     _sudo=True,
+    #     _use_sudo_login=True,
+    # )
+
 
 @deploy("Config")
 def apply_config(teardown=False):

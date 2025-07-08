@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://downloads.rclone.org/
 class Rclone:
-    version = "1.69.1"
+    version = "1.70.2"
 
     class Linux:
-        sha256sum = "42cc349f6eeca59a61b7354882aa60505a1992ef586ab1f93401e06b542f6632"
+        sha256sum = "d1d99f58c1ad31592caa093eb400607725afd74eb3655bdeb6dc1886fed8fda8"
 
 
 @deploy("MacOS")
@@ -36,23 +36,6 @@ def apply_linux(teardown=False):
     )
 
 
-@deploy("NYU")
-def apply_config_nyu(teardown=False):
-    myfiles.template(
-        name=f"{'Remove ' if teardown else ''}Config",
-        src="templates/rclone/nyu-rclone.conf.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/rclone/rclone.conf",
-        present=not teardown,
-        mode=600,
-        create_remote_dir=False,
-        rclone_nyu_drive_client_id=host.data.rclone_nyu_drive_client_id,
-        rclone_nyu_drive_client_secret=host.data.rclone_nyu_drive_client_secret,
-        rclone_nyu_drive_access_token=host.data.rclone_nyu_drive_access_token,
-        rclone_nyu_drive_refresh_token=host.data.rclone_nyu_drive_refresh_token,
-        rclone_nyu_drive_expiry=host.data.rclone_nyu_drive_expiry,
-    )
-
-
 @deploy("Config")
 def apply_config(teardown=False):
     files.directory(
@@ -61,9 +44,6 @@ def apply_config(teardown=False):
         present=not teardown,
         mode=700,
     )
-
-    if host.data.get("org", "") == "nyu":
-        apply_config_nyu(teardown=teardown)
 
 
 def apply():

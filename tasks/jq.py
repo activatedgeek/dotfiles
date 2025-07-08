@@ -6,10 +6,10 @@ from pyinfra.facts import server as server_facts
 
 ## https://github.com/jqlang/jq/releases
 class Jq:
-    version = "1.7.1"
+    version = "1.8.1"
 
     class Linux:
-        sha256sum = "5942c9b0934e510ee61eb3e30273f1b3fe2590df93933a93d7c58b81d19c8ff5"
+        sha256sum = "020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d"
 
 
 @deploy("MacOS")

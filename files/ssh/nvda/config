@@ -6,14 +6,9 @@ Host github.com gitlab-master.nvidia.com
 Host nvmac
   HostName 127.0.0.1
 
-Host nvr6000
-  HostName 10.110.42.243
-
-Host nva100
-  HostName 10.110.40.240
-
 Host nvdesk
-  HostName 10.110.41.39
+  HostName aiapps-070225.dyn.nvidia.com
+  IdentityFile ~/.ssh/config.d/nvda/id_ed25519
 
 Host *-cs?
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519

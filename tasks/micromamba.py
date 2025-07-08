@@ -6,10 +6,10 @@ from pyinfra.facts import server as server_facts
 
 ## https://github.com/mamba-org/micromamba-releases/releases
 class Micromamba:
-    version = "2.1.0-0"
+    version = "2.3.0-1"
 
     class Linux:
-        sha256sum = "15d4127a9b248907ab99e2804bd86789f1bbd1458d206065c16a9e86c02d6a30"
+        sha256sum = "83f38b81295dade6b242b40dbab81bcd9fb03bb196928ab15f552cbafe82386b"
 
 
 @deploy("MacOS")

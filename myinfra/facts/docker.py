@@ -7,10 +7,13 @@ class BuildX(FactBase):
         return "cat"
 
     def command(self):
-        return "cat ~/.docker/config.json"
+        return "cat ~/.docker/config.json || true"
 
     def process(self, output):
-        config = json.loads("".join(output).strip())
+        output = "".join(output).strip()
+        if not output:
+            return False
+        config = json.loads(output)
         aliases = config.get("aliases", {})
         builder = aliases.get("builder", None)
         return builder == "buildx"
