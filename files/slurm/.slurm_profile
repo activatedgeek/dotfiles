@@ -3,57 +3,22 @@ alias scc='singularity cache clean'
 function spull { singularity pull docker://${1:-"${DOCKER_USERNAME}/$(basename "$(pwd)"):cu124-py311-torch"}; }
 
 ## Slurm.
-export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}
-export SINGULARITY_CACHEDIR=${XDG_CACHE_HOME}
-
-export SLURM_LOGDIR="${STORE_HOME}/.slurm/logs"
-export SBATCH_ERROR="${SLURM_LOGDIR}/%j.err"
-export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.out"
-
-# export SBATCH_EXCLUDE_LIST=cs001
-# export SBATCH_EXCLUDE_LIST=rose[1-4],vine[3,6,11-12],hpc[1-8]
-
 alias si='sinfo -lNe'
 alias sshare='sshare -u $USER'
 function __sbatch {
-  if [[ ! -z "${GPUS}" ]]; then
-    __gres="gpu:${GPUS}"
-
-    IFS=":" read -a __gres_split <<< "${__gres}"
-    __gpus=${__gres_split[-1]}
-
-    __cpus="$((${CPUS:-4} * ${__gpus}))"
-    __gres="--gres=${__gres}"
-  else
-    __cpus="${CPUS:-4}"
-  fi
-
   if [[ ! -z "${SBATCH_DEPENDENCY}" ]]; then
     __dependency="--dependency=${SBATCH_DEPENDENCY}"
   fi
 
   sbatch --signal=B:USR1@30 \
-    --account="${SBATCH_ACCOUNT:-"users"}" --job-name="$(basename $(pwd)):${JOB_NAME}" \
-    --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} ${__dependency} \
+    --job-name="$(basename $(pwd)):${JOB_NAME}" --time=${HH:-4}:00:00 --mem=${MEM:-16}G --cpus-per-task=4 \
+    --nodes="${SBATCH_NODES:-1}" --gpus-per-node="${SBATCH_GPUS_PER_NODE:-1}" --ntasks-per-node="${SBATCH_NTASKS:-${SBATCH_GPUS_PER_NODE:-1}}" ${__dependency} \
     "${@}"
 }
 function __srun {
-  if [[ ! -z "${GPUS}" ]]; then
-    __gres="gpu:${GPUS}"
-
-    IFS=":" read -a __gres_split <<< "${__gres}"
-    __gpus=${__gres_split[-1]}
-
-    __cpus="$((${CPUS:-4} * ${__gpus}))"
-    __gres="--gres=${__gres}"
-  else
-    __cpus="${CPUS:-4}"
-  fi
-  unset GPUS
-
   srun --pty \
-    --account="${SBATCH_ACCOUNT:-users}" --job-name="$(basename $(pwd)):${JOB_NAME}" \
-    --time=${HH:-12}:01:00 --mem=${MEM:-16}G --ntasks=${NTASKS:-1} --cpus-per-task=${__cpus} ${__gres} \
+    --job-name="$(basename $(pwd)):${JOB_NAME}" --time=${HH:-4}:00:00 --mem=${MEM:-16}G --cpus-per-task=4 \
+    --nodes="${SBATCH_NODES:-1}" --gpus-per-node="${SBATCH_GPUS_PER_NODE:-1}" --ntasks-per-node="${SBATCH_NTASKS:-${SBATCH_GPUS_PER_NODE:-1}}" \
     "${@}"
 }
 function sdocker { __sbatch srun-docker "${@}"; }
@@ -66,17 +31,16 @@ function sto { tail -n100 -f "${SLURM_LOGDIR}/${1}.out"; }
 
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'
-# | %.12F %.10K
-alias sq='squeue -u "${USER}" -o "%.10A | %.8a | %.8T | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
+alias sq='squeue -u "${USER}" -o "%.10A | %.8a | %.8T | %.9L | %.5D %.10m %.4C %.18b | %j %R"'  # | %.12F %.10K
 function sjob {
   sacct --json -P -o state -j ${1} | \
-  jq -r '.jobs[0] | {id: .job_id, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code.number, status: .state.current[0]}'
+  jq -r '.jobs[0] | {id: .job_id, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code, status: .state.current}'
 }
 
 function snotify {
   __job_info=$(sjob ${1})
   if [[ $? -ne 0 ]]; then
-    echo "[ERROR]: Missing job id."
+    echo "[ERROR]: Missing job id. Cannot notify."
     return
   fi
 
@@ -119,7 +83,7 @@ function snotify {
 
   __name=$(echo "${__job_info}" | jq -r '.name')
   __id=$(echo "${__job_info}" | jq -r '.id')
-  __start=$(date -d @"$(echo "${__job_info}" | jq -r '.start')" +"%b %d %Y %r")
+  __start=$(date -d @"$(echo "${__job_info}" | jq -r '.start')" +"%b %d %Y %r %Z")
   __waittime=$(echo "${__job_info}" | jq -r '.waittime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
   __cmd=$(echo "${__job_info}" | jq -r '.cmd')
   __workdir=$(echo "${__job_info}" | jq -r '.workdir')
@@ -135,7 +99,7 @@ function snotify {
     fi
   fi
 
-cat << _EOF | apprise discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
+cat << _EOF | "${STORE_HOME}/uv/.venv/bin/apprise" discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
 ## :${__status_emoji}:  ${__name}
 -#  :id: ${__id}  |  :rocket:  ${__start}  |  :hourglass_flowing_sand: ${__waittime}
 

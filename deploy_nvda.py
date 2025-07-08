@@ -6,6 +6,7 @@ def deploy_tasks():
         "bash",
         "bottom",
         "docker",
+        "discord",
         "ghostty",
         "git",
         "jq",

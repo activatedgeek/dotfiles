@@ -64,6 +64,7 @@ def apply_config(teardown=False):
         inventory_hostname=host.name.split("/")[-1],
         git_name=local.shell("id -F"),
         git_email=host.data.email,
+        term=host.data.get("term", None),
         store_home=host.data.get("store_home", None),
         goatcounter_site=host.data.get("goatcounter_site", None),
         mapbox_access_token=host.data.get("mapbox_access_token", None),
@@ -92,6 +93,7 @@ def apply_config(teardown=False):
         name=f"{'Remove' if teardown else 'Add'} Profile",
         path=f"{host.get_fact(server_facts.Home)}/.bash_profile",
         line=f"source {host.get_fact(server_facts.Home)}/.local/profile/.bash_profile",
+        ensure_newline=True,
         present=not teardown,
     )
 

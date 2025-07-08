@@ -24,6 +24,10 @@ fi
 
 ## Config Vars.
 
+{% if term is not none %}
+export TERM={{ term }}
+{% endif %}
+
 export INVENTORY_HOSTNAME={{ inventory_hostname | d('unknown') }}
 
 export GIT_CONFIG_PARAMETERS="'user.name={{ git_name }}' 'user.email={{ git_email }}'"

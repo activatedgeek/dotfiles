@@ -35,25 +35,19 @@ for i in "${@}"; do
   __args="${__args} \"${i//\"/\\\"}\""
 done
 
-export PYTHONPATH="$(pwd):${PYTHONPATH}"
-
-if [[ -e /dev/nvidia0 ]]; then __nv_args="--nv"; fi
-
-if [[ -f "${IMAGENET_DIR}/imagenet-train.sqf" ]]; then
-  __overlay_args="${__overlay_args} --overlay ${IMAGENET_DIR}/imagenet-train.sqf:ro --overlay ${IMAGENET_DIR}/imagenet-val.sqf:ro"
+__docker_name=${DOCKER_IMAGE}
+if [[ -d ".git" ]]; then
+  __repo_user=$(git remote get-url origin | cut -d/ -f4)
+  __repo_name=$(git remote get-url origin | cut -d/ -f5 | cut -d. -f1)
+  __docker_name=${DOCKER_IMAGE:-gitlab-master.nvidia.com/${__repo_user}/${__repo_name}}
+fi
+__docker_tag=${DOCKER_TAG:-latest}
+__container_image="${PROJECT_HOME}/$(basename "$(pwd)")/squashfs/${__repo_user}+${__repo_name}+${__docker_tag}.sqsh"
+if [[ ! -f "${__container_image}" ]]; then
+  __container_image=${__docker_name}:${__docker_tag}
 fi
 
-__docker_image=docker://${DOCKER_IMAGE:-"${DOCKER_USERNAME}/$(basename "$(pwd)"):cu124-py311-torch"}
-
-if [[ $__is_sbatch -eq 0 ]]; then
-
-  singularity exec ${__nv_args} ${__overlay_args} ${__docker_image} \
-    bash -l -c "${__args}"
-
-  SLURM_EXIT_CODE=$?
-  exit
-fi
-
+export PYTHONPATH=$(pwd):${PYTHONPATH}
 export NNODES=${SLURM_NNODES}
 export NPROC_PER_NODE=${SLURM_GPUS_ON_NODE}
 export MPROC_GROUPID=${SLURM_JOB_ID}
@@ -64,8 +58,11 @@ for i in $(seq 0 $(( SLURM_NNODES - 1 ))); do
   export MRANK=${i}
 
   srun -N 1 -n 1 \
-    singularity exec ${__nv_args} ${__overlay_args} ${__docker_image} \
-      bash -l -c "${__args}" &
+      --no-container-remap-root --container-mount-home \
+      --container-image=${__container_image} \
+      --container-mounts=${STORE_HOME}:/store:rw,$(pwd):"/code/$(basename "$(pwd)")" \
+      --container-workdir="/code/$(basename "$(pwd)")" \
+        bash -l -c "${__args}" &
 
   __pids[i]=$!
 

@@ -1,43 +1,34 @@
+##
+# NOTE: Enable remote login on Mac.
+#
+
 Host github.com gitlab-master.nvidia.com
   PreferredAuthentications publickey
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
 
-## Enable remote login in System settings.
-Host nvmac
-  HostName 127.0.0.1
-
-Host nvdesk
+Host desk
   HostName aiapps-070225.dyn.nvidia.com
-  IdentityFile ~/.ssh/config.d/nvda/id_ed25519
-
-Host *-cs?
-  IdentityFile ~/.ssh/config.d/nvda/id_ed25519
-  ProxyCommand ssh -W cs-oci-ord-$(echo %h | cut -d- -f1)-0$(echo -n %h | tail -c 1).nvidia.com:%p nvmac
-
-Host cs
-  HostName cs-oci-ord-login-03.nvidia.com
-
-Host dc-cs
-  HostName cs-oci-ord-dc-03.nvidia.com
-
-HostName code-cs
-  HostName cs-oci-ord-vscode-02.nvidia.com
-
-Host *-dr?
-  IdentityFile ~/.ssh/config.d/nvda/id_ed25519
-  ProxyCommand ssh -W draco-oci-$(echo %h | cut -d- -f1)-0$(echo -n %h | tail -c 1).draco-oci-iad.nvidia.com:%p nvmac
-
-Host dr
-  HostName draco-oci-login-03.draco-oci-iad.nvidia.com
-
-Host dc-dr
-  HostName draco-oci-dc-03.draco-oci-iad.nvidia.com
-
-Host eos
-  HostName login-eos.nvidia.com
-
-Match host *.nvidia.com,10.110.*,127.0.0.1
-  User sanyamk
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
   AddKeysToAgent yes
   ForwardAgent yes
+
+Host cs?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cs-oci-ord-login-0$(echo %h | cut -ds -f2).nvidia.com:%p 127.0.0.1
+
+Host dcs?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cs-oci-ord-dc-0$(echo %h | cut -ds -f2).nvidia.com:%p 127.0.0.1
+
+Host dfw?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cw-dfw-cs-001-login-0$(echo %h | cut -dw -f2).cw-dfw-cs-001.hpc.nvidia.com:%p 127.0.0.1
+
+Host ddfw?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cw-dfw-cs-001-dc-0$(echo %h | cut -dw -f2).cw-dfw-cs-001.hpc.nvidia.com:%p 127.0.0.1
+
+Host dr?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W draco-oci-login-0$(echo %h | cut -dr -f2).draco-oci-iad.nvidia.com:%p 127.0.0.1
+
+Host ddr?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W draco-oci-dc-0$(echo %h | cut -dr -f2).draco-oci-iad.nvidia.com:%p 127.0.0.1
+
+Host eos?
+  ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W login-eos0$(echo %h | cut -ds -f2).eos.clusters.nvidia.com:%p 127.0.0.1
