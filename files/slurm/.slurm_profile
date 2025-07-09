@@ -6,19 +6,29 @@ function spull { singularity pull docker://${1:-"${DOCKER_USERNAME}/$(basename "
 alias si='sinfo -lNe'
 alias sshare='sshare -u $USER'
 function __sbatch {
-  if [[ ! -z "${SBATCH_DEPENDENCY}" ]]; then
-    __dependency="--dependency=${SBATCH_DEPENDENCY}"
+  if [[ ! -z "${DEPS}" ]]; then
+    __dependency="--dependency=${DEPS}"
   fi
 
-  sbatch --signal=B:USR1@30 \
-    --job-name="$(basename $(pwd)):${JOB_NAME}" --time=${HH:-4}:00:00 --mem=${MEM:-16}G --cpus-per-task=4 \
-    --nodes="${SBATCH_NODES:-1}" --gpus-per-node="${SBATCH_GPUS_PER_NODE:-1}" --ntasks-per-node="${SBATCH_NTASKS:-${SBATCH_GPUS_PER_NODE:-1}}" ${__dependency} \
+  __gpus_exclude_list=("eos")
+  if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
+    unset GPUS
+  else
+    __gpus="--gpus-per-node=${GPUS:-1}"
+  fi
+
+  sbatch --signal=B:USR1@10 \
+    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-4}:00:00 \
+    --nodes="${NNODES:-1}" --mem=${MEM:-16}G \
+    --ntasks-per-node="${NTASKS:-1}" --cpus-per-task=${CPUS:-2} ${__gpus} ${__dependency} \
     "${@}"
+
+  unset DEPS JOB_NAME HH NNODES MEM NTASKS CPUS GPUS
 }
 function __srun {
   srun --pty \
-    --job-name="$(basename $(pwd)):${JOB_NAME}" --time=${HH:-4}:00:00 --mem=${MEM:-16}G --cpus-per-task=4 \
-    --nodes="${SBATCH_NODES:-1}" --gpus-per-node="${SBATCH_GPUS_PER_NODE:-1}" --ntasks-per-node="${SBATCH_NTASKS:-${SBATCH_GPUS_PER_NODE:-1}}" \
+    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-4}:00:00 --mem=${MEM:-16}G --cpus-per-task=2 \
+    --nodes="${SBATCH_NODES:-1}" --gpus-per-node="${SBATCH_GPUS_PER_NODE:-1}" \
     "${@}"
 }
 function sdocker { __sbatch srun-docker "${@}"; }
@@ -99,7 +109,7 @@ function snotify {
     fi
   fi
 
-cat << _EOF | "${STORE_HOME}/uv/.venv/bin/apprise" discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
+cat << _EOF | uv --directory="${STORE_HOME}/uv" run apprise discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
 ## :${__status_emoji}:  ${__name}
 -#  :id: ${__id}  |  :rocket:  ${__start}  |  :hourglass_flowing_sand: ${__waittime}
 

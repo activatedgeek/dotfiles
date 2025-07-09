@@ -17,9 +17,7 @@ desktop = (
             ),
         )
     ],
-    dict(
-        discord_webhook_token=config.INVENTORY_VARS["DISCORD_WEBHOOK_TOKEN"],
-    ),
+    dict(),
 )
 
 slurm = (
@@ -48,26 +46,32 @@ slurm = (
                 sbatch_partition="batch_block1,batch_block2,batch_block3,batch_block4",
             ),
         ),
-        # (
-        #     "@ssh/eos",
-        #     dict(
-        #         ssh_hostname="login-eos02.eos.clusters.nvidia.com",
-        #         store_home="/lustre/fsw/llmservice/users/${USER}", ## FIXME.
-        #         sbatch_partition="batch",
-        #     ),
-        # ),
+        (
+            "@ssh/eos",
+            dict(
+                ssh_hostname="login-eos02.eos.clusters.nvidia.com",
+                store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}",
+                sbatch_partition="batch",
+            ),
+        ),
     ],
     dict(
-        term="linux-vt",
         slurm_host=True,
         sbatch_account="llmservice_nemo_robustness",
         sbatch_overcommit=True,
+    ),
+)
+
+linux = (
+    [*[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
+    dict(
+        term="linux-vt",
         discord_webhook_token=config.INVENTORY_VARS["DISCORD_WEBHOOK_TOKEN"],
     ),
 )
 
 all = (
-    [*[h for h, _ in mac[0]], *[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
+    [*[h for h, _ in mac[0]], *linux[0]],
     dict(
         org="nvda",
         ssh_key="files/ssh/nvda/id_ed25519",
