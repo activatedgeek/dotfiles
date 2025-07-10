@@ -26,6 +26,7 @@ def apply_config_nvda(teardown=False):
         name="Include",
         path=f"{host.get_fact(server_facts.Home)}/.ssh/config",
         line="Include config.d/nvda/config",
+        ensure_newline=True,
         present=not teardown,
     )
 

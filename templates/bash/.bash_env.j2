@@ -17,11 +17,6 @@ fi
 
 export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 
-if [[ -f "${STORE_HOME}/uv/.venv/bin/python" ]]; then
-    EXTRA_VIRTUAL_ENV=${VIRTUAL_ENV:-"${STORE_HOME}/uv/.venv"}
-    export PATH="${PATH}":"${EXTRA_VIRTUAL_ENV}/bin"
-fi
-
 ## Config Vars.
 
 {% if term is not none %}
@@ -69,6 +64,10 @@ export HF_TOKEN=${HF_TOKEN:-"{{ hf_token }}"}
 
 {% if openai_api_key is not none %}
 export OPENAI_API_KEY=${OPENAI_API_KEY:-"{{ openai_api_key }}"}
+{% endif %}
+
+{% if nvidia_api_key is not none %}
+export NVIDIA_API_KEY=${NVIDIA_API_KEY:-"{{ nvidia_api_key }}"}
 {% endif %}
 
 {% if google_gemini_api_key is not none %}

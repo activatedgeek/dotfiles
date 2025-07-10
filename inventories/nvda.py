@@ -65,8 +65,12 @@ slurm = (
 linux = (
     [*[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
     dict(
-        term="linux-vt",
+        term="xterm-256color",
         discord_webhook_token=config.INVENTORY_VARS["DISCORD_WEBHOOK_TOKEN"],
+        nvidia_api_key=config.INVENTORY_VARS["NVIDIA_API_KEY"],
+        hf_token=config.INVENTORY_VARS["HF_TOKEN"],
+        enroot_user=config.INVENTORY_VARS["NVIDIA_EMAIL"],
+        enroot_pass=config.INVENTORY_VARS["GITLAB_PAT"],
     ),
 )
 
@@ -75,9 +79,9 @@ all = (
     dict(
         org="nvda",
         ssh_key="files/ssh/nvda/id_ed25519",
-        email=config.INVENTORY_VARS["NVDA_EMAIL"],
-        # wandb_api_key=config.INVENTORY_VARS["NVDA_WANDB_API_KEY"],
-        # wandb_username=config.INVENTORY_VARS["NVDA_WANDB_USERNAME"],
-        # wandb_entity=config.INVENTORY_VARS["NVDA_WANDB_ENTITY"],
+        email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
+        # wandb_api_key=config.INVENTORY_VARS["WANDB_API_KEY"],
+        # wandb_username=config.INVENTORY_VARS["WANDB_USERNAME"],
+        # wandb_entity=config.INVENTORY_VARS["WANDB_ENTITY"],
     ),
 )

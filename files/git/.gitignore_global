@@ -6,6 +6,7 @@
 *.env
 
 ## Folders
-/.vscode
-/.idea
-/wandb
+.vscode
+.idea
+wandb
+.venv
