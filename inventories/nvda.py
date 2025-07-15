@@ -71,6 +71,9 @@ linux = (
         hf_token=config.INVENTORY_VARS["HF_TOKEN"],
         enroot_user=config.INVENTORY_VARS["NVIDIA_EMAIL"],
         enroot_pass=config.INVENTORY_VARS["GITLAB_PAT"],
+        wandb_api_key=config.INVENTORY_VARS["WANDB_API_KEY"],
+        wandb_username=config.INVENTORY_VARS["WANDB_USERNAME"],
+        wandb_entity=config.INVENTORY_VARS["WANDB_ENTITY"],
     ),
 )
 
@@ -80,8 +83,5 @@ all = (
         org="nvda",
         ssh_key="files/ssh/nvda/id_ed25519",
         email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
-        # wandb_api_key=config.INVENTORY_VARS["WANDB_API_KEY"],
-        # wandb_username=config.INVENTORY_VARS["WANDB_USERNAME"],
-        # wandb_entity=config.INVENTORY_VARS["WANDB_ENTITY"],
     ),
 )

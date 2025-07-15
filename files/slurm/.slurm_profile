@@ -18,17 +18,23 @@ function __sbatch {
   fi
 
   sbatch --signal=B:USR1@10 \
-    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-4}:00:00 \
-    --nodes="${NNODES:-1}" --mem=${MEM:-16}G \
-    --ntasks-per-node="${NTASKS:-1}" --cpus-per-task=${CPUS:-2} ${__gpus} ${__dependency} \
+    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-1}:00:00 \
+    --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} ${__dependency} \
     "${@}"
 
   unset DEPS JOB_NAME HH NNODES MEM NTASKS CPUS GPUS
 }
 function __srun {
+  __gpus_exclude_list=("eos")
+  if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
+    unset GPUS
+  else
+    __gpus="--gpus-per-node=${GPUS:-1}"
+  fi
+
   srun --pty \
-    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-4}:00:00 --mem=${MEM:-16}G --cpus-per-task=2 \
-    --nodes="${SBATCH_NODES:-1}" --gpus-per-node="${SBATCH_GPUS_PER_NODE:-1}" \
+    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-4}:00:00 \
+    --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} \
     "${@}"
 }
 function sdocker { __sbatch srun-docker "${@}"; }
