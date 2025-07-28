@@ -14,6 +14,7 @@ desktop = (
             "@ssh/desk",
             dict(
                 ssh_hostname="aiapps-070225.dyn.nvidia.com",
+                store_home="${HOME}/store",
             ),
         )
     ],
