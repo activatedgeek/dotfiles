@@ -40,7 +40,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/draco",
+            "@ssh/dr",
             dict(
                 ssh_hostname="draco-oci-dc-02.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -82,6 +82,7 @@ all = (
     [*[h for h, _ in mac[0]], *linux[0]],
     dict(
         org="nvda",
+        ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
         ssh_key="files/ssh/nvda/id_ed25519",
         email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
     ),

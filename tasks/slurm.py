@@ -5,6 +5,18 @@ from pyinfra.facts import server as server_facts
 from myinfra.operations import files as myfiles
 
 
+@deploy("NVDA")
+def apply_nvda(teardown=False):
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}srun-docker",
+        src="files/slurm/srun-docker",
+        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/srun-docker",
+        mode=755,
+        create_remote_dir=False,
+        present=not teardown,
+    )
+
+
 @deploy("Config")
 def apply_config(teardown=False):
     myfiles.copy(
@@ -29,17 +41,8 @@ def apply_config(teardown=False):
         sbatch_overcommit=host.data.get("sbatch_overcommit", None),
     )
 
-
-@deploy("NVDA")
-def apply_nvda(teardown=False):
-    myfiles.copy(
-        name=f"{'Remove ' if teardown else ''}srun-docker",
-        src="files/slurm/srun-docker",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/srun-docker",
-        mode=755,
-        create_remote_dir=False,
-        present=not teardown,
-    )
+    if host.data.get("org", "") == "nvda":
+        apply_nvda(teardown=teardown)
 
 
 def apply():
@@ -47,9 +50,6 @@ def apply():
 
     if host.data.get("slurm_host", False):
         apply_config(teardown=teardown)
-
-        if host.data.get("org", "") == "nvda":
-            apply_nvda(teardown=teardown)
 
 
 apply()

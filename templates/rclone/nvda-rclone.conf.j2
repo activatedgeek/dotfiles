@@ -1,27 +1,39 @@
-[eos]
+[cs]
 type = sftp
-ssh = ssh eos
+host = {{ hosts["@ssh/cs"]["hostname"] }}
+key_use_agent = true
 shell_type = unix
+
+[cs-store]
+type = alias
+remote = cs:{{ hosts["@ssh/cs"]["store_home"] }}
+
+[dfw]
+type = sftp
+host = {{ hosts["@ssh/dfw"]["hostname"] }}
+key_use_agent = true
+shell_type = unix
+
+[dfw-store]
+type = alias
+remote = dfw:{{ hosts["@ssh/dfw"]["store_home"] }}
 
 [dr]
 type = sftp
-ssh = ssh dc-dr
+host = {{ hosts["@ssh/dr"]["hostname"] }}
+key_use_agent = true
 shell_type = unix
 
-[cs]
+[dr-store]
+type = alias
+remote = dr:{{ hosts["@ssh/dr"]["store_home"] }}
+
+[eos]
 type = sftp
-ssh = ssh dc-cs
+host = {{ hosts["@ssh/eos"]["hostname"] }}
+key_use_agent = true
 shell_type = unix
 
-[cs-icl]
+[eos-store]
 type = alias
-remote = cs:{{ cs_store_home }}/projects/icl-order-robustness
-
-[dr-icl]
-type = alias
-remote = dr:{{ dr_store_home }}/projects/icl-order-robustness
-
-[eos-icl]
-type = alias
-remote = eos:{{ eos_store_home }}/projects/icl-order-robustness
-
+remote = eos:{{ hosts["@ssh/eos"]["store_home"] }}
