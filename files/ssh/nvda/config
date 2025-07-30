@@ -9,26 +9,32 @@ Host github.com gitlab-master.nvidia.com
 Host desk
   HostName aiapps-070225.dyn.nvidia.com
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
-  AddKeysToAgent yes
   ForwardAgent yes
 
 Host cs?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cs-oci-ord-login-0$(echo %h | cut -ds -f2).nvidia.com:%p 127.0.0.1
 
 Host dcs?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cs-oci-ord-dc-0$(echo %h | cut -ds -f2).nvidia.com:%p 127.0.0.1
 
 Host dfw?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cw-dfw-cs-001-login-0$(echo %h | cut -dw -f2).cw-dfw-cs-001.hpc.nvidia.com:%p 127.0.0.1
 
 Host ddfw?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W cw-dfw-cs-001-dc-0$(echo %h | cut -dw -f2).cw-dfw-cs-001.hpc.nvidia.com:%p 127.0.0.1
 
 Host dr?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W draco-oci-login-0$(echo %h | cut -dr -f2).draco-oci-iad.nvidia.com:%p 127.0.0.1
 
 Host ddr?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W draco-oci-dc-0$(echo %h | cut -dr -f2).draco-oci-iad.nvidia.com:%p 127.0.0.1
 
 Host eos?
+  ForwardAgent yes
   ProxyCommand ssh -A -i ~/.ssh/config.d/nvda/id_ed25519 -W login-eos0$(echo %h | cut -ds -f2).eos.clusters.nvidia.com:%p 127.0.0.1
