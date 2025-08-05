@@ -42,7 +42,7 @@ if [[ -d ".git" ]]; then
   __docker_name=${DOCKER_IMAGE:-gitlab-master.nvidia.com/${__repo_user}/${__repo_name}}
 fi
 __docker_tag=${DOCKER_TAG:-latest}
-__container_image="${PROJECT_HOME}/$(basename "$(pwd)")/squashfs/${__repo_user}+${__repo_name}+${__docker_tag}.sqsh"
+__container_image=${CONTAINER_IMAGE:-"${PROJECT_HOME}/$(basename "$(pwd)")/squashfs/${__repo_user}+${__repo_name}+${__docker_tag}.sqsh"}
 if [[ ! -f "${__container_image}" ]]; then
   __container_image=${__docker_name}:${__docker_tag}
 fi

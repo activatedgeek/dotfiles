@@ -67,7 +67,7 @@ def apply_config(teardown=False):
         mode=700,
     )
 
-    if host.data.get("org", "") == "nvda" and "linux" in host.groups:
+    if host.data.get("org", "") == "nvda":
         apply_nvda(teardown=teardown)
 
 

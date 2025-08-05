@@ -116,5 +116,6 @@ function uvc {
   fi
   unset __venv_path
 }
+alias uvr='uv run --no-sync'
 alias uvs='uv sync --no-install-project'
 alias uvsa='uv sync --all-extras'
