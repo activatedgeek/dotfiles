@@ -1,0 +1,46 @@
+Host github.com gitlab-master.nvidia.com
+  PreferredAuthentications publickey
+  IdentityFile ~/.ssh/config.d/nvda/id_ed25519
+
+Host desk
+  HostName aiapps-070225.dyn.nvidia.com
+
+{% for i in range(3) %}
+Host cs{{ i + 1 }}
+  HostName cs-oci-ord-login-0{{ i + 1 }}.nvidia.com
+{% endfor %}
+
+{% for i in range(4) %}
+Host dcs{{ i + 1 }}
+  HostName cs-oci-ord-dc-0{{ i + 1 }}.nvidia.com
+{% endfor %}
+
+{% for i in range(3) %}
+Host dfw{{ i + 1 }}
+  HostName cw-dfw-cs-001-login-0{{ i + 1 }}.cw-dfw-cs-001.hpc.nvidia.com
+{% endfor %}
+
+{% for i in range(3) %}
+Host ddfw{{ i + 1 }}
+  HostName cw-dfw-cs-001-dc-0{{ i + 1 }}.cw-dfw-cs-001.hpc.nvidia.com
+{% endfor %}
+
+{% for i in range(3) %}
+Host dr{{ i + 1 }}
+  HostName draco-oci-login-0{{ i + 1 }}.draco-oci-iad.nvidia.com
+{% endfor %}
+
+{% for i in range(3) %}
+Host ddr{{ i + 1 }}
+  HostName draco-oci-dc-0{{ i + 1 }}.draco-oci-iad.nvidia.com
+{% endfor %}
+
+{% for i in range(2) %}
+Host eos{{ i + 1 }}
+  HostName login-eos0{{ i + 1 }}.eos.clusters.nvidia.com
+{% endfor %}
+
+Match host="*.nvidia.com"
+  IdentityFile ~/.ssh/config.d/nvda/id_ed25519
+  ForwardAgent yes
+  AddKeysToAgent yes

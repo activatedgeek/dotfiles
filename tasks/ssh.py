@@ -25,21 +25,20 @@ def apply_config_nvda(teardown=False):
                 delete=True,
             )
 
+        myfiles.template(
+            name=f"{'Remove ' if teardown else ''}Config",
+            src="templates/ssh/nvda/config.j2",
+            dest=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda/config",
+            mode=600,
+            create_remote_dir=False,
+            present=not teardown,
+        )
+
         files.line(
             name="Include",
             path=f"{host.get_fact(server_facts.Home)}/.ssh/config",
             line="Include config.d/nvda/config",
             ensure_newline=True,
-            present=not teardown,
-        )
-
-    if host.name == "@ssh/desk":
-        myfiles.copy(
-            name=f"{'Remove ' if teardown else ''}SSH Identity",
-            src="files/ssh/nvda/id_ed25519",
-            dest=f"{host.get_fact(server_facts.Home)}/.ssh/id_ed25519",
-            mode=600,
-            create_remote_dir=False,
             present=not teardown,
         )
 

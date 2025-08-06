@@ -84,6 +84,7 @@ all = (
         org="nvda",
         ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
         ssh_key="files/ssh/nvda/id_ed25519",
+        ssh_config_file="/dev/null",
         email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
     ),
 )
