@@ -22,7 +22,7 @@ def apply_config_nvda(teardown=False):
                 dest=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda",
                 dir_mode=700,
                 mode=600,
-                delete=True,
+                delete=False,
             )
 
         myfiles.template(

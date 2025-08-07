@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://github.com/ClementTsang/bottom/releases
 class Btm:
-    version = "0.10.2"
+    version = "0.11.0"
 
     class Linux:
-        sha256sum = "b9c9a7bcb8a7056471700428357604643a37ca174ad1833cbbc45c31aff48a67"
+        sha256sum = "16cb001f642accc0a92392f7d4051b7b90fbcb4ee8e0a24732a60a407e52ceee"
 
 
 @deploy("Linux")
