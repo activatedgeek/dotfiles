@@ -79,6 +79,7 @@ def apply_config(teardown=False):
         nvidia_api_key=host.data.get("nvidia_api_key", None),
         docker_username=host.data.get("docker_username", None),
         hcloud_token=host.data.get("hcloud_token", None),
+        gitlab_token=host.data.get("gitlab_token", None),
     )
 
     myfiles.copy(

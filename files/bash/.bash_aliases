@@ -42,6 +42,7 @@ function gdelhist {
 }
 
 ## rclone.
+alias rcp='rclone -P copy'
 function rcpull() {
   rclone -P copy "${1}" "$(echo "${1}" | cut -d: -f2)"
 }

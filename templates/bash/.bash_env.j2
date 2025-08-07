@@ -85,3 +85,7 @@ export DOCKER_USERNAME=${DOCKER_USERNAME:-"{{ docker_username }}"}
 {% if hcloud_token is not none %}
 export HCLOUD_TOKEN={{ hcloud_token }}
 {% endif %}
+
+{% if gitlab_token is not none %}
+export GITLAB_TOKEN=${GITLAB_TOKEN:-"{{ gitlab_token }}"}
+{% endif %}
