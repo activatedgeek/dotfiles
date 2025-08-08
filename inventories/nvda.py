@@ -69,6 +69,7 @@ linux = (
         term="xterm-256color",
         discord_webhook_token=config.INVENTORY_VARS["DISCORD_WEBHOOK_TOKEN"],
         nvidia_api_key=config.INVENTORY_VARS["NVIDIA_API_KEY"],
+        exa_api_key=config.INVENTORY_VARS["EXA_API_KEY"],
         hf_token=config.INVENTORY_VARS["HF_TOKEN"],
         gitlab_token=config.INVENTORY_VARS["GITLAB_TOKEN"],
         wandb_api_key=config.INVENTORY_VARS["WANDB_API_KEY"],

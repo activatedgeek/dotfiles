@@ -74,6 +74,10 @@ export NVIDIA_API_KEY=${NVIDIA_API_KEY:-"{{ nvidia_api_key }}"}
 export GOOGLE_API_KEY=${GOOGLE_API_KEY:-"{{ google_gemini_api_key }}"}  ## Gemini.
 {% endif %}
 
+{% if exa_api_key is not none %}
+export EXA_API_KEY=${EXA_API_KEY:-"{{ exa_api_key }}"}
+{% endif %}
+
 {% if discord_webhook_token is not none %}
 export DISCORD_WEBHOOK_TOKEN=${DISCORD_WEBHOOK_TOKEN:-"{{ discord_webhook_token }}"}
 {% endif %}

@@ -76,6 +76,7 @@ def apply_config(teardown=False):
         hf_token=host.data.get("hf_token", None),
         openai_api_key=host.data.get("openai_api_key", None),
         google_gemini_api_key=host.data.get("gemini_api_key", None),
+        exa_api_key=host.data.get("exa_api_key", None),
         nvidia_api_key=host.data.get("nvidia_api_key", None),
         docker_username=host.data.get("docker_username", None),
         hcloud_token=host.data.get("hcloud_token", None),
