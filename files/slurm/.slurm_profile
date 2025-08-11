@@ -40,6 +40,15 @@ function __srun {
 function sdocker { __sbatch srun-docker "${@}"; }
 function sdocker-it { JOB_NAME=${JOB_NAME:-terminal} __srun srun-docker bash -l; }
 
+function senroot {
+  if [[ -z "${1}" ]]; then
+    echo "[ERROR]: Missing Docker image."
+    return
+  fi
+  srun --pty --account=${SBATCH_ACCOUNT} --partition=cpu \
+       --time=30 bash -l -c "mkenroot ${1} && exit"  
+}
+
 function sle { less "${SLURM_LOGDIR}/${1}.err"; }
 function slo { less "${SLURM_LOGDIR}/${1}.out"; }
 function ste { tail -n100 -f "${SLURM_LOGDIR}/${1}.err"; }

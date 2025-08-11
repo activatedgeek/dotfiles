@@ -25,6 +25,15 @@ def apply_config(teardown=False):
         present=not teardown,
     )
 
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}mkenroot",
+        src="files/enroot/mkenroot.sh",
+        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/mkenroot",
+        mode=755,
+        create_remote_dir=False,
+        present=not teardown,
+    )
+
 
 def apply():
     teardown = host.data.get("teardown", False)

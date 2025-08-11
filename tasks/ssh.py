@@ -8,7 +8,7 @@ from myinfra.operations import files as myfiles
 
 @deploy("NVDA")
 def apply_config_nvda(teardown=False):
-    if host.name == "@local":
+    if host.name in ["@local", "@ssh/desk"]:
         if teardown:
             files.directory(
                 name="Delete",
@@ -25,6 +25,7 @@ def apply_config_nvda(teardown=False):
                 delete=False,
             )
 
+    if host.name == "@local":
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}Config",
             src="templates/ssh/nvda/config.j2",
