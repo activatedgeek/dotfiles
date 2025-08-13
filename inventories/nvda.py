@@ -75,6 +75,7 @@ linux = (
         wandb_api_key=config.INVENTORY_VARS["WANDB_API_KEY"],
         wandb_username=config.INVENTORY_VARS["WANDB_USERNAME"],
         wandb_entity=config.INVENTORY_VARS["WANDB_ENTITY"],
+        git_gpgsign=True,
     ),
 )
 

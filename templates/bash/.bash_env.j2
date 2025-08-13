@@ -26,6 +26,7 @@ export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 {% if term is not none %}
 export TERM={{ term }}
 {% endif %}
+export GPG_TTY=$(tty)
 
 export INVENTORY_HOSTNAME={{ inventory_hostname | d('unknown') }}
 

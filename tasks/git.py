@@ -46,13 +46,15 @@ def apply_linux(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
-    myfiles.copy(
+    myfiles.template(
         name=f"{'Remove ' if teardown else ''}.gitconfig",
-        src="files/git/.gitconfig",
+        src="templates/git/.gitconfig.j2",
         dest=f"{host.get_fact(server_facts.Home)}/.gitconfig",
-        present=not teardown,
         mode=600,
         create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        git_gpgsign=host.data.get("git_gpgsign", False),
     )
 
     myfiles.copy(

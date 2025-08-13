@@ -12,6 +12,8 @@
 	t = log --tags --decorate --simplify-by-decoration
 [branch]
 	sort = -committerdate
+[commit]
+	gpgsign = {{ git_gpgsign | string | lower }}
 [core]
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
