@@ -4,7 +4,7 @@
 	d = difftool
 	f = fetch --all -p
 	l = -c diff.external=difft log --ext-diff
-	m = commit -m
+	m = commit{{ " -S " if git_gpgsign else " " }}-m
 	p = pull
 	r = remote -v
 	s = status
