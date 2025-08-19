@@ -1,0 +1,38 @@
+function senroot {
+  if [[ -z "${1}" ]]; then
+    echo "[ERROR]: Missing Docker image."
+    return
+  fi
+  srun --pty --account=${SBATCH_ACCOUNT} --partition=cpu \
+       --time=60 --mem=64G bash -l -c "mkenroot ${1} && exit"  
+}
+
+function snemo-logd {
+    if [[ -z "${1}" ]]; then
+        echo "[ERROR]: Missing Slurm Job ID."
+        echo "Usage:"
+        echo "  snemo-logd SLURM_JOB_ID"
+        return 1
+    fi
+    sacct --json -P -o state -j ${1} | jq -r '.jobs[0] | .submit_line' | cut -d' ' -f4 | xargs cat | grep -m1 '\-\-output' | cut -d= -f2 | xargs dirname
+}
+
+function snemo-t {
+    if [[ -z "${1}" ]]; then
+        echo "[ERROR]: Missing Slurm Job ID."
+        echo "Usage:"
+        echo "  snemo-t SLURM_JOB_ID [main|server|sandbox|...]"
+        return 1
+    fi
+    snemo-logd ${1} | __log_name=${2:-main} xargs -I{} bash -c 'tail -f {}/${__log_name}*.log'
+}
+
+function snemo-l {
+    if [[ -z "${1}" ]]; then
+        echo "[ERROR]: Missing Slurm Job ID."
+        echo "Usage:"
+        echo "  snemo-l SLURM_JOB_ID [main|server|sandbox|...]"
+        return 1
+    fi
+    snemo-logd ${1} | __log_name=${2:-main} xargs -I{} bash -c 'less {}/${__log_name}*.log'
+}
