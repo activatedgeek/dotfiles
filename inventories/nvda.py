@@ -27,7 +27,7 @@ slurm = (
             "@ssh/cs",
             dict(
                 ssh_hostname="cs-oci-ord-dc-02.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
                 sbatch_partition="polar",
             ),
         ),
