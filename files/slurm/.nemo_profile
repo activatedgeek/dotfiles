@@ -1,3 +1,5 @@
+export NEMO_SKILLS_DISABLE_UNCOMMITTED_CHANGES_CHECK=1
+
 function senroot {
   if [[ -z "${1}" ]]; then
     echo "[ERROR]: Missing Docker image."

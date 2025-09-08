@@ -30,7 +30,7 @@ cims = (
 
 slurm = (
     [*[h for h, _ in hpc[0]], *[h for h, _ in cims[0]]],
-    dict(slurm_host=True, docker_username=config.INVENTORY_VARS["DOCKER_USERNAME"]),
+    dict(docker_username=config.INVENTORY_VARS["DOCKER_USERNAME"]),
 )
 
 all = (

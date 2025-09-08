@@ -16,7 +16,14 @@ desktop = (
                 ssh_hostname="aiapps-070225.dyn.nvidia.com",
                 store_home="${HOME}/store",
             ),
-        )
+        ),
+        (
+            "@ssh/bigdesk",
+            dict(
+                ssh_hostname="10.110.40.240",
+                store_home="${HOME}/store",
+            ),
+        ),
     ],
     dict(),
 )
@@ -57,7 +64,6 @@ slurm = (
         ),
     ],
     dict(
-        slurm_host=True,
         sbatch_account="llmservice_nemo_robustness",
         sbatch_overcommit=True,
     ),
