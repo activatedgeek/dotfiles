@@ -43,7 +43,7 @@ Host eos{{ i + 1 }}
   HostName login-eos0{{ i + 1 }}.eos.clusters.nvidia.com
 {% endfor %}
 
-Match host="*.nvidia.com"
+Match host="*.nvidia.com,10.*.*.*"
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
   ForwardAgent yes
   AddKeysToAgent yes

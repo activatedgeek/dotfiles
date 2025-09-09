@@ -37,3 +37,23 @@ shell_type = unix
 [eos-store]
 type = alias
 remote = eos:{{ hosts["@ssh/eos"]["store_home"] }}
+
+[desk]
+type = sftp
+host = {{ hosts["@ssh/desk"]["hostname"] }}
+key_use_agent = true
+shell_type = unix
+
+[desk-store]
+type = alias
+remote = desk:{{ hosts["@ssh/desk"]["store_home"] }}
+
+[bigdesk]
+type = sftp
+host = {{ hosts["@ssh/bigdesk"]["hostname"] }}
+key_use_agent = true
+shell_type = unix
+
+[bigdesk-store]
+type = alias
+remote = bigdesk:{{ hosts["@ssh/bigdesk"]["store_home"] }}

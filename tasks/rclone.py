@@ -38,10 +38,14 @@ def apply_linux(teardown=False):
 
 @deploy("NVDA")
 def apply_nvda(teardown=False):
+    homedir = host.get_fact(server_facts.Home)
+
     linux_hosts = {
         host.name: {
             "hostname": host.data.ssh_hostname,
-            "store_home": host.data.store_home.replace("${USER}", host.data.ssh_user),
+            "store_home": host.data.store_home.replace(
+                "${USER}", host.data.ssh_user
+            ).replace("${HOME}", homedir),
         }
         for host in inventory.get_group("linux")
     }
@@ -49,7 +53,7 @@ def apply_nvda(teardown=False):
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Conf",
         src="templates/rclone/nvda-rclone.conf.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/rclone/rclone.conf",
+        dest=f"{homedir}/.config/rclone/rclone.conf",
         mode=600,
         create_remote_dir=False,
         present=not teardown,

@@ -21,7 +21,7 @@ desktop = (
             "@ssh/bigdesk",
             dict(
                 ssh_hostname="10.110.40.240",
-                store_home="${HOME}/store",
+                store_home="/mnt/ssd/home/${USER}",
             ),
         ),
     ],
