@@ -1,4 +1,5 @@
 export NEMO_SKILLS_DISABLE_UNCOMMITTED_CHANGES_CHECK=1
+# export NEMO_SKILLS_CONFIG_DIR=${HOME}/.config/nemo_skills/cluster_configs
 
 function senroot {
   if [[ -z "${1}" ]]; then

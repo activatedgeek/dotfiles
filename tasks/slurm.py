@@ -19,15 +19,6 @@ def apply_nvda(teardown=False):
         present=is_slurm_host and not teardown,
     )
 
-    myfiles.copy(
-        name=f"{'Remove ' if teardown else ''}NeMo Profile",
-        src="files/slurm/.nemo_profile",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.nemo_profile",
-        mode=600,
-        create_remote_dir=False,
-        present=not teardown,
-    )
-
 
 @deploy("Config")
 def apply_config(teardown=False):
