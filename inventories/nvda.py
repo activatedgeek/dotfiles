@@ -50,7 +50,7 @@ slurm = (
             "@ssh/dr",
             dict(
                 ssh_hostname="draco-oci-dc-02.draco-oci-iad.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
                 sbatch_partition="batch_block1,batch_block2,batch_block3,batch_block4",
             ),
         ),
