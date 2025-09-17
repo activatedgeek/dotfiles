@@ -8,7 +8,7 @@ from myinfra.operations import files as myfiles
 
 @deploy("NVDA")
 def apply_config_nvda(teardown=False):
-    if host.name in ["@local", "@ssh/desk"]:
+    if host.name == "@local" or "desktop" in host.groups:
         if teardown:
             files.directory(
                 name="Delete",

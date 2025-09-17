@@ -1,0 +1,15 @@
+containers:
+  vllm: igitman/nemo-skills-vllm:0.7.0
+  sglang: igitman/nemo-skills-sglang:0.7.0
+  sandbox: igitman/nemo-skills-sandbox:0.7.1
+  nemo-skills: igitman/nemo-skills:0.7.0
+  search: gitlab-master.nvidia.com/sanyamk/tool-integrated-reasoning/search:0.4.0
+
+executor: local
+
+mounts:
+  - {{ store_home }}:/store
+
+env_vars:
+  - HF_HOME=/store/huggingface
+  - CUDA_VISIBLE_DEVICES

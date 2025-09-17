@@ -5,7 +5,6 @@ def deploy_tasks():
     for task in [
         "bash",
         "bottom",
-        # "docker",
         "discord",
         "enroot",
         "ghostty",
