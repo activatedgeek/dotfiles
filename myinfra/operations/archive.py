@@ -1,16 +1,15 @@
 from pathlib import Path
+
 from pyinfra import host
-from pyinfra.api import operation, exceptions
-from pyinfra.facts import server as server_facts
+from pyinfra.api import exceptions, operation
 from pyinfra.api.command import QuoteString, StringCommand
+from pyinfra.facts import server as server_facts
 
 
 @operation()
 def unzip(path):
     if host.get_fact(server_facts.Which, command="unzip"):
-        yield StringCommand(
-            "unzip", "-o", QuoteString(path), "-d", QuoteString(Path(path).parent)
-        )
+        yield StringCommand("unzip", "-o", QuoteString(path), "-d", QuoteString(Path(path).parent))
     else:
         raise exceptions.OperationError("unzip executable not found.")
 

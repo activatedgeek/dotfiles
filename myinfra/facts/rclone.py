@@ -1,7 +1,8 @@
 from pyinfra import host
 from pyinfra.api import exceptions
-from pyinfra.facts import server as server_facts, files as file_facts
 from pyinfra.api.facts import FactBase
+from pyinfra.facts import files as file_facts
+from pyinfra.facts import server as server_facts
 
 
 class Obscure(FactBase):

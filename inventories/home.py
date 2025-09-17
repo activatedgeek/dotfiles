@@ -1,6 +1,5 @@
 from pyinfra.api import config
 
-
 mac = (
     [
         (

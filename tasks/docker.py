@@ -1,9 +1,10 @@
 from pyinfra import host
 from pyinfra.api import deploy
-from pyinfra.operations import brew, files, server
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import brew, files, server
 
-from myinfra.facts import brew as brew_facts, docker as docker_facts
+from myinfra.facts import brew as brew_facts
+from myinfra.facts import docker as docker_facts
 
 
 @deploy("Config")

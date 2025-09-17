@@ -1,7 +1,7 @@
 from pyinfra import host, inventory
 from pyinfra.api import deploy
-from pyinfra.operations import files, brew
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import brew, files
 
 from myinfra.operations import files as myfiles
 
@@ -43,9 +43,7 @@ def apply_nvda(teardown=False):
     linux_hosts = {
         host.name: {
             "hostname": host.data.ssh_hostname,
-            "store_home": host.data.store_home.replace(
-                "${USER}", host.data.ssh_user
-            ).replace("${HOME}", homedir),
+            "store_home": host.data.store_home.replace("${USER}", host.data.ssh_user).replace("${HOME}", homedir),
         }
         for host in inventory.get_group("linux")
     }

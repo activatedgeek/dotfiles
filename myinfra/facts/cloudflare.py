@@ -1,8 +1,7 @@
 from cloudflare import Cloudflare
 from pyinfra import host
-from pyinfra.api.facts import FactBase
 from pyinfra.api.exceptions import FactError
-
+from pyinfra.api.facts import FactBase
 
 client = Cloudflare(
     api_email=host.data.cloudflare_email,

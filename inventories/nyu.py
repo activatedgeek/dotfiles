@@ -1,4 +1,5 @@
 import os
+
 from pyinfra.api import config, exceptions
 
 ## Ensure SSH keys.

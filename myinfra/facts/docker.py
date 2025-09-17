@@ -1,4 +1,5 @@
 import json
+
 from pyinfra.api.facts import FactBase
 
 

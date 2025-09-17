@@ -2,8 +2,9 @@ from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.operations import server
 
+from myinfra.facts import brew as brew_facts
+from myinfra.facts import cloudflare as cf_facts
 from myinfra.operations import cloudflare
-from myinfra.facts import cloudflare as cf_facts, brew as brew_facts
 
 
 @deploy("A Records")

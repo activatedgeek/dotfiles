@@ -1,7 +1,7 @@
 from pyinfra import host
 from pyinfra.api import deploy
-from pyinfra.operations import brew, apt
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import apt, brew
 
 
 @deploy("MacOS")

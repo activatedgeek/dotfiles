@@ -2,7 +2,6 @@ from pyinfra import host
 from pyinfra.api import operation
 from pyinfra.api.command import StringCommand
 
-
 from ..facts import vscode as vscode_facts
 
 

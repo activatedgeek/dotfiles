@@ -1,4 +1,4 @@
-from pyinfra import local, host
+from pyinfra import host, local
 from pyinfra.operations import server
 
 

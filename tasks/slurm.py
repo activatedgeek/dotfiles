@@ -2,8 +2,8 @@ from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 
-from myinfra.operations import files as myfiles
 from myinfra.facts import slurm as slurm_facts
+from myinfra.operations import files as myfiles
 
 
 @deploy("NVDA")

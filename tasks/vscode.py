@@ -1,10 +1,10 @@
 from pyinfra import host
 from pyinfra.api import deploy
-from pyinfra.operations import brew, files
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import brew, files
 
-from myinfra.operations import vscode, files as myfiles
-
+from myinfra.operations import files as myfiles
+from myinfra.operations import vscode
 
 _EXTENSIONS = [
     "astro-build.astro-vscode",

@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from bitwarden_sdk import BitwardenClient, DeviceType, client_settings_from_dict
 from dotenv import dotenv_values
 from pyinfra import logger
@@ -17,16 +18,12 @@ def setup_inventory_vars(env_file=".env", cache_file=".env.inventory"):
             bws_org_id = os.getenv("BWS_ORG_ID", None)
 
         if bws_access_token is None or bws_org_id is None:
-            raise exceptions.DeployError(
-                "Missing Bitwarden environment variables BWS_ACCESS_TOKEN / BWS_ORG_ID"
-            )
+            raise exceptions.DeployError("Missing Bitwarden environment variables BWS_ACCESS_TOKEN / BWS_ORG_ID")
 
         logger.info("Loading inventory variables from Bitwarden Secrets.")
 
         client = BitwardenClient(
-            client_settings_from_dict(
-                {"deviceType": DeviceType.SDK, "userAgent": "Python dotfiles"}
-            )
+            client_settings_from_dict({"deviceType": DeviceType.SDK, "userAgent": "Python dotfiles"})
         )
         client.auth().login_access_token(bws_access_token)
 

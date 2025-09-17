@@ -1,7 +1,7 @@
 from pyinfra import host
 from pyinfra.api import deploy
-from pyinfra.operations import files
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import files
 
 from myinfra.operations import files as myfiles
 

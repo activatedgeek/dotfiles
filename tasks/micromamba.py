@@ -1,7 +1,7 @@
 from pyinfra import host
 from pyinfra.api import deploy
-from pyinfra.operations import brew, files
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import brew, files
 
 
 ## https://github.com/mamba-org/micromamba-releases/releases

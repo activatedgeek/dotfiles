@@ -1,6 +1,6 @@
 from pyinfra import host
-from pyinfra.operations import files
 from pyinfra.facts import server as server_facts
+from pyinfra.operations import files
 
 
 def apply():
@@ -14,7 +14,5 @@ def apply():
         )
 
 
-if all(
-    [host.data.get(k, "") for k in ["wandb_username", "wandb_api_key", "wandb_entity"]]
-):
+if all([host.data.get(k, "") for k in ["wandb_username", "wandb_api_key", "wandb_entity"]]):
     apply()

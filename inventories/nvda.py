@@ -1,4 +1,5 @@
 import os
+
 from pyinfra.api import config, exceptions
 
 ## Ensure SSH keys.
@@ -21,7 +22,7 @@ desktop = (
             "@ssh/bigdesk",
             dict(
                 ssh_hostname="10.110.40.240",
-                store_home="/mnt/ssd/home/${USER}",
+                store_home="/mnt/ssd/home/${USER}/store",
             ),
         ),
     ],
@@ -34,7 +35,7 @@ slurm = (
             "@ssh/cs",
             dict(
                 ssh_hostname="cs-oci-ord-dc-02.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="polar",
             ),
         ),
@@ -42,7 +43,7 @@ slurm = (
             "@ssh/dfw",
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-02.cw-dfw-cs-001.hpc.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}/store",
                 sbatch_partition="batch,batch_short",
             ),
         ),
@@ -50,7 +51,7 @@ slurm = (
             "@ssh/dr",
             dict(
                 ssh_hostname="draco-oci-dc-02.draco-oci-iad.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="batch_block1,batch_block2,batch_block3,batch_block4",
             ),
         ),
@@ -58,7 +59,7 @@ slurm = (
             "@ssh/eos",
             dict(
                 ssh_hostname="login-eos02.eos.clusters.nvidia.com",
-                store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}",
+                store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="batch",
             ),
         ),

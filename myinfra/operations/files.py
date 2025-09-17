@@ -1,12 +1,13 @@
 from pathlib import Path
-from pyinfra import host
-from pyinfra.api import operation, exceptions
-from pyinfra.api.command import QuoteString, StringCommand
-from pyinfra.operations import files
-from pyinfra.facts import files as file_facts
 
-from . import archive
+from pyinfra import host
+from pyinfra.api import exceptions, operation
+from pyinfra.api.command import QuoteString, StringCommand
+from pyinfra.facts import files as file_facts
+from pyinfra.operations import files
+
 from ..facts import checksum as checksum_facts
+from . import archive
 
 
 @operation()
@@ -95,17 +96,13 @@ def download(src, dest, src_dir=None, sha256sum=None, present=True, mode=None):
             if src.endswith(".tar.gz"):
                 yield from archive.untar._inner(path=str(temp_dir / Path(src).name))
             elif src.endswith(".tar.bz2"):
-                yield from archive.untar._inner(
-                    path=str(temp_dir / Path(src).name), flags="j"
-                )
+                yield from archive.untar._inner(path=str(temp_dir / Path(src).name), flags="j")
             elif src.endswith(".zip"):
                 yield from archive.unzip._inner(path=str(temp_dir / Path(src).name))
             else:
                 raise exceptions.OperationError(f"Unsupported file type in {src}.")
 
-            yield from files.file._inner(
-                path=str(temp_dir / Path(src).name), present=False
-            )
+            yield from files.file._inner(path=str(temp_dir / Path(src).name), present=False)
 
             yield StringCommand(
                 "mv",
@@ -114,8 +111,6 @@ def download(src, dest, src_dir=None, sha256sum=None, present=True, mode=None):
             )
 
             if src_dir:
-                yield from files.directory._inner(
-                    path=str(temp_dir / src_dir), present=False
-                )
+                yield from files.directory._inner(path=str(temp_dir / src_dir), present=False)
 
     yield from files.file._inner(path=dest, present=present, mode=mode)
