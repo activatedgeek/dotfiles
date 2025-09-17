@@ -17,7 +17,7 @@ function snemo-logd {
         echo "  snemo-logd SLURM_JOB_ID"
         return 1
     fi
-    sacct --json -P -o state -j ${1} | jq -r '.jobs[0] | .submit_line' | cut -d' ' -f4 | xargs cat | grep -m1 '\-\-output' | cut -d= -f2 | xargs dirname
+    sacct --json -P -o state -j ${1} | jq -r '.jobs[0] | .submit_line' | rev | cut -d' ' -f1 | rev | xargs cat | grep -m1 '\-\-output' | cut -d= -f2 | xargs dirname
 }
 
 function snemo-t {
