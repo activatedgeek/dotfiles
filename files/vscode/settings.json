@@ -32,6 +32,7 @@
             "icon": "terminal-bash"
         }
     },
+    "terminal.integrated.stickyScroll.enabled": false,
     "window.zoomLevel": 1,
     "workbench.colorTheme": "Ayu Mirage Bordered",
     "workbench.startupEditor": "none"
