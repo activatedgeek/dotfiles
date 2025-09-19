@@ -42,7 +42,6 @@ def apply_nemo_skills(teardown=False):
             "ssh_tunnel_user": ihost.data.ssh_user,
             "sbatch_account": ihost.data.sbatch_account,
             "sbatch_partition": ihost.data.sbatch_partition,
-            "extra_mounts": ihost.data.get("nemo_skills_mounts", []),
             "disable_gpus_per_node": ihost.data.get("nemo_skills_disable_gpus_per_node", False),
         }
         for ihost in inventory.get_group("slurm")

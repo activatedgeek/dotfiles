@@ -3,6 +3,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import files
 
+import myinfra.facts.enroot as enroot_facts
 import myinfra.operations.files as myfiles
 
 
@@ -10,7 +11,7 @@ import myinfra.operations.files as myfiles
 def apply_config(teardown=False):
     files.directory(
         name="Config Dir.",
-        path=f"{host.get_fact(server_facts.Home)}/.config/enroot",
+        path=f"{host.get_fact(server_facts.Home)}/.config/enroot/mounts.d",
         mode=700,
         present=not teardown,
         recursive=True,
@@ -34,11 +35,24 @@ def apply_config(teardown=False):
         present=not teardown,
     )
 
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''} Default Mounts",
+        src="templates/enroot/mounts.d/default.fstab.j2",
+        dest=f"{host.get_fact(server_facts.Home)}/.config/enroot/mounts.d/default.fstab",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        store_home=host.data.store_home,
+        extra_mounts=host.data.get("enroot_mounts", []),
+    )
+
 
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
-    if kernel == "Linux":
+    enroot_exists = host.get_fact(enroot_facts.EnrootExists)
+    if kernel == "Linux" and enroot_exists:
         apply_config(teardown=teardown)
 
 

@@ -37,7 +37,7 @@ slurm = (
                 ssh_hostname="cs-oci-ord-dc-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="polar,polar3,polar4,grizzly",
-                nemo_skills_mounts=[
+                enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice/users/igitman/hf_models",
                 ],
             ),
@@ -48,7 +48,7 @@ slurm = (
                 ssh_hostname="cw-dfw-cs-001-dc-02.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}/store",
                 sbatch_partition="batch",
-                nemo_skills_mounts=[
+                enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice/users/igitman/hf_models",
                 ],
             ),
@@ -59,7 +59,7 @@ slurm = (
                 ssh_hostname="draco-oci-dc-02.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="batch_block1,batch_block3,batch_block4",
-                nemo_skills_mounts=[
+                enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice/users/igitman/llm/hf_models",
                     "/lustre/fsw/portfolios/llmservice/users/sdiao/wiki-202503-index",
                     "/lustre/fsw/portfolios/llmservice/users/ebakhturina/data/stem_v2_seed_data",

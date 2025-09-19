@@ -20,7 +20,7 @@ timeouts:
   cpu: 04:00:00
 
 containers:
-  vllm: {{ store_home }}/images/nemo-skills-vllm-0.7.0.sqsh
+  vllm: {{ store_home }}/images/nemo-skills-stem-vllm-rev20250919.sqsh
   sglang: {{ store_home }}/images/nemo-skills-sglang-0.7.0.sqsh
   sandbox: {{ store_home }}/images/nemo-skills-sandbox-0.7.1.sqsh
   nemo-skills: {{ store_home }}/images/nemo-skills-0.7.0.sqsh
@@ -28,9 +28,6 @@ containers:
 
 mounts:
   - {{ store_home }}:/store
-{% for path in extra_mounts %}
-  - {{ path }}:{{ path }}
-{% endfor %}
 
 env_vars:
   - HF_HOME=/store/huggingface

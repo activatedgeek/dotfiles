@@ -8,7 +8,7 @@ from myinfra.operations import files as myfiles
 
 @deploy("NVDA")
 def apply_nvda(teardown=False):
-    is_slurm_host = bool(host.get_fact(slurm_facts.Sbatch))
+    is_slurm_host = bool(host.get_fact(slurm_facts.SbatchExists))
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}srun-docker",
@@ -22,7 +22,7 @@ def apply_nvda(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
-    is_slurm_host = bool(host.get_fact(slurm_facts.Sbatch))
+    is_slurm_host = bool(host.get_fact(slurm_facts.SbatchExists))
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",

@@ -1,0 +1,4 @@
+{{ store_home }} /store none x-create=dir,bind
+{% for path in extra_mounts %}
+{{ path }} {{ path }} none x-create=dir,bind
+{% endfor %}
