@@ -66,6 +66,17 @@ def apply_config(teardown=False):
         git_email=host.data.email,
         term=host.data.get("term", None),
         store_home=host.data.get("store_home", None),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Secrets Env",
+        src="templates/bash/.secrets_env.j2",
+        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.secrets_env",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        use_export=True,
         goatcounter_site=host.data.get("goatcounter_site", None),
         mapbox_access_token=host.data.get("mapbox_access_token", None),
         cloudflare_api_key=host.data.get("cloudflare_api_key", None),

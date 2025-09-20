@@ -10,12 +10,21 @@ import myinfra.operations.files as myfiles
 @deploy("Config")
 def apply_config(teardown=False):
     files.directory(
-        name="Config Dir.",
-        path=f"{host.get_fact(server_facts.Home)}/.config/enroot/mounts.d",
+        name=f"{'Remove ' if teardown else ''}Directory",
+        path=f"{host.get_fact(server_facts.Home)}/.config/enroot",
         mode=700,
         present=not teardown,
         recursive=True,
     )
+
+    for d in ["mounts.d", "environ.d"]:
+        files.directory(
+            name=f"{'Remove ' if teardown else ''}{d}",
+            path=f"{host.get_fact(server_facts.Home)}/.config/enroot/{d}",
+            mode=700,
+            present=not teardown,
+            recursive=True,
+        )
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
@@ -45,6 +54,27 @@ def apply_config(teardown=False):
         ## Jinja2 Variables.
         store_home=host.data.store_home,
         extra_mounts=host.data.get("enroot_mounts", []),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Secrets",
+        src="templates/bash/.secrets_env.j2",
+        dest=f"{host.get_fact(server_facts.Home)}/.config/enroot/environ.d/secrets.env",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        use_export=False,
+        discord_webhook_token=host.data.get("discord_webhook_token", None),
+        wandb_api_key=host.data.get("wandb_api_key", None),
+        wandb_username=host.data.get("wandb_username", None),
+        wandb_entity=host.data.get("wandb_entity", None),
+        hf_token=host.data.get("hf_token", None),
+        openai_api_key=host.data.get("openai_api_key", None),
+        google_gemini_api_key=host.data.get("gemini_api_key", None),
+        exa_api_key=host.data.get("exa_api_key", None),
+        nvidia_api_key=host.data.get("nvidia_api_key", None),
+        gitlab_token=host.data.get("gitlab_token", None),
     )
 
 
