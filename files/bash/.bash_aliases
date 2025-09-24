@@ -44,9 +44,17 @@ function gdelhist {
 ## rclone.
 alias rcp='rclone -P copy'
 function rcpull() {
+  if [[ "$(pwd)" != "${STORE_HOME}" ]]; then
+    echo "Must only run this function from STORE_HOME"
+    return 1
+  fi
   rclone -P copy "${1}" "$(echo "${1}" | cut -d: -f2)"
 }
 function rcpush() {
+  if [[ "$(pwd)" != "${STORE_HOME}" ]]; then
+    echo "Must only run this function from STORE_HOME"
+    return 1
+  fi
   rclone -P copy "$(echo "${1}" | cut -d: -f2)" "${1}"
 }
 

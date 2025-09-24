@@ -20,11 +20,11 @@ timeouts:
   cpu: 04:00:00
 
 containers:
-  vllm: {{ store_home }}/images/nemo-skills-stem-vllm-rev20250919.sqsh
+  vllm: {{ store_home }}/images/nemo-skills-stem-vllm-rev20250923.sqsh
   sglang: {{ store_home }}/images/nemo-skills-sglang-0.7.0.sqsh
   sandbox: {{ store_home }}/images/nemo-skills-sandbox-0.7.1.sqsh
   nemo-skills: {{ store_home }}/images/nemo-skills-0.7.0.sqsh
-  search: {{ store_home }}/images/tool-integrated-reasoning-search-0.4.0.sqsh
+  search: {{ store_home }}/images/tool-integrated-reasoning-search-rev20250923.sqsh
 
 mounts:
   - {{ store_home }}:/store

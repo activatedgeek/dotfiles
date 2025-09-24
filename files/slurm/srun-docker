@@ -58,9 +58,8 @@ for i in $(seq 0 $(( SLURM_NNODES - 1 ))); do
   export MRANK=${i}
 
   srun -N 1 -n 1 \
-      --no-container-remap-root --container-mount-home \
       --container-image=${__container_image} \
-      --container-mounts=${STORE_HOME}:/store:rw,$(pwd):"/code/$(basename "$(pwd)")" \
+      --container-mounts=$(pwd):"/code/$(basename "$(pwd)")" \
       --container-workdir="/code/$(basename "$(pwd)")" \
         bash -l -c "${__args}" &
 
