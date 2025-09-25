@@ -3,6 +3,7 @@ ssh_tunnel:
   user: {{ ssh_tunnel_user }}
   identity: /home/{{ ssh_tunnel_user }}/.ssh/config.d/nvda/id_ed25519
   job_dir: {{ store_home}}/.nemo_run
+  pre_command: source ~/.bash_profile
 
 executor: slurm
 
@@ -10,7 +11,6 @@ disable_gpus_per_node: {{ disable_gpus_per_node }}
 
 account: {{ sbatch_account }}
 mail_type: FAIL
-mail_user: {{ ssh_tunnel_user }}@nvidia.com
 partition: {{ sbatch_partition }}
 cpu_partition: cpu
 timeouts:
@@ -20,7 +20,7 @@ timeouts:
   cpu: 04:00:00
 
 containers:
-  vllm: {{ store_home }}/images/nemo-skills-stem-vllm-rev20250923.sqsh
+  vllm: {{ store_home }}/images/nemo-skills-stem-vllm-rev20250924.sqsh
   sglang: {{ store_home }}/images/nemo-skills-sglang-0.7.0.sqsh
   sandbox: {{ store_home }}/images/nemo-skills-sandbox-0.7.1.sqsh
   nemo-skills: {{ store_home }}/images/nemo-skills-0.7.0.sqsh

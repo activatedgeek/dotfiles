@@ -1,18 +1,18 @@
 ## Directories.
 export STORE_HOME=${STORE_HOME:-"{{ store_home if store_home is not none else '${HOME}' }}"}
-export PROJECT_HOME=${PROJECT_HOME:-${STORE_HOME}/projects}
+export PROJECT_HOME=${STORE_HOME}/projects
 
 export CACHE_HOME=${STORE_HOME}/.cache
-export XDG_CACHE_HOME=${XDG_CACHE_HOME:-${CACHE_HOME}}
+export XDG_CACHE_HOME=${CACHE_HOME}
 export ENROOT_CACHE_PATH=${CACHE_HOME}/enroot
 
-export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"${HOME}/.config"}
+export XDG_CONFIG_HOME=${HOME}/.config
 
-export ENROOT_DATA_PATH=${STORE_HOME}/.enroot
+export ENROOT_DATA_PATH=${ENROOT_CACHE_PATH}/data
 
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 
-export HF_HOME=${HF_HOME:-"${STORE_HOME}/huggingface"}
+export HF_HOME=${STORE_HOME}/huggingface
 
 export WANDB_DIR=${CACHE_HOME}/wandb
 if [[ ! -d  "${WANDB_DIR}" ]]; then
@@ -24,7 +24,7 @@ export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 ## Config Vars.
 
 {% if term is not none %}
-export TERM={{ term }}
+export TERM=${TERM:-"{{ term }}"}
 {% endif %}
 export GPG_TTY=$(tty)
 
@@ -36,9 +36,7 @@ export DISABLE_OPENCOLLECTIVE=1
 export ADBLOCK=1
 export NPM_CONFIG_AUDIT=false
 
-export OMP_NUM_THREADS=${OMP_NUM_THREADS:-4}
 export XLA_PYTHON_CLIENT_PREALLOCATE=false
 export TF_CPP_MIN_LOG_LEVEL=${TF_CPP_MIN_LOG_LEVEL:-3}
-export VLLM_WORKER_MULTIPROC_METHOD=${VLLM_WORKER_MULTIPROC_METHOD:-spawn}
 
 export WANDB_DISABLE_CODE=true

@@ -22,7 +22,8 @@ def apply_nvda(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
-    is_slurm_host = bool(host.get_fact(slurm_facts.SbatchExists))
+    sbatch_bin = host.get_fact(slurm_facts.SbatchExists)
+    is_slurm_host = bool(sbatch_bin)
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
@@ -46,8 +47,19 @@ def apply_config(teardown=False):
         sbatch_overcommit=host.data.get("sbatch_overcommit", None),
     )
 
-    if host.data.get("org", "") == "nvda":
-        apply_nvda(teardown=teardown)
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}sbatch",
+        src="templates/slurm/sbatch.j2",
+        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/sbatch",
+        mode=755,
+        create_remote_dir=False,
+        present=is_slurm_host and not teardown,
+        ## Jinja2 Variables.
+        sbatch_bin=sbatch_bin,
+    )
+
+    # if host.data.get("org", "") == "nvda":
+    #     apply_nvda(teardown=teardown)
 
 
 def apply():

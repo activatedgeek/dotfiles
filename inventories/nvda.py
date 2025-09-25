@@ -34,7 +34,7 @@ slurm = (
         (
             "@ssh/cs",
             dict(
-                ssh_hostname="cs-oci-ord-dc-02.nvidia.com",
+                ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="polar,polar3,polar4,grizzly",
                 enroot_mounts=[
@@ -45,7 +45,7 @@ slurm = (
         (
             "@ssh/dfw",
             dict(
-                ssh_hostname="cw-dfw-cs-001-dc-02.cw-dfw-cs-001.hpc.nvidia.com",
+                ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}/store",
                 sbatch_partition="batch",
                 enroot_mounts=[
@@ -56,7 +56,7 @@ slurm = (
         (
             "@ssh/dr",
             dict(
-                ssh_hostname="draco-oci-dc-02.draco-oci-iad.nvidia.com",
+                ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_partition="batch_block1,batch_block3,batch_block4",
                 enroot_mounts=[
