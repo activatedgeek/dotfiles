@@ -1,3 +1,24 @@
 #!/usr/bin/env bash
 
+function snemo-patch-job_name {
+    if [[ -z "${1}" ]]; then
+        return 0  ## Return 0 exit-code to avoid cascading errors.
+    fi
+
+    __sbatch_file="${1}"
+    __sbatch_job_arg=$(cat "${__sbatch_file}" | grep -m1 "#SBATCH --job-name=")
+    
+    if [[ ! -z "${__sbatch_job_arg}" ]]; then
+        __old_job_name=$(echo ${__sbatch_job_arg} | cut -d'=' -f2)
+        __new_job_name="$(basename $(dirname "${__sbatch_file}"))/${__old_job_name}"
+        sed -i "s|^${__sbatch_job_arg}\$|#SBATCH --job-name=${__new_job_name}|" "${__sbatch_file}"
+    fi
+}
+
+## Assumes arguments to be `--requeue --parsable <bash.sh>`.
+__sbatch_file="$(echo "${@}" | rev | cut -d' ' -f1 | rev)"
+if [[ -f "${__sbatch_file}" ]]; then
+    snemo-patch-job_name "${__sbatch_file}"
+fi
+
 {{ sbatch_bin }} "${@}"

@@ -1,7 +1,7 @@
 ssh_tunnel:
   host: {{ ssh_tunnel_host }}
   user: ${USER}
-  job_dir: {{ store_home}}/.nemo_run
+  job_dir: ${HOME}/.nemo_run
   pre_command: source ~/.bash_profile
 
 executor: slurm
