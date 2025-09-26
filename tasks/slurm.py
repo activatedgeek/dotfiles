@@ -43,8 +43,6 @@ def apply_config(teardown=False):
         present=is_slurm_host and not teardown,
         ## Jinja2 Variables.
         sbatch_account=host.data.get("sbatch_account", None),
-        sbatch_partition=host.data.get("sbatch_partition", None),
-        sbatch_overcommit=host.data.get("sbatch_overcommit", None),
     )
 
     myfiles.template(

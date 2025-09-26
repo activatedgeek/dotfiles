@@ -1,7 +1,6 @@
 ssh_tunnel:
   host: {{ ssh_tunnel_host }}
-  user: {{ ssh_tunnel_user }}
-  identity: /home/{{ ssh_tunnel_user }}/.ssh/config.d/nvda/id_ed25519
+  user: ${USER}
   job_dir: {{ store_home}}/.nemo_run
   pre_command: source ~/.bash_profile
 

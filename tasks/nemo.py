@@ -39,7 +39,6 @@ def apply_nemo_skills(teardown=False):
         f"{ihost.name.split('/')[-1]}": {
             "store_home": ihost.data.store_home.replace("${USER}", ihost.data.ssh_user),
             "ssh_tunnel_host": ihost.data.ssh_hostname,
-            "ssh_tunnel_user": ihost.data.ssh_user,
             "sbatch_account": ihost.data.sbatch_account,
             "sbatch_partition": ihost.data.sbatch_partition,
             "disable_gpus_per_node": ihost.data.get("nemo_skills_disable_gpus_per_node", False),

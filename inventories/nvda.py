@@ -78,7 +78,6 @@ slurm = (
     ],
     dict(
         sbatch_account="llmservice_nemo_robustness",
-        sbatch_overcommit=True,
     ),
 )
 

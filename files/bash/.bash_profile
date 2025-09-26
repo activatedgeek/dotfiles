@@ -23,7 +23,9 @@ fi
 
 ### starship.
 if [[ -x "$(command -v starship)" ]]; then
-    eval "$(starship init bash)"
+    if [[ "$TERM" != "dumb" ]]; then
+        eval "$(starship init bash)"
+    fi
 fi
 
 for profile_file in ${__src_dir}/.*_profile; do

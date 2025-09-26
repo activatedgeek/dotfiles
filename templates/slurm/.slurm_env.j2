@@ -8,13 +8,3 @@ export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.out"
 {% if sbatch_account is not none %}
 export SBATCH_ACCOUNT={{ sbatch_account }}
 {% endif %}
-
-{% if sbatch_partition is not none %}
-export SBATCH_PARTITION={{ sbatch_partition }}
-{% endif %}
-
-{% if sbatch_overcommit is not none %}
-export SBATCH_OVERCOMMIT=1
-{% endif %}
-
-# export SBATCH_EXCLUDE_LIST=
