@@ -23,10 +23,12 @@ export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 
 ## Config Vars.
 
-{% if term is not none %}
-export TERM=${TERM:-"{{ term }}"}
-{% endif %}
-export GPG_TTY=$(tty)
+if [[ -z "${HEADLESS}" ]]; then
+    {% if term is not none %}
+    export TERM={{ term }}
+    {% endif %}
+    export GPG_TTY=$(tty)
+fi
 
 export INVENTORY_HOSTNAME={{ inventory_hostname | d('unknown') }}
 
