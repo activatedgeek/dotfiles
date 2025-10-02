@@ -75,6 +75,7 @@ def apply_config(teardown=False):
         exa_api_key=host.data.get("exa_api_key", None),
         nvidia_api_key=host.data.get("nvidia_api_key", None),
         gitlab_token=host.data.get("gitlab_token", None),
+        brave_api_key=host.data.get("brave_api_key", None),
     )
 
 

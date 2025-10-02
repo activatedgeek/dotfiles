@@ -92,6 +92,7 @@ def apply_config(teardown=False):
         docker_username=host.data.get("docker_username", None),
         hcloud_token=host.data.get("hcloud_token", None),
         gitlab_token=host.data.get("gitlab_token", None),
+        brave_api_key=host.data.get("brave_api_key", None),
     )
 
     myfiles.copy(
