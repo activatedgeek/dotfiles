@@ -6,10 +6,10 @@ from pyinfra.operations import brew, files
 
 ## https://github.com/mamba-org/micromamba-releases/releases
 class Micromamba:
-    version = "2.3.1-0"
+    version = "2.3.2-0"
 
     class Linux:
-        sha256sum = "69be35f63f8db980d643d5c9be32108fbe231a647e770fe86c52f72d5e797b7f"
+        sha256sum = "ffc3cb8d52d4d6b354bdbb979c407719c485392b74e462cbd50811aa88e58f85"
 
 
 @deploy("MacOS")

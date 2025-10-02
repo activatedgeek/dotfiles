@@ -1,59 +1,11 @@
-[cs]
+{% for host, attrs in hosts.items() +%}
+[{{ host }}]
 type = sftp
-host = {{ hosts["@ssh/cs"]["hostname"] }}
+host = {{ attrs["hostname"] }}
 key_use_agent = true
 shell_type = unix
 
-[cs-store]
+[{{ host }}-store]
 type = alias
-remote = cs:{{ hosts["@ssh/cs"]["store_home"] }}
-
-[dfw]
-type = sftp
-host = {{ hosts["@ssh/dfw"]["hostname"] }}
-key_use_agent = true
-shell_type = unix
-
-[dfw-store]
-type = alias
-remote = dfw:{{ hosts["@ssh/dfw"]["store_home"] }}
-
-[dr]
-type = sftp
-host = {{ hosts["@ssh/dr"]["hostname"] }}
-key_use_agent = true
-shell_type = unix
-
-[dr-store]
-type = alias
-remote = dr:{{ hosts["@ssh/dr"]["store_home"] }}
-
-[eos]
-type = sftp
-host = {{ hosts["@ssh/eos"]["hostname"] }}
-key_use_agent = true
-shell_type = unix
-
-[eos-store]
-type = alias
-remote = eos:{{ hosts["@ssh/eos"]["store_home"] }}
-
-[desk]
-type = sftp
-host = {{ hosts["@ssh/desk"]["hostname"] }}
-key_use_agent = true
-shell_type = unix
-
-[desk-store]
-type = alias
-remote = desk:{{ hosts["@ssh/desk"]["store_home"] }}
-
-[bigdesk]
-type = sftp
-host = {{ hosts["@ssh/bigdesk"]["hostname"] }}
-key_use_agent = true
-shell_type = unix
-
-[bigdesk-store]
-type = alias
-remote = bigdesk:{{ hosts["@ssh/bigdesk"]["store_home"] }}
+remote = {{ host }}:{{ attrs["store_home"] }}
+{% endfor %}

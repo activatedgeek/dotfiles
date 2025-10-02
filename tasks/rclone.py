@@ -8,10 +8,10 @@ from myinfra.operations import files as myfiles
 
 ## https://downloads.rclone.org/
 class Rclone:
-    version = "1.70.2"
+    version = "1.71.1"
 
     class Linux:
-        sha256sum = "d1d99f58c1ad31592caa093eb400607725afd74eb3655bdeb6dc1886fed8fda8"
+        sha256sum = "5409cb410e49903af3517654ccc65c89d89f9dc12d7a97b0e13e09a9be6dc74a"
 
 
 @deploy("MacOS")
@@ -41,11 +41,11 @@ def apply_nvda(teardown=False):
     homedir = host.get_fact(server_facts.Home)
 
     linux_hosts = {
-        host.name: {
-            "hostname": host.data.ssh_hostname,
-            "store_home": host.data.store_home.replace("${USER}", host.data.ssh_user).replace("${HOME}", homedir),
+        f"{ihost.name.split('/')[-1]}": {
+            "hostname": ihost.data.ssh_hostname,
+            "store_home": ihost.data.store_home.replace("${USER}", host.data.ssh_user).replace("${HOME}", homedir),
         }
-        for host in inventory.get_group("linux")
+        for ihost in inventory.get_group("linux")
     }
 
     myfiles.template(
