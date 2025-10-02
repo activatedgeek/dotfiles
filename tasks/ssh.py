@@ -1,4 +1,4 @@
-from pyinfra import host
+from pyinfra import host, inventory
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import files
@@ -26,6 +26,15 @@ def apply_config_nvda(teardown=False):
             )
 
     if host.name == "@local":
+        slurm_hosts = {
+            f"{ihost.name.split('/')[-1]}": {
+                "ssh_hostname_format": ihost.data.ssh_hostname_format,
+                "num_login_nodes": ihost.data.get("num_login_nodes", 0),
+                "num_dc_nodes": ihost.data.get("num_dc_nodes", 0),
+            }
+            for ihost in inventory.get_group("slurm")
+        }
+
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}Config",
             src="templates/ssh/nvda/config.j2",
@@ -33,6 +42,8 @@ def apply_config_nvda(teardown=False):
             mode=600,
             create_remote_dir=False,
             present=not teardown,
+            ## Jinja2 variables.
+            slurm_hosts=slurm_hosts,
         )
 
         files.line(
