@@ -1,17 +1,32 @@
+from dataclasses import dataclass
+from typing import ClassVar
+
 from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
 from myinfra.operations import files as myfiles
+from myinfra.utils import Binary
 
 
 ## https://github.com/zyedidia/micro/releases
-class Micro:
-    version = "2.0.14"
+@dataclass
+class Micro(Binary):
+    version: ClassVar[str] = "2.0.14"
 
-    class Linux:
-        sha256sum = "26cab163197dd75207f7792c9ebf96ee1eb5c92b63af537ff9568eb2f8345b53"
+    @property
+    def _arch_map(self):
+        return {
+            "x86_64": {
+                "src": f"https://github.com/zyedidia/micro/releases/download/v{self.version}/micro-{self.version}-linux64-static.tar.gz",
+                "sha256sum": "26cab163197dd75207f7792c9ebf96ee1eb5c92b63af537ff9568eb2f8345b53",
+            },
+            "aarch64": {
+                "src": f"https://github.com/zyedidia/micro/releases/download/v{self.version}/micro-{self.version}-linux-arm64.tar.gz",
+                "sha256sum": "374d22f155d8a24595ca3c153aeb3e9bf0c982ce7a014360a8a6916258958085",
+            },
+        }
 
 
 @deploy("MacOS")
@@ -24,13 +39,14 @@ def apply_macos(teardown=False):
 
 
 @deploy("Linux")
-def apply_linux(teardown=False):
+def apply_linux(arch, teardown=False):
+    binary = Micro(arch)
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/zyedidia/micro/releases/download/v{Micro.version}/micro-{Micro.version}-linux64-static.tar.gz",
-        src_dir=f"micro-{Micro.version}",
+        src=binary.src,
+        src_dir=f"micro-{binary.version}",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/micro",
-        sha256sum=Micro.Linux.sha256sum,
+        sha256sum=binary.sha256sum,
         mode=755,
         present=not teardown,
     )
@@ -52,7 +68,8 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        apply_linux(teardown=teardown)
+        arch = host.get_fact(server_facts.Arch)
+        apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
 

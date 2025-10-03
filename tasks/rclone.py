@@ -1,17 +1,33 @@
+from dataclasses import dataclass
+from pathlib import Path
+from typing import ClassVar
+
 from pyinfra import host, inventory
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
 from myinfra.operations import files as myfiles
+from myinfra.utils import Binary
 
 
 ## https://downloads.rclone.org/
-class Rclone:
-    version = "1.71.1"
+@dataclass
+class Rclone(Binary):
+    version: ClassVar[str] = "1.71.1"
 
-    class Linux:
-        sha256sum = "5409cb410e49903af3517654ccc65c89d89f9dc12d7a97b0e13e09a9be6dc74a"
+    @property
+    def _arch_map(self):
+        return {
+            "x86_64": {
+                "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-amd64.zip",
+                "sha256sum": "5409cb410e49903af3517654ccc65c89d89f9dc12d7a97b0e13e09a9be6dc74a",
+            },
+            "aarch64": {
+                "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-arm64.zip",
+                "sha256sum": "024871b9bc0c47311e73ed06b1abf13208723b79b51d55b5a757d787e9340c13",
+            },
+        }
 
 
 @deploy("MacOS")
@@ -24,13 +40,14 @@ def apply_macos(teardown=False):
 
 
 @deploy("Linux")
-def apply_linux(teardown=False):
+def apply_linux(arch, teardown=False):
+    binary = Rclone(arch)
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://downloads.rclone.org/v{Rclone.version}/rclone-v{Rclone.version}-linux-amd64.zip",
-        src_dir=f"rclone-v{Rclone.version}-linux-amd64",
+        src=binary.src,
+        src_dir=f"rclone-v{binary.version}-linux-{Path(binary.src).stem.split('-')[-1]}",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/rclone",
-        sha256sum=Rclone.Linux.sha256sum,
+        sha256sum=binary.sha256sum,
         present=not teardown,
         mode=755,
     )
@@ -79,7 +96,8 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        apply_linux(teardown=teardown)
+        arch = host.get_fact(server_facts.Arch)
+        apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
 

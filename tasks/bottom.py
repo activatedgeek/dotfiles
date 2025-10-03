@@ -1,26 +1,42 @@
+from dataclasses import dataclass
+from typing import ClassVar
+
 from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import files
 
 from myinfra.operations import files as myfiles
+from myinfra.utils import Binary
 
 
 ## https://github.com/ClementTsang/bottom/releases
-class Btm:
-    version = "0.11.1"
+@dataclass
+class Btm(Binary):
+    version: ClassVar[str] = "0.11.1"
 
-    class Linux:
-        sha256sum = "ff67e8ecd567c98bbb4016defd4efd8090e9b6a926a3c72cab184e73c964f0a9"
+    @property
+    def _arch_map(self):
+        return {
+            "x86_64": {
+                "src": f"https://github.com/ClementTsang/bottom/releases/download/{self.version}/bottom_x86_64-unknown-linux-musl.tar.gz",
+                "sha256sum": "ff67e8ecd567c98bbb4016defd4efd8090e9b6a926a3c72cab184e73c964f0a9",
+            },
+            "aarch64": {
+                "src": f"https://github.com/ClementTsang/bottom/releases/download/{self.version}/bottom_aarch64-unknown-linux-musl.tar.gz",
+                "sha256sum": "d8bf90b6058edf14118eb12fa3b86070386b7376bce08df72a96f5737647b737",
+            },
+        }
 
 
 @deploy("Linux")
-def apply_linux(teardown=False):
+def apply_linux(arch, teardown=False):
+    binary = Btm(arch)
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/ClementTsang/bottom/releases/download/{Btm.version}/bottom_x86_64-unknown-linux-musl.tar.gz",
+        src=binary.src,
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/btm",
-        sha256sum=Btm.Linux.sha256sum,
+        sha256sum=binary.sha256sum,
         present=not teardown,
         mode=755,
     )
@@ -40,7 +56,8 @@ def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Linux":
-        apply_linux(teardown=teardown)
+        arch = host.get_fact(server_facts.Arch)
+        apply_linux(arch, teardown=teardown)
         apply_config(teardown=teardown)
 
 

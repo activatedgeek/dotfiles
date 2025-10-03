@@ -1,17 +1,32 @@
+from dataclasses import dataclass
+from typing import ClassVar
+
 from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew
 
 from myinfra.operations import files as myfiles
+from myinfra.utils import Binary
 
 
 ## https://github.com/Wilfred/difftastic/releases
-class Difftastic:
-    version = "0.65.0"
+@dataclass
+class Difftastic(Binary):
+    version: ClassVar[str] = "0.65.0"
 
-    class Linux:
-        sha256sum = "1de384a69813b665e36a816f24ff4bbad15059006996a69cdf677c997a6bd5b0"
+    @property
+    def _arch_map(self):
+        return {
+            "x86_64": {
+                "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "1de384a69813b665e36a816f24ff4bbad15059006996a69cdf677c997a6bd5b0",
+            },
+            "aarch64": {
+                "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-aarch64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "a3fc036c2e5b6d5680be047cd3ec49812139004fc46b2455030b0c2f00891222",
+            },
+        }
 
 
 @deploy("MacOS")
@@ -28,20 +43,25 @@ def apply_macos(teardown=False):
 
 
 @deploy("difft")
-def apply_difft(teardown=False):
+def apply_difft(arch, teardown=False):
+    ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
+    if arch == "aarch64":
+        teardown = True
+
+    binary = Difftastic(arch)
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        src=f"https://github.com/Wilfred/difftastic/releases/download/{Difftastic.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
+        src=binary.src,
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/difft",
-        sha256sum=Difftastic.Linux.sha256sum,
+        sha256sum=binary.sha256sum,
         mode=755,
         present=not teardown,
     )
 
 
 @deploy("Linux")
-def apply_linux(teardown=False):
-    apply_difft(teardown=teardown)
+def apply_linux(arch, teardown=False):
+    apply_difft(arch, teardown=teardown)
 
 
 @deploy("Config")
@@ -73,7 +93,8 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        apply_linux(teardown=teardown)
+        arch = host.get_fact(server_facts.Arch)
+        apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
 

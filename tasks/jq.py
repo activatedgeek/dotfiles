@@ -1,15 +1,31 @@
+from dataclasses import dataclass
+from typing import ClassVar
+
 from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
+from myinfra.utils import Binary
+
 
 ## https://github.com/jqlang/jq/releases
-class Jq:
-    version = "1.8.1"
+@dataclass
+class Jq(Binary):
+    version: ClassVar[str] = "1.8.1"
 
-    class Linux:
-        sha256sum = "020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d"
+    @property
+    def _arch_map(self):
+        return {
+            "x86_64": {
+                "src": f"https://github.com/jqlang/jq/releases/download/jq-{self.version}/jq-linux64",
+                "sha256sum": "020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d",
+            },
+            "aarch64": {
+                "src": f"https://github.com/jqlang/jq/releases/download/jq-{self.version}/jq-linux-arm64",
+                "sha256sum": "6bc62f25981328edd3cfcfe6fe51b073f2d7e7710d7ef7fcdac28d4e384fc3d4",
+            },
+        }
 
 
 @deploy("MacOS")
@@ -22,7 +38,7 @@ def apply_macos(teardown=False):
 
 
 @deploy("Linux")
-def apply_linux(teardown=False):
+def apply_linux(arch, teardown=False):
     if teardown:
         files.file(
             name="Uninstall",
@@ -30,11 +46,12 @@ def apply_linux(teardown=False):
             present=False,
         )
     else:
+        binary = Jq(arch)
         files.download(
             name="Install",
-            src=f"https://github.com/jqlang/jq/releases/download/jq-{Jq.version}/jq-linux64",
+            src=binary.src,
             dest=f"{host.get_fact(server_facts.Home)}/.local/bin/jq",
-            sha256sum=Jq.Linux.sha256sum,
+            sha256sum=binary.sha256sum,
             mode=755,
         )
 
@@ -45,7 +62,8 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        apply_linux(teardown=teardown)
+        arch = host.get_fact(server_facts.Arch)
+        apply_linux(arch, teardown=teardown)
 
 
 apply()

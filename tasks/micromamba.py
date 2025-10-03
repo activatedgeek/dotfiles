@@ -1,15 +1,31 @@
+from dataclasses import dataclass
+from typing import ClassVar
+
 from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
+from myinfra.utils import Binary
+
 
 ## https://github.com/mamba-org/micromamba-releases/releases
-class Micromamba:
-    version = "2.3.2-0"
+@dataclass
+class Micromamba(Binary):
+    version: ClassVar[str] = "2.3.2-0"
 
-    class Linux:
-        sha256sum = "ffc3cb8d52d4d6b354bdbb979c407719c485392b74e462cbd50811aa88e58f85"
+    @property
+    def _arch_map(self):
+        return {
+            "x86_64": {
+                "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-64",
+                "sha256sum": "ffc3cb8d52d4d6b354bdbb979c407719c485392b74e462cbd50811aa88e58f85",
+            },
+            "aarch64": {
+                "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-aarch64",
+                "sha256sum": "7154d66112a623d8d930f8aab467347971d5c1403a84b1c25d19298f4fb9da03",
+            },
+        }
 
 
 @deploy("MacOS")
@@ -22,7 +38,7 @@ def apply_macos(teardown=False):
 
 
 @deploy("Linux")
-def apply_linux(teardown=False):
+def apply_linux(arch, teardown=False):
     if teardown:
         files.file(
             name="Uninstall micromamba",
@@ -30,11 +46,12 @@ def apply_linux(teardown=False):
             present=False,
         )
     else:
+        binary = Micromamba(arch)
         files.download(
             name="micromamba",
-            src=f"https://github.com/mamba-org/micromamba-releases/releases/download/{Micromamba.version}/micromamba-linux-64",
+            src=binary.src,
             dest=f"{host.get_fact(server_facts.Home)}/.local/bin/micromamba",
-            sha256sum=Micromamba.Linux.sha256sum,
+            sha256sum=binary.sha256sum,
             mode=755,
         )
 
@@ -54,7 +71,8 @@ def apply():
     # if kernel == "Darwin":
     #     apply_macos(teardown=teardown)
     if kernel == "Linux":
-        apply_linux(teardown=teardown)
+        arch = host.get_fact(server_facts.Arch)
+        apply_linux(arch, teardown=teardown)
 
 
 apply()
