@@ -78,6 +78,19 @@ def apply_config(teardown=False):
         brave_api_key=host.data.get("brave_api_key", None),
     )
 
+    files.directory(
+        name="Images directory",
+        path=f"{host.data.store_home.replace('${USER}', host.data.ssh_user)}/images",
+        present=True,
+    )
+
+    files.link(
+        name=f"{'Remove ' if teardown else ''}Images Symlink",
+        path=f"{host.get_fact(server_facts.Home)}/images",
+        target=f"{host.data.store_home.replace('${USER}', host.data.ssh_user)}/images",
+        present=not teardown,
+    )
+
 
 def apply():
     teardown = host.data.get("teardown", False)
