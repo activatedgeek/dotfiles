@@ -27,7 +27,7 @@ def apply_config(teardown=False):
         )
 
     myfiles.copy(
-        name=f"{'Remove ' if teardown else ''}Profile",
+        name=f"{'Remove ' if teardown else ''}Credentials",
         src="files/enroot/.credentials",
         dest=f"{host.get_fact(server_facts.Home)}/.config/enroot/.credentials",
         mode=600,
@@ -74,6 +74,8 @@ def apply_config(teardown=False):
         google_gemini_api_key=host.data.get("gemini_api_key", None),
         exa_api_key=host.data.get("exa_api_key", None),
         nvidia_api_key=host.data.get("nvidia_api_key", None),
+        docker_hub_username=host.data.get("docker_hub_username", None),
+        docker_hub_password=host.data.get("docker_hub_password", None),
         gitlab_token=host.data.get("gitlab_token", None),
         brave_api_key=host.data.get("brave_api_key", None),
     )

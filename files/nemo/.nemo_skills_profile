@@ -8,8 +8,22 @@ function senroot {
     echo "[ERROR]: Missing Docker image."
     return
   fi
-  srun --pty --account=${SBATCH_ACCOUNT} --partition=cpu \
-       --time=60 --mem=64G bash -l -c "mkenroot ${1} && exit"  
+
+  if [[ -z "${SBATCH_PARTITION}" ]]; then
+    if [[ "${INVENTORY_HOSTNAME}" = "eos" ]]; then
+      SBATCH_PARTITION=interactive
+    elif [[ "${INVENTORY_HOSTNAME}" = "hsg" ]]; then
+      SBATCH_PARTITION=cpu
+    fi
+  fi
+
+  sbatch \
+       --account=${SBATCH_ACCOUNT} \
+       --partition=${SBATCH_PARTITION:-cpu_interactive} \
+       --time=${SBATCH_TIMELIMIT:-"01:00:00"} \
+       --mem=${SBATCH_MEM:-"32G"} \
+       --job-name=${SBATCH_ACCOUNT}-mkenroot.run \
+       ~/.local/bin/mkenroot ${1}
 }
 
 function snemo-logd {
