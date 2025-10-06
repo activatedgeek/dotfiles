@@ -6,6 +6,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
+from myinfra.facts import server as myserver_facts
 from myinfra.utils import Binary
 
 
@@ -71,7 +72,7 @@ def apply():
     # if kernel == "Darwin":
     #     apply_macos(teardown=teardown)
     if kernel == "Linux":
-        arch = host.get_fact(server_facts.Arch)
+        arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
 
 

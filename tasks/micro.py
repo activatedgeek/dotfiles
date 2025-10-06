@@ -6,6 +6,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
+from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
@@ -18,11 +19,11 @@ class Micro(Binary):
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://github.com/zyedidia/micro/releases/download/v{self.version}/micro-{self.version}-linux64-static.tar.gz",
                 "sha256sum": "26cab163197dd75207f7792c9ebf96ee1eb5c92b63af537ff9568eb2f8345b53",
             },
-            "aarch64": {
+            "arm64": {
                 "src": f"https://github.com/zyedidia/micro/releases/download/v{self.version}/micro-{self.version}-linux-arm64.tar.gz",
                 "sha256sum": "374d22f155d8a24595ca3c153aeb3e9bf0c982ce7a014360a8a6916258958085",
             },
@@ -68,7 +69,7 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        arch = host.get_fact(server_facts.Arch)
+        arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)

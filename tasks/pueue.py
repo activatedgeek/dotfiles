@@ -6,6 +6,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import files
 
+from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
@@ -102,7 +103,7 @@ def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Linux":
-        arch = host.get_fact(server_facts.Arch)
+        arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
         apply_config(teardown=teardown)
 

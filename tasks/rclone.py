@@ -7,6 +7,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
+from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
@@ -19,11 +20,11 @@ class Rclone(Binary):
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-amd64.zip",
                 "sha256sum": "5409cb410e49903af3517654ccc65c89d89f9dc12d7a97b0e13e09a9be6dc74a",
             },
-            "aarch64": {
+            "arm64": {
                 "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-arm64.zip",
                 "sha256sum": "024871b9bc0c47311e73ed06b1abf13208723b79b51d55b5a757d787e9340c13",
             },
@@ -96,7 +97,7 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        arch = host.get_fact(server_facts.Arch)
+        arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)

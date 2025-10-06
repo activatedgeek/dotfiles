@@ -6,6 +6,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import files
 
+from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
@@ -18,11 +19,11 @@ class Btm(Binary):
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://github.com/ClementTsang/bottom/releases/download/{self.version}/bottom_x86_64-unknown-linux-musl.tar.gz",
                 "sha256sum": "ff67e8ecd567c98bbb4016defd4efd8090e9b6a926a3c72cab184e73c964f0a9",
             },
-            "aarch64": {
+            "arm64": {
                 "src": f"https://github.com/ClementTsang/bottom/releases/download/{self.version}/bottom_aarch64-unknown-linux-musl.tar.gz",
                 "sha256sum": "d8bf90b6058edf14118eb12fa3b86070386b7376bce08df72a96f5737647b737",
             },
@@ -56,7 +57,7 @@ def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Linux":
-        arch = host.get_fact(server_facts.Arch)
+        arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
         apply_config(teardown=teardown)
 

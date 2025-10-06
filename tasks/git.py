@@ -6,6 +6,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew
 
+from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
@@ -18,11 +19,11 @@ class Difftastic(Binary):
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "1de384a69813b665e36a816f24ff4bbad15059006996a69cdf677c997a6bd5b0",
             },
-            "aarch64": {
+            "arm64": {
                 "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-aarch64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "a3fc036c2e5b6d5680be047cd3ec49812139004fc46b2455030b0c2f00891222",
             },
@@ -45,7 +46,7 @@ def apply_macos(teardown=False):
 @deploy("difft")
 def apply_difft(arch, teardown=False):
     ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
-    if arch == "aarch64":
+    if arch == "arm64":
         teardown = True
 
     binary = Difftastic(arch)
@@ -93,7 +94,7 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
     elif kernel == "Linux":
-        arch = host.get_fact(server_facts.Arch)
+        arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)

@@ -108,7 +108,7 @@ def apply_config(teardown=False):
     files.line(
         name=f"{'Remove' if teardown else 'Add'} Profile",
         path=f"{host.get_fact(server_facts.Home)}/.bash_profile",
-        line=f"source {host.get_fact(server_facts.Home)}/.local/profile/.bash_profile",
+        line="source ~/.local/profile/.bash_profile",
         ensure_newline=True,
         present=not teardown,
     )

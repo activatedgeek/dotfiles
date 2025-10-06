@@ -17,13 +17,15 @@ function senroot {
     fi
   fi
 
-  sbatch \
+  __all_args="${@}"
+
+  srun --pty \
        --account=${SBATCH_ACCOUNT} \
        --partition=${SBATCH_PARTITION:-cpu_interactive} \
        --time=${SBATCH_TIMELIMIT:-"01:00:00"} \
-       --mem=${SBATCH_MEM:-"32G"} \
+       --mem=${SBATCH_MEM:-"16G"} \
        --job-name=${SBATCH_ACCOUNT}-mkenroot.run \
-       ~/.local/bin/mkenroot ${1}
+       bash -l -c "mkenroot ${__all_args}; exit"
 }
 
 function snemo-logd {
