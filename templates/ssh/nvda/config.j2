@@ -22,7 +22,7 @@ Host d{{ host }}{{ i + 1 }}
 
 {% endfor %}
 
-Match host="*.nvidia.com" originalhost="*desk"
+Match host="*.nvidia.com",originalhost="*desk"
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
   ForwardAgent yes
   AddKeysToAgent yes

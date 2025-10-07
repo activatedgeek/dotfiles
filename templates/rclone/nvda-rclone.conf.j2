@@ -4,8 +4,4 @@ type = sftp
 host = {{ attrs["hostname"] }}
 key_use_agent = true
 shell_type = unix
-
-[{{ host }}-store]
-type = alias
-remote = {{ host }}:/home/{{ attrs["user"] }}/store
 {% endfor %}
