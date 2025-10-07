@@ -7,5 +7,5 @@ shell_type = unix
 
 [{{ host }}-store]
 type = alias
-remote = {{ host }}:{{ attrs["store_home"] }}
+remote = {{ host }}:/home/{{ attrs["user"] }}/store
 {% endfor %}

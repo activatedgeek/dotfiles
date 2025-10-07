@@ -19,6 +19,8 @@ _EXTENSIONS = [
 
 @deploy("MacOS")
 def apply_macos(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     brew.casks(
         name=f"{'Uni' if teardown else 'I'}nstall",
         casks=["visual-studio-code"],
@@ -36,10 +38,28 @@ def apply_macos(teardown=False):
         myfiles.copy(
             name=f.capitalize().split(".")[0],
             src=f"files/vscode/{f}",
-            dest=f"{host.get_fact(server_facts.Home)}/Library/Application Support/Code/User/{f}",
+            dest=f"{remote_home}/Library/Application Support/Code/User/{f}",
             present=not teardown,
             mode=600,
             create_remote_dir=False,
+        )
+
+
+@deploy("MacOS")
+def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    if teardown:
+        files.directory(
+            name="Remove .vscode-server",
+            path=f"{remote_home}/.vscode-server",
+            present=False,
+        )
+
+        files.directory(
+            name="Remove .vscode",
+            path=f"{remote_home}/.vscode",
+            present=False,
         )
 
 
@@ -49,18 +69,7 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
 
-    if teardown:
-        files.directory(
-            name="Remove .vscode-server",
-            path=f"{host.get_fact(server_facts.Home)}/.vscode-server",
-            present=False,
-        )
-
-        files.directory(
-            name="Remove .vscode",
-            path=f"{host.get_fact(server_facts.Home)}/.vscode",
-            present=False,
-        )
+    apply_config(teardown=teardown)
 
 
 apply()

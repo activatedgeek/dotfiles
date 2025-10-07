@@ -17,23 +17,25 @@ def apply_macos(teardown=False):
 
 @deploy("Home")
 def apply_config_home(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name="Directory",
-        path=f"{host.get_fact(server_facts.Home)}/.config/bw",
+        path=f"{remote_home}/.config/bw",
         present=not teardown,
     )
 
     if host.data.get("vault_pass", None):
         files.line(
             name="Vault Password",
-            path=f"{host.get_fact(server_facts.Home)}/.config/bw/pass",
+            path=f"{remote_home}/.config/bw/pass",
             line=host.data.vault_pass,
             present=not teardown,
         )
 
         files.file(
             name="Permissions",
-            path=f"{host.get_fact(server_facts.Home)}/.config/bw/pass",
+            path=f"{remote_home}/.config/bw/pass",
             mode=600,
             present=not teardown,
         )

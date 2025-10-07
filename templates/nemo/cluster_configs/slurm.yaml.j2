@@ -19,14 +19,14 @@ timeouts:
   cpu: 04:00:00
 
 containers:
-  vllm: {{ store_home }}/images/nemo-skills-stem-vllm-rev20250924.sqsh
-  sglang: {{ store_home }}/images/nemo-skills-sglang-0.7.0.sqsh
-  sandbox: {{ store_home }}/images/nemo-skills-sandbox-0.7.1.sqsh
-  nemo-skills: {{ store_home }}/images/nemo-skills-0.7.0.sqsh
-  search: {{ store_home }}/images/tool-integrated-reasoning-search-rev20250923.sqsh
+  vllm: /home/{{ ssh_user }}/store/images/nemo-skills-stem-vllm-rev20250924.sqsh
+  sglang: /home/{{ ssh_user }}/store/images/nemo-skills-sglang-0.7.0.sqsh
+  sandbox: /home/{{ ssh_user }}/store/images/nemo-skills-sandbox-0.7.1.sqsh
+  nemo-skills: /home/{{ ssh_user }}/store/images/nemo-skills-0.7.0.sqsh
+  search: /home/{{ ssh_user }}/store/images/tool-integrated-reasoning-search-rev20250923.sqsh
 
 mounts:
-  - {{ store_home }}:/store
+  - /home/{{ ssh_user }}/store:/store
 
 env_vars:
   - HF_HOME=/store/huggingface

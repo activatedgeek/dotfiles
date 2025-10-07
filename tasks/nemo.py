@@ -8,9 +8,11 @@ from myinfra.operations import files as myfiles
 
 @deploy("NeMo-Skills")
 def apply_nemo_skills(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name="Config Dir.",
-        path=f"{host.get_fact(server_facts.Home)}/.config/nemo_skills/cluster_configs",
+        path=f"{remote_home}/.config/nemo_skills/cluster_configs",
         mode=700,
         present=not teardown,
         recursive=True,
@@ -18,7 +20,7 @@ def apply_nemo_skills(teardown=False):
 
     local_cluster_hosts = {
         f"{ihost.name.split('/')[-1]}": {
-            "store_home": ihost.data.store_home.replace("${USER}", ihost.data.ssh_user),
+            "ssh_user": ihost.data.ssh_user,
         }
         for ihost in inventory.get_group("desktop")
     }
@@ -27,7 +29,7 @@ def apply_nemo_skills(teardown=False):
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
             src="templates/nemo/cluster_configs/local.yaml.j2",
-            dest=f"{host.get_fact(server_facts.Home)}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
+            dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
             create_remote_dir=False,
             present=not teardown,
@@ -37,7 +39,7 @@ def apply_nemo_skills(teardown=False):
 
     slurm_cluster_hosts = {
         f"{ihost.name.split('/')[-1]}": {
-            "store_home": ihost.data.store_home.replace("${USER}", ihost.data.ssh_user),
+            "ssh_user": ihost.data.ssh_user,
             "ssh_tunnel_host": ihost.data.ssh_hostname,
             "sbatch_account": ihost.data.sbatch_account,
             "sbatch_partition": ihost.data.sbatch_partition,
@@ -50,7 +52,7 @@ def apply_nemo_skills(teardown=False):
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
             src="templates/nemo/cluster_configs/slurm.yaml.j2",
-            dest=f"{host.get_fact(server_facts.Home)}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
+            dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
             create_remote_dir=False,
             present=not teardown,

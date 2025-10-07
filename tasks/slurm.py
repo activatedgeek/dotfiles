@@ -25,10 +25,12 @@ def apply_config(teardown=False):
     sbatch_bin = host.get_fact(slurm_facts.SbatchExists)
     is_slurm_host = bool(sbatch_bin)
 
+    remote_home = host.get_fact(server_facts.Home)
+
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
         src="files/slurm/.slurm_profile",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.slurm_profile",
+        dest=f"{remote_home}/.local/profile/.slurm_profile",
         mode=600,
         create_remote_dir=False,
         present=is_slurm_host and not teardown,
@@ -37,7 +39,7 @@ def apply_config(teardown=False):
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Env",
         src="templates/slurm/.slurm_env.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.slurm_env",
+        dest=f"{remote_home}/.local/profile/.slurm_env",
         mode=600,
         create_remote_dir=False,
         present=is_slurm_host and not teardown,
@@ -48,7 +50,7 @@ def apply_config(teardown=False):
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}sbatch",
         src="templates/slurm/sbatch.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/sbatch",
+        dest=f"{remote_home}/.local/bin/sbatch",
         mode=755,
         create_remote_dir=False,
         present=is_slurm_host and not teardown,

@@ -9,9 +9,11 @@ import myinfra.operations.files as myfiles
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name=f"{'Remove ' if teardown else ''}Directory",
-        path=f"{host.get_fact(server_facts.Home)}/.config/enroot",
+        path=f"{remote_home}/.config/enroot",
         mode=700,
         present=not teardown,
         recursive=True,
@@ -20,7 +22,7 @@ def apply_config(teardown=False):
     for d in ["mounts.d", "environ.d"]:
         files.directory(
             name=f"{'Remove ' if teardown else ''}{d}",
-            path=f"{host.get_fact(server_facts.Home)}/.config/enroot/{d}",
+            path=f"{remote_home}/.config/enroot/{d}",
             mode=700,
             present=not teardown,
             recursive=True,
@@ -29,7 +31,7 @@ def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Credentials",
         src="files/enroot/.credentials",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/enroot/.credentials",
+        dest=f"{remote_home}/.config/enroot/.credentials",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -38,7 +40,7 @@ def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}mkenroot",
         src="files/enroot/mkenroot.sh",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/mkenroot",
+        dest=f"{remote_home}/.local/bin/mkenroot",
         mode=755,
         create_remote_dir=False,
         present=not teardown,
@@ -47,7 +49,7 @@ def apply_config(teardown=False):
     myfiles.template(
         name=f"{'Remove ' if teardown else ''} Default Mounts",
         src="templates/enroot/mounts.d/default.fstab.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/enroot/mounts.d/default.fstab",
+        dest=f"{remote_home}/.config/enroot/mounts.d/default.fstab",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -59,7 +61,7 @@ def apply_config(teardown=False):
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Secrets",
         src="templates/bash/.secrets_env.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/enroot/environ.d/secrets.env",
+        dest=f"{remote_home}/.config/enroot/environ.d/secrets.env",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -78,19 +80,6 @@ def apply_config(teardown=False):
         docker_hub_password=host.data.get("docker_hub_password", None),
         gitlab_token=host.data.get("gitlab_token", None),
         brave_api_key=host.data.get("brave_api_key", None),
-    )
-
-    files.directory(
-        name="Images directory",
-        path=f"{host.data.store_home.replace('${USER}', host.data.ssh_user)}/images",
-        present=True,
-    )
-
-    files.link(
-        name=f"{'Remove ' if teardown else ''}Images Symlink",
-        path=f"{host.get_fact(server_facts.Home)}/images",
-        target=f"{host.data.store_home.replace('${USER}', host.data.ssh_user)}/images",
-        present=not teardown,
     )
 
 

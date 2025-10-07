@@ -19,9 +19,11 @@ def apply_macos(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name=f"{'Remove ' if teardown else ''}Directory",
-        path=f"{host.get_fact(server_facts.Home)}/.config/ghostty",
+        path=f"{remote_home}/.config/ghostty",
         present=not teardown,
         mode=700,
     )
@@ -29,7 +31,7 @@ def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Options",
         src="files/ghostty/config",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/ghostty/config",
+        dest=f"{remote_home}/.config/ghostty/config",
         mode=600,
         create_remote_dir=False,
         present=not teardown,

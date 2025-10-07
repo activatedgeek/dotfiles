@@ -32,15 +32,17 @@ class Uv(Binary):
 
 @deploy("Linux")
 def apply_linux(arch, teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     if teardown:
         files.file(
             name="Uninstall uv",
-            path=f"{host.get_fact(server_facts.Home)}/.local/bin/uv",
+            path=f"{remote_home}/.local/bin/uv",
             present=False,
         )
         files.file(
             name="Uninstall uvx",
-            path=f"{host.get_fact(server_facts.Home)}/.local/bin/uvx",
+            path=f"{remote_home}/.local/bin/uvx",
             present=False,
         )
     else:
@@ -49,7 +51,7 @@ def apply_linux(arch, teardown=False):
             name=f"{'Uni' if teardown else 'I'}nstall",
             src=binary.src,
             src_dir=f"uv-{arch}-unknown-linux-gnu",
-            dest=f"{host.get_fact(server_facts.Home)}/.local/bin/uv",
+            dest=f"{remote_home}/.local/bin/uv",
             sha256sum=binary.sha256sum,
             present=not teardown,
             mode=755,

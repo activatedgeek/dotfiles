@@ -8,18 +8,20 @@ from myinfra.operations import files as myfiles
 
 @deploy("NVDA")
 def apply_config_nvda(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     if host.name == "@local" or "desktop" in host.groups:
         if teardown:
             files.directory(
                 name="Delete",
-                path=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda",
+                path=f"{remote_home}/.ssh/config.d/nvda",
                 present=False,
             )
         else:
             files.sync(
                 name="Sync",
                 src="files/ssh/nvda",
-                dest=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda",
+                dest=f"{remote_home}/.ssh/config.d/nvda",
                 dir_mode=700,
                 mode=600,
                 delete=False,
@@ -38,7 +40,7 @@ def apply_config_nvda(teardown=False):
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}Config",
             src="templates/ssh/nvda/config.j2",
-            dest=f"{host.get_fact(server_facts.Home)}/.ssh/config.d/nvda/config",
+            dest=f"{remote_home}/.ssh/config.d/nvda/config",
             mode=600,
             create_remote_dir=False,
             present=not teardown,
@@ -48,7 +50,7 @@ def apply_config_nvda(teardown=False):
 
         files.line(
             name="Include",
-            path=f"{host.get_fact(server_facts.Home)}/.ssh/config",
+            path=f"{remote_home}/.ssh/config",
             line="Include config.d/nvda/config",
             ensure_newline=True,
             present=not teardown,

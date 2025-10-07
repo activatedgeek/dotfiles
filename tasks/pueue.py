@@ -40,15 +40,17 @@ class Pueued(Pueue):
 
 @deploy("Linux")
 def apply_linux(arch, teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     if teardown:
         files.file(
             name="Uninstall pueue",
-            path=f"{host.get_fact(server_facts.Home)}/.local/bin/pueue",
+            path=f"{remote_home}/.local/bin/pueue",
             present=False,
         )
         files.file(
             name="Uninstall pueued",
-            path=f"{host.get_fact(server_facts.Home)}/.local/bin/pueued",
+            path=f"{remote_home}/.local/bin/pueued",
             present=False,
         )
     else:
@@ -56,7 +58,7 @@ def apply_linux(arch, teardown=False):
         files.download(
             name="pueue",
             src=binary.src,
-            dest=f"{host.get_fact(server_facts.Home)}/.local/bin/pueue",
+            dest=f"{remote_home}/.local/bin/pueue",
             sha256sum=binary.sha256sum,
             mode=755,
         )
@@ -65,7 +67,7 @@ def apply_linux(arch, teardown=False):
         files.download(
             name="pueued",
             src=binary.src,
-            dest=f"{host.get_fact(server_facts.Home)}/.local/bin/pueued",
+            dest=f"{remote_home}/.local/bin/pueued",
             sha256sum=binary.sha256sum,
             mode=755,
         )
@@ -73,10 +75,12 @@ def apply_linux(arch, teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Aliases",
         src="files/pueue/.pueue_aliases",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.pueue_aliases",
+        dest=f"{remote_home}/.local/profile/.pueue_aliases",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -85,7 +89,7 @@ def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}prun",
         src="files/pueue/prun",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/prun",
+        dest=f"{remote_home}/.local/bin/prun",
         mode=755,
         create_remote_dir=False,
         present=not teardown,
@@ -94,7 +98,7 @@ def apply_config(teardown=False):
     if teardown:
         files.directory(
             name="Remove",
-            path=f"{host.get_fact(server_facts.Home)}/.config/pueue",
+            path=f"{remote_home}/.config/pueue",
             present=False,
         )
 

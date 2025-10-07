@@ -40,10 +40,12 @@ def apply_macos(teardown=False):
 
 @deploy("Linux")
 def apply_linux(arch, teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     if teardown:
         files.file(
             name="Uninstall micromamba",
-            path=f"{host.get_fact(server_facts.Home)}/.local/bin/micromamba",
+            path=f"{remote_home}/.local/bin/micromamba",
             present=False,
         )
     else:
@@ -51,7 +53,7 @@ def apply_linux(arch, teardown=False):
         files.download(
             name="micromamba",
             src=binary.src,
-            dest=f"{host.get_fact(server_facts.Home)}/.local/bin/micromamba",
+            dest=f"{remote_home}/.local/bin/micromamba",
             sha256sum=binary.sha256sum,
             mode=755,
         )

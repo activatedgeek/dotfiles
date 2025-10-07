@@ -8,7 +8,7 @@ containers:
 executor: local
 
 mounts:
-  - {{ store_home }}:/store
+  - /home/{{ ssh_user }}/store:/store
 
 env_vars:
   - HF_HOME=/store/huggingface

@@ -1,5 +1,5 @@
 ## Directories.
-export STORE_HOME=${STORE_HOME:-"{{ store_home if store_home is not none else '${HOME}' }}"}
+export STORE_HOME=${STORE_HOME:-"${HOME}/store"}
 export PROJECT_HOME=${STORE_HOME}/projects
 
 export CACHE_HOME=${STORE_HOME}/.cache

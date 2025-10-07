@@ -28,9 +28,11 @@ def apply_macos(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name="Profile Dir.",
-        path=f"{host.get_fact(server_facts.Home)}/.local/profile",
+        path=f"{remote_home}/.local/profile",
         mode=700,
         present=True,
         recursive=True,
@@ -38,7 +40,7 @@ def apply_config(teardown=False):
 
     files.directory(
         name="Bin Dir.",
-        path=f"{host.get_fact(server_facts.Home)}/.local/bin",
+        path=f"{remote_home}/.local/bin",
         mode=755,
         present=True,
         recursive=True,
@@ -47,7 +49,7 @@ def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
         src="files/bash/.bash_profile",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.bash_profile",
+        dest=f"{remote_home}/.local/profile/.bash_profile",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -56,7 +58,7 @@ def apply_config(teardown=False):
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Env",
         src="templates/bash/.bash_env.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.bash_env",
+        dest=f"{remote_home}/.local/profile/.bash_env",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -65,13 +67,23 @@ def apply_config(teardown=False):
         git_name=local.shell("id -F"),
         git_email=host.data.email,
         term=host.data.get("term", None),
-        store_home=host.data.get("store_home", None),
     )
+
+    store_home = host.data.get("store_home")
+    if store_home:
+        store_home = store_home.replace("${USER}", host.data.ssh_user)
+        if not store_home.startswith(remote_home):
+            files.link(
+                name=f"{'Remove ' if teardown else ''}Store Symlink",
+                path=f"{remote_home}/store",
+                target=store_home,
+                present=not teardown,
+            )
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Secrets Env",
         src="templates/bash/.secrets_env.j2",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.secrets_env",
+        dest=f"{remote_home}/.local/profile/.secrets_env",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -99,7 +111,7 @@ def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Aliases",
         src="files/bash/.bash_aliases",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.bash_aliases",
+        dest=f"{remote_home}/.local/profile/.bash_aliases",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
@@ -107,7 +119,7 @@ def apply_config(teardown=False):
 
     files.line(
         name=f"{'Remove' if teardown else 'Add'} Profile",
-        path=f"{host.get_fact(server_facts.Home)}/.bash_profile",
+        path=f"{remote_home}/.bash_profile",
         line="source ~/.local/profile/.bash_profile",
         ensure_newline=True,
         present=not teardown,
@@ -116,7 +128,7 @@ def apply_config(teardown=False):
     if teardown:
         files.file(
             name="Remove History",
-            path=f"{host.get_fact(server_facts.Home)}/.bash_history",
+            path=f"{remote_home}/.bash_history",
             present=False,
         )
 
