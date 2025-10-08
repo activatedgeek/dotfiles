@@ -59,27 +59,25 @@ def apply_config(teardown=False):
     )
 
     myfiles.template(
-        name=f"{'Remove ' if teardown else ''}Secrets",
-        src="templates/bash/.secrets_env.j2",
-        dest=f"{remote_home}/.config/enroot/environ.d/secrets.env",
+        name=f"{'Remove ' if teardown else ''}ML Secrets Env",
+        src="templates/bash/.ml_secrets_env.j2",
+        dest=f"{remote_home}/.config/enroot/environ.d/ml_secrets.env",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         use_export=False,
-        discord_webhook_token=host.data.get("discord_webhook_token", None),
-        wandb_api_key=host.data.get("wandb_api_key", None),
-        wandb_username=host.data.get("wandb_username", None),
-        wandb_entity=host.data.get("wandb_entity", None),
-        hf_token=host.data.get("hf_token", None),
-        openai_api_key=host.data.get("openai_api_key", None),
-        google_gemini_api_key=host.data.get("gemini_api_key", None),
-        exa_api_key=host.data.get("exa_api_key", None),
-        nvidia_api_key=host.data.get("nvidia_api_key", None),
-        docker_hub_username=host.data.get("docker_hub_username", None),
-        docker_hub_password=host.data.get("docker_hub_password", None),
-        gitlab_token=host.data.get("gitlab_token", None),
-        brave_api_key=host.data.get("brave_api_key", None),
+        brave_api_key=host.data.get("brave_api_key"),
+        exa_api_key=host.data.get("exa_api_key"),
+        google_search_engine_id=host.data.get("google_search_engine_id"),
+        google_search_api_key=host.data.get("google_search_api_key"),
+        hf_token=host.data.get("hf_token"),
+        nvidia_api_key=host.data.get("nvidia_api_key"),
+        openai_api_key=host.data.get("openai_api_key"),
+        tavily_api_key=host.data.get("tavily_api_key"),
+        wandb_api_key=host.data.get("wandb_api_key"),
+        wandb_username=host.data.get("wandb_username"),
+        wandb_entity=host.data.get("wandb_entity"),
     )
 
 
