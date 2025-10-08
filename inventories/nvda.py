@@ -87,6 +87,7 @@ slurm = (
                     "/lustre/fsw/portfolios/llmservice/users/igitman/llm/hf_models",
                     "/lustre/fsw/portfolios/llmservice/users/sdiao/wiki-202503-index",
                     "/lustre/fsw/portfolios/llmservice/users/ebakhturina/data",
+                    "/lustre/fsw/portfolios/llmservice/users/rshahbazyan/DATA",
                 ],
             ),
         ),
