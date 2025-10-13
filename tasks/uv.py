@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from pathlib import Path
 from typing import ClassVar
 
 from pyinfra import host
@@ -14,18 +15,38 @@ from myinfra.utils import Binary
 ## https://github.com/astral-sh/uv/releases
 @dataclass
 class Uv(Binary):
-    version: ClassVar[str] = "0.8.22"
+    version: ClassVar[str] = "0.9.2"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "a261804d9493a96e7eebf13bcffc1b7ecc87dbd7da9a2800af94c20182d1a70d",
+                "sha256sum": "b399aea47c961d15b83ae3ea14d616149a1babb157c53009b49a15ceafcc9fee",
             },
             "arm64": {
                 "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "774e2e7e95389267bb58383c9d2af3aa4a422c8d37cd684712772bbba5530c9a",
+                "sha256sum": "707e3c4cdb62789bb8b2c4072a26147f8f765b8082f75db6600eb83549dd9423",
+            },
+        }
+
+    @property
+    def src_dir(self):
+        return Path(self.src.removesuffix(".tar.gz")).stem
+
+
+@dataclass
+class Uvx(Uv):
+    @property
+    def _arch_map(self):
+        return {
+            "amd64": {
+                "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "421b1bb58429180a04ade98da066b5a5b6763e8ed74edef97359701c4cb42db8",
+            },
+            "arm64": {
+                "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-aarch64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "8e6e02c3f41124bf09c8ad9a1a89b7020a70f93ccc3d4b5c934b1052099d1b9e",
             },
         }
 
@@ -48,10 +69,21 @@ def apply_linux(arch, teardown=False):
     else:
         binary = Uv(arch)
         myfiles.download(
-            name=f"{'Uni' if teardown else 'I'}nstall",
+            name=f"{'Uni' if teardown else 'I'}nstall uv",
             src=binary.src,
-            src_dir=f"uv-{arch}-unknown-linux-gnu",
+            src_dir=binary.src_dir,
             dest=f"{remote_home}/.local/bin/uv",
+            sha256sum=binary.sha256sum,
+            present=not teardown,
+            mode=755,
+        )
+
+        binary = Uvx(arch)
+        myfiles.download(
+            name=f"{'Uni' if teardown else 'I'}nstall uvx",
+            src=binary.src,
+            src_dir=binary.src_dir,
+            dest=f"{remote_home}/.local/bin/uvx",
             sha256sum=binary.sha256sum,
             present=not teardown,
             mode=755,
