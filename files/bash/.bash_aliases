@@ -19,6 +19,10 @@ alias xargs='xargs '
 
 alias rsync='rsync -avzhEP --stats'
 
+if [ -f "${STORE_HOME}/uv/.venv/bin/dvc" ]; then
+  alias dvc="${STORE_HOME}/uv/.venv/bin/dvc"
+fi
+
 ## docker.
 alias cst='colima start'
 alias cstop='colima stop'
@@ -44,14 +48,14 @@ function gdelhist {
 ## rclone.
 alias rcp='rclone -P copy'
 function rcpull() {
-  if [[ "$(pwd)" != "${HOME}" ]]; then
+  if [[ "$(pwd)" != "${STORE_HOME}" ]]; then
     echo "Must only run this function from HOME"
     return 1
   fi
   rclone -P copy "${1}" "$(echo "${1}" | cut -d: -f2)"
 }
 function rcpush() {
-  if [[ "$(pwd)" != "${HOME}" ]]; then
+  if [[ "$(pwd)" != "${STORE_HOME}" ]]; then
     echo "Must only run this function from HOME"
     return 1
   fi

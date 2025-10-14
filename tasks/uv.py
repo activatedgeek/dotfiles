@@ -9,6 +9,7 @@ from pyinfra.operations import brew, files
 
 from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
+from myinfra.operations import uv as myuv
 from myinfra.utils import Binary
 
 
@@ -90,6 +91,26 @@ def apply_linux(arch, teardown=False):
         )
 
 
+@deploy("NVDA")
+def apply_nvda(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+    store_home = host.data.store_home
+
+    myuv.venv(
+        name=f"{'Remove ' if teardown else ''}venv",
+        path=f"{store_home}/uv",
+        requirements=["apprise", "dvc"],
+        binary_path=f"{remote_home}/.local/bin/uv",
+        present=not teardown,
+    )
+
+
+@deploy("Config")
+def apply_config(teardown=False):
+    if host.data.get("org", "") == "nvda":
+        apply_nvda(teardown=teardown)
+
+
 @deploy("MacOS")
 def apply_macos(teardown=False):
     brew.packages(
@@ -107,6 +128,7 @@ def apply():
     elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
+        apply_config(teardown=teardown)
 
 
 apply()
