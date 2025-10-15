@@ -22,7 +22,7 @@ mac = (
 all = (
     [h for h, _ in mac[0]],
     dict(
-        org="me",
+        org="home",
         email=config.INVENTORY_VARS["EMAIL"],
         wandb_api_key=config.INVENTORY_VARS["WANDB_API_KEY"],
         wandb_username=config.INVENTORY_VARS["WANDB_USERNAME"],

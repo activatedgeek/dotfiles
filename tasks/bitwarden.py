@@ -54,7 +54,7 @@ def apply_config_home(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
-    if host.data.get("org", "") == "me":
+    if host.data.get("org") == "home":
         apply_config_home(teardown=teardown)
 
 

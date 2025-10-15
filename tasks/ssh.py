@@ -6,6 +6,36 @@ from pyinfra.operations import files
 from myinfra.operations import files as myfiles
 
 
+@deploy("Home")
+def apply_config_home(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    if host.name == "@local":
+        if teardown:
+            files.directory(
+                name="Delete",
+                path=f"{remote_home}/.ssh/config.d/home",
+                present=False,
+            )
+        else:
+            files.sync(
+                name="Sync",
+                src="files/ssh/home",
+                dest=f"{remote_home}/.ssh/config.d/home",
+                dir_mode=700,
+                mode=600,
+                delete=True,
+            )
+
+        files.line(
+            name="Include",
+            path=f"{remote_home}/.ssh/config",
+            line="Include config.d/home/config",
+            ensure_newline=True,
+            present=not teardown,
+        )
+
+
 @deploy("NVDA")
 def apply_config_nvda(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
@@ -24,7 +54,7 @@ def apply_config_nvda(teardown=False):
                 dest=f"{remote_home}/.ssh/config.d/nvda",
                 dir_mode=700,
                 mode=600,
-                delete=False,
+                delete=True,
             )
 
     if host.name == "@local":
@@ -67,7 +97,9 @@ def apply_config(teardown=False):
         recursive=True,
     )
 
-    if host.data.get("org", "") == "nvda":
+    if host.data.get("org") == "home":
+        apply_config_home(teardown=teardown)
+    elif host.data.get("org") == "nvda":
         apply_config_nvda(teardown=teardown)
 
 
