@@ -56,6 +56,10 @@ slurm = (
                 sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch",
                 nemo_skills_disable_gpus_per_node=True,
+                nemo_skills_disable_cpu_partition=True,
+                enroot_mounts=[
+                    "/lustre/fsw/llmservice_nemo_reasoning/hf_models",
+                ],
             ),
         ),
         (

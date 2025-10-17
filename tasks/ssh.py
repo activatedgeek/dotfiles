@@ -24,7 +24,7 @@ def apply_config_home(teardown=False):
                 dest=f"{remote_home}/.ssh/config.d/home",
                 dir_mode=700,
                 mode=600,
-                delete=True,
+                delete=False,
             )
 
         files.line(
@@ -54,7 +54,7 @@ def apply_config_nvda(teardown=False):
                 dest=f"{remote_home}/.ssh/config.d/nvda",
                 dir_mode=700,
                 mode=600,
-                delete=True,
+                delete=False,
             )
 
     if host.name == "@local":

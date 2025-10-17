@@ -2,8 +2,14 @@ Host github.com gitlab-master.nvidia.com
   PreferredAuthentications publickey
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
 
-Host desk
+Host desk *.aim
   HostName aiapps-070225.dyn.nvidia.com
+
+Match originalhost="*.aim"
+  RequestTTY yes
+  ExitOnForwardFailure yes
+  LocalForward 43800 localhost:43800
+  RemoteCommand source ~/.bash_profile; cd ~/code/$(echo %n | cut -d. -f1); uv run --no-sync aim up -y -p 43800 --repo "${PROJECT_HOME}/$(basename "$(pwd)")"
 
 Host bigdesk
   HostName 10.110.40.240

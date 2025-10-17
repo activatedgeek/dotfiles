@@ -5,13 +5,15 @@ ssh_tunnel:
   pre_command: HEADLESS=1 source ~/.bash_profile
 
 executor: slurm
-
+{% if disable_gpus_per_node is defined and disable_gpus_per_node %}
 disable_gpus_per_node: {{ disable_gpus_per_node }}
-
+{% endif %}
 account: {{ sbatch_account }}
 mail_type: FAIL
 partition: {{ sbatch_partition }}
+{% if disable_cpu_partition is not defined or not disable_cpu_partition %}
 cpu_partition: cpu
+{% endif %}
 timeouts:
   {{ sbatch_partition }}: 04:00:00
   interactive: 04:00:00

@@ -45,7 +45,7 @@ function snemo-t {
         echo "  snemo-t SLURM_JOB_ID [main|server|sandbox|...]"
         return 1
     fi
-    snemo-logd ${1} | __log_name=${2:-main} xargs -I{} bash -c 'tail -f {}/${__log_name}*.log'
+    snemo-logd ${1} | __slurm_job_id=${1} __log_name=${2:-main} xargs -I{} bash -c 'tail -n 500 -f {}/${__log_name}*${__slurm_job_id}*.log'
 }
 
 function snemo-l {
