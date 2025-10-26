@@ -96,7 +96,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/lbd",
+            "@ssh/lax",
             dict(
                 ssh_port=30022,
                 ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",

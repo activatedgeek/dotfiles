@@ -31,9 +31,7 @@ export ENROOT_DATA_PATH="${SQSH_CACHE_DIR}/data"
 enroot remove -f "$(basename "${sqsh_name%.*}")"
 rm -f "${sqsh_name}"
 
-if enroot import -o "${sqsh_name}" "docker://${image}"; then
-    enroot create "${sqsh_name}"
-else
+if ! enroot import -o "${sqsh_name}" "docker://${image}"; then
     echo "[ERROR] Failed squash file \"${sqsh_name}\" for image \"${image}\"."
     exit 1
 fi
