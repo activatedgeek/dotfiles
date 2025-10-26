@@ -96,6 +96,18 @@ slurm = (
             ),
         ),
         (
+            "@ssh/lbd",
+            dict(
+                ssh_port=30022,
+                ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
+                ssh_hostname_format="lbd-lax-cs-001-%s-0%d.nvidia.com",
+                num_login_nodes=1,
+                store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
+                sbatch_account="llmservice_nemo_robustness",
+                sbatch_partition="batch",
+            ),
+        ),
+        (
             "@ssh/ord",
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",

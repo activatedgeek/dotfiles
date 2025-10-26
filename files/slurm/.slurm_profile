@@ -50,7 +50,7 @@ alias skill='scancel -s SIGKILL'
 alias sq='squeue -u "${USER}" -o "%.10A | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'  # | %.12F %.10K
 function sjob {
   sacct --json -P -o state -j ${1} | \
-  jq -r '.jobs[0] | {id: .job_id, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code, status: .state.current}'
+  jq -r '.jobs[0] | {id: .job_id, partition: .partition, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code, status: .state.current}'
 }
 
 function snotify {

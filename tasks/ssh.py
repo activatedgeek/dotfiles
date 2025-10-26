@@ -61,6 +61,7 @@ def apply_config_nvda(teardown=False):
         slurm_hosts = {
             f"{ihost.name.split('/')[-1]}": {
                 "ssh_hostname_format": ihost.data.ssh_hostname_format,
+                "ssh_port": ihost.data.get("ssh_port", 22),
                 "num_login_nodes": ihost.data.get("num_login_nodes", 0),
                 "num_dc_nodes": ihost.data.get("num_dc_nodes", 0),
             }

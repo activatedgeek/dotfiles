@@ -2,6 +2,7 @@
 [{{ host }}]
 type = sftp
 host = {{ attrs["hostname"] }}
+port = {{ attrs["port"] }}
 key_use_agent = true
 shell_type = unix
 {% endfor %}

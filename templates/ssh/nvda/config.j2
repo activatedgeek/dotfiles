@@ -19,11 +19,13 @@ Host bigdesk
 {% for i in range(attrs["num_login_nodes"]) %}
 Host {{ host }}{{ i + 1 }}
   HostName {{ attrs["ssh_hostname_format"] | format("login", i + 1) }}
+  Port {{ attrs["ssh_port"] }}
 {% endfor %}
 
 {% for i in range(attrs["num_dc_nodes"]) %}
 Host d{{ host }}{{ i + 1 }}
   HostName {{ attrs["ssh_hostname_format"] | format("dc", i + 1) }}
+  Port {{ attrs["ssh_port"] }}
 {% endfor %}
 
 {% endfor %}
