@@ -1,3 +1,4 @@
+{% if extended is defined and extended %}
 Host github.com gitlab-master.nvidia.com
   PreferredAuthentications publickey
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
@@ -13,24 +14,17 @@ Match originalhost="*.aim"
 
 Host bigdesk
   HostName 10.110.40.240
+{% endif %}
 
-{% for host, attrs in slurm_hosts.items() %}
-
-{% for i in range(attrs["num_login_nodes"]) %}
-Host {{ host }}{{ i + 1 }}
-  HostName {{ attrs["ssh_hostname_format"] | format("login", i + 1) }}
-  Port {{ attrs["ssh_port"] }}
+{% for host, attrs in slurm_hosts.items() +%}
+Host {{ host }}
+  HostName {{ attrs["hostname"] }}
+  Port {{ attrs["port"] }}
 {% endfor %}
 
-{% for i in range(attrs["num_dc_nodes"]) %}
-Host d{{ host }}{{ i + 1 }}
-  HostName {{ attrs["ssh_hostname_format"] | format("dc", i + 1) }}
-  Port {{ attrs["ssh_port"] }}
-{% endfor %}
-
-{% endfor %}
-
+{% if extended is defined and extended %}
 Match host="*.nvidia.com",originalhost="*desk"
   IdentityFile ~/.ssh/config.d/nvda/id_ed25519
   ForwardAgent yes
   AddKeysToAgent yes
+{% endif %}

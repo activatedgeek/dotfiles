@@ -35,9 +35,6 @@ slurm = (
             "@ssh/dfw",
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
-                ssh_hostname_format="cw-dfw-cs-001-%s-0%d.cw-dfw-cs-001.hpc.nvidia.com",
-                num_login_nodes=3,
-                num_dc_nodes=3,
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}/store",
                 sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch",
@@ -50,8 +47,6 @@ slurm = (
             "@ssh/eos",
             dict(
                 ssh_hostname="login-eos02.eos.clusters.nvidia.com",
-                ssh_hostname_format="%s-eos0%d.eos.clusters.nvidia.com",
-                num_login_nodes=2,
                 store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch",
@@ -66,9 +61,6 @@ slurm = (
             "@ssh/hsg",
             dict(
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
-                ssh_hostname_format="oci-hsg-cs-001-%s-0%d.nvidia.com",
-                num_login_nodes=3,
-                num_dc_nodes=3,
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}/store",
                 sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch",
@@ -81,9 +73,6 @@ slurm = (
             "@ssh/iad",
             dict(
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
-                ssh_hostname_format="draco-oci-%s-0%d.draco-oci-iad.nvidia.com",
-                num_login_nodes=3,
-                num_dc_nodes=3,
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch_block1,batch_block3,batch_block4",
@@ -100,20 +89,18 @@ slurm = (
             dict(
                 ssh_port=30022,
                 ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
-                ssh_hostname_format="lbd-lax-cs-001-%s-0%d.nvidia.com",
-                num_login_nodes=1,
                 store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch",
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice/users/igitman/hf_models",
+                ],
             ),
         ),
         (
             "@ssh/ord",
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
-                ssh_hostname_format="cs-oci-ord-%s-0%d.nvidia.com",
-                num_login_nodes=3,
-                num_dc_nodes=4,
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}/store",
                 sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="polar,polar3,polar4,grizzly",

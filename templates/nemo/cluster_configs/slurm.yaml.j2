@@ -1,8 +1,8 @@
 ssh_tunnel:
   host: {{ ssh_tunnel_host }}
   port: {{ ssh_tunnel_port }}
-  user: ${USER}
-  job_dir: ${HOME}/.nemo_run
+  user: {{ ssh_user }}
+  job_dir: /home/{{ ssh_user }}/.nemo_run
   pre_command: HEADLESS=1 source ~/.bash_profile
 
 executor: slurm

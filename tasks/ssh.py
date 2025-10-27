@@ -40,52 +40,51 @@ def apply_config_home(teardown=False):
 def apply_config_nvda(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    if host.name == "@local" or "desktop" in host.groups:
-        if teardown:
-            files.directory(
-                name="Delete",
-                path=f"{remote_home}/.ssh/config.d/nvda",
-                present=False,
-            )
-        else:
-            files.sync(
-                name="Sync",
-                src="files/ssh/nvda",
-                dest=f"{remote_home}/.ssh/config.d/nvda",
-                dir_mode=700,
-                mode=600,
-                delete=False,
-            )
+    files.directory(
+        name=f"{'Remove ' if teardown else ''}Directory",
+        path=f"{remote_home}/.ssh/config.d/nvda",
+        mode=700,
+        present=not teardown,
+    )
 
-    if host.name == "@local":
-        slurm_hosts = {
-            f"{ihost.name.split('/')[-1]}": {
-                "ssh_hostname_format": ihost.data.ssh_hostname_format,
-                "ssh_port": ihost.data.get("ssh_port", 22),
-                "num_login_nodes": ihost.data.get("num_login_nodes", 0),
-                "num_dc_nodes": ihost.data.get("num_dc_nodes", 0),
-            }
-            for ihost in inventory.get_group("slurm")
-        }
-
-        myfiles.template(
-            name=f"{'Remove ' if teardown else ''}Config",
-            src="templates/ssh/nvda/config.j2",
-            dest=f"{remote_home}/.ssh/config.d/nvda/config",
+    if host.name == "@local" and not teardown:
+        files.sync(
+            name="Sync",
+            src="files/ssh/nvda",
+            dest=f"{remote_home}/.ssh/config.d/nvda",
+            dir_mode=700,
             mode=600,
-            create_remote_dir=False,
-            present=not teardown,
-            ## Jinja2 variables.
-            slurm_hosts=slurm_hosts,
+            delete=False,
+            exclude=["*git*"],
         )
 
-        files.line(
-            name="Include",
-            path=f"{remote_home}/.ssh/config",
-            line="Include config.d/nvda/config",
-            ensure_newline=True,
-            present=not teardown,
-        )
+    slurm_hosts = {
+        f"{ihost.name.split('/')[-1]}": {
+            "hostname": ihost.data.ssh_hostname,
+            "port": ihost.data.get("ssh_port", 22),
+        }
+        for ihost in inventory.get_group("slurm")
+    }
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Config",
+        src="templates/ssh/nvda/config.j2",
+        dest=f"{remote_home}/.ssh/config.d/nvda/config",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        slurm_hosts=slurm_hosts,
+        extended=(host.name == "@local"),
+    )
+
+    files.line(
+        name="Include",
+        path=f"{remote_home}/.ssh/config",
+        line="Include config.d/nvda/config",
+        ensure_newline=True,
+        present=not teardown,
+    )
 
 
 @deploy("Config")
