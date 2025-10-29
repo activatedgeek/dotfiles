@@ -1,0 +1,28 @@
+{
+  "format_on_save": "off",
+  "icon_theme": {
+    "mode": "system",
+    "light": "Material Icon Theme",
+    "dark": "Zed (Default)"
+  },
+  "telemetry": {
+    "diagnostics": true,
+    "metrics": false
+  },
+  "minimap": {
+    "show": "auto"
+  },
+  "buffer_font_fallbacks": [
+    "Menlo",
+    "Monaco",
+    "Courier New",
+    "monospace"
+  ],
+  "buffer_font_family": "Inconsolata Nerd Font",
+  "file_types": {},
+  "base_keymap": "VSCode",
+  "ui_font_size": 16,
+  "buffer_font_size": 18.0,
+  "theme": "Gruvbox Dark Soft",
+  "diagnostics_max_severity": "off"
+}

@@ -21,6 +21,7 @@ def deploy_tasks():
         "uv",
         "vscode",
         "wandb",
+        "zed",
     ]:
         local.include(f"tasks/{task}.py")
 

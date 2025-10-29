@@ -45,7 +45,7 @@ def apply_macos(teardown=False):
         )
 
 
-@deploy("MacOS")
+@deploy("Config")
 def apply_config(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 

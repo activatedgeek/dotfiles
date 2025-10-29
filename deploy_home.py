@@ -27,6 +27,7 @@ def deploy_tasks():
         "uv",
         "vscode",
         "wandb",
+        "zed",
     ]
 
     for t in tasks:
