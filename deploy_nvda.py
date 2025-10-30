@@ -19,7 +19,6 @@ def deploy_tasks():
         "starship",
         "tmux",
         "uv",
-        "vscode",
         "wandb",
         "zed",
     ]:
