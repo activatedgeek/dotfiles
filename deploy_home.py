@@ -25,7 +25,6 @@ def deploy_tasks():
         "starship",
         "tailscale",
         "uv",
-        "vscode",
         "wandb",
         "zed",
     ]
