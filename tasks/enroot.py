@@ -54,7 +54,6 @@ def apply_config(teardown=False):
         create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
-        store_home=host.data.store_home,
         extra_mounts=host.data.get("enroot_mounts", []),
     )
 

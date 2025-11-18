@@ -94,11 +94,11 @@ def apply_linux(arch, teardown=False):
 @deploy("NVDA")
 def apply_nvda(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
-    store_home = host.data.store_home
+    uv_home = str(Path(host.data.store_home) / "uv")
 
     myuv.venv(
         name=f"{'Remove ' if teardown else ''}venv",
-        path=f"{store_home}/uv",
+        path=uv_home,
         requirements=["apprise", "dvc"],
         binary_path=f"{remote_home}/.local/bin/uv",
         present=not teardown,

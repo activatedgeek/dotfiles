@@ -2,7 +2,7 @@ ssh_tunnel:
   host: {{ ssh_tunnel_host }}
   port: {{ ssh_tunnel_port }}
   user: {{ ssh_user }}
-  job_dir: /home/{{ ssh_user }}/.nemo_run
+  job_dir: /home/{{ ssh_user }}/store/.nemo_run
   pre_command: HEADLESS=1 source ~/.bash_profile
 
 executor: slurm
@@ -34,4 +34,4 @@ mounts:
 
 env_vars:
   - XDG_CACHE_HOME=/store/.cache
-  - HF_HOME=/store/huggingface
+  - HF_HOME=/store/.cache/huggingface
