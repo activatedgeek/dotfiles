@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pyinfra import host, inventory
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
@@ -65,15 +67,35 @@ def apply_nemo_skills(teardown=False):
 
 @deploy("NVDA")
 def apply_nvda(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     if "linux" in host.groups:
         myfiles.copy(
             name=f"{'Remove ' if teardown else ''}NeMo-Skills Profile",
             src="files/nemo/.nemo_skills_profile",
-            dest=f"{host.get_fact(server_facts.Home)}/.local/profile/.nemo_skills_profile",
+            dest=f"{remote_home}/.local/profile/.nemo_skills_profile",
             mode=600,
             create_remote_dir=False,
             present=not teardown,
         )
+
+        store_home = host.data.get("store_home")
+        if store_home:
+            store_home = store_home.replace("${USER}", host.data.ssh_user)
+            if not store_home.startswith(remote_home):
+                files.directory(
+                    name=f"{'Remove ' if teardown else ''}.nemo_run Directory",
+                    path=str(Path(store_home).parent / ".nemo_run"),
+                    mode=700,
+                    present=not teardown,
+                )
+
+                files.link(
+                    name=f"{'Remove ' if teardown else ''}.nemo_run Symlink",
+                    path=f"{remote_home}/.nemo_run",
+                    target=str(Path(store_home).parent / ".nemo_run"),
+                    present=not teardown,
+                )
 
     if "desktop" in host.groups:
         apply_nemo_skills(teardown=teardown)

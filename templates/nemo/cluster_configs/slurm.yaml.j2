@@ -27,10 +27,11 @@ containers:
   sandbox: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sandbox-latest.sqsh
   sglang: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sglang-latest.sqsh
   search: /home/{{ ssh_user }}/store/images/tool-integrated-reasoning-search-rev20250923.sqsh
-  vllm: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-vllm-latest.sqsh
+  vllm: /home/{{ ssh_user }}/store/images/vllm-v0.10.2.sqsh
 
 mounts:
   - /home/{{ ssh_user }}/store:/store
 
 env_vars:
+  - XDG_CACHE_HOME=/store/.cache
   - HF_HOME=/store/huggingface

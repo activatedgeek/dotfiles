@@ -24,9 +24,9 @@ echo "[INFO] Creating squash file \"${sqsh_name}\" for image \"${image}\"..."
 
 mkdir -p "$(dirname "${sqsh_name}")"
 
-export SQSH_CACHE_DIR="${SQSH_CACHE_DIR:-"$(dirname "${sqsh_name}")/.cache"}/sqsh"
-export ENROOT_CACHE_PATH="${SQSH_CACHE_DIR}/enroot"
-export ENROOT_DATA_PATH="${SQSH_CACHE_DIR}/data"
+export SQSH_CACHE_DIR="${XDG_CACHE_HOME}/sqsh"
+export ENROOT_CACHE_PATH="${XDG_CACHE_HOME}/enroot/cache"
+export ENROOT_DATA_PATH="${XDG_CACHE_HOME}/enroot/data"
 
 enroot remove -f "$(basename "${sqsh_name%.*}")"
 rm -f "${sqsh_name}"

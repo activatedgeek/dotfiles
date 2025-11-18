@@ -131,6 +131,8 @@ linux = (
         wandb_entity=config.INVENTORY_VARS["WANDB_ENTITY"],
         docker_hub_username=config.INVENTORY_VARS["DOCKER_HUB_USERNAME"],
         docker_hub_password=config.INVENTORY_VARS["DOCKER_HUB_PASSWORD"],
+        openai_client_id=config.INVENTORY_VARS["OPENAI_CLIENT_ID"],
+        openai_client_secret=config.INVENTORY_VARS["OPENAI_CLIENT_SECRET"],
         git_gpgsign=True,
     ),
 )
