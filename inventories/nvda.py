@@ -36,6 +36,7 @@ slurm = (
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
@@ -47,6 +48,7 @@ slurm = (
             dict(
                 ssh_hostname="login-eos02.eos.clusters.nvidia.com",
                 store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch",
                 nemo_skills_disable_gpus_per_node=True,
                 nemo_skills_disable_cpu_partition=True,
@@ -60,6 +62,7 @@ slurm = (
             dict(
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
@@ -71,6 +74,7 @@ slurm = (
             dict(
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch_block1,batch_block3,batch_block4",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
@@ -83,7 +87,20 @@ slurm = (
                 ssh_port=30022,
                 ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
                 store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch",
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+            ),
+        ),
+        (
+            "@ssh/nrt",
+            dict(
+                ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemotron_nano",
+                sbatch_partition="batch_block1",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
@@ -94,6 +111,7 @@ slurm = (
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="polar,polar3,polar4,grizzly",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
@@ -101,7 +119,7 @@ slurm = (
             ),
         ),
     ],
-    dict(sbatch_account="llmservice_nemo_reasoning"),
+    dict(),
 )
 
 linux = (

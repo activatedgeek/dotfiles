@@ -13,7 +13,7 @@ account: {{ sbatch_account }}
 mail_type: FAIL
 partition: {{ sbatch_partition }}
 {% if disable_cpu_partition is not defined or not disable_cpu_partition %}
-cpu_partition: cpu
+cpu_partition: {{ sbatch_cpu_partition }}
 {% endif %}
 timeouts:
   {{ sbatch_partition }}: 04:00:00

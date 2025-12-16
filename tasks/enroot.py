@@ -28,13 +28,15 @@ def apply_config(teardown=False):
             recursive=True,
         )
 
-    myfiles.copy(
-        name=f"{'Remove ' if teardown else ''}Credentials",
-        src="files/enroot/.credentials",
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''} Credentials",
+        src="templates/enroot/.credentials.j2",
         dest=f"{remote_home}/.config/enroot/.credentials",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
+        ## Jinja2 Variables.
+        docker_hub_username=host.data.get("docker_hub_username"),
     )
 
     myfiles.copy(

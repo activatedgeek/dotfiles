@@ -44,6 +44,7 @@ def apply_nemo_skills(teardown=False):
             "ssh_tunnel_port": ihost.data.get("ssh_port", 22),
             "sbatch_account": ihost.data.sbatch_account,
             "sbatch_partition": ihost.data.sbatch_partition,
+            "sbatch_cpu_partition": ihost.data.get("sbatch_cpu_partition", "cpu"),
             "disable_gpus_per_node": ihost.data.get("nemo_skills_disable_gpus_per_node"),
             "disable_cpu_partition": ihost.data.get("nemo_skills_disable_cpu_partition"),
         }
