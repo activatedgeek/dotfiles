@@ -1,0 +1,27 @@
+export MAMBA_EXE=${MAMBA_EXE:-"${HOME}/.local/bin/micromamba"}
+export MAMBA_ROOT_PREFIX=${MAMBA_ROOT_PREFIX:-"${STORE_HOME}/.mamba"}
+if [[ -f "${MAMBA_EXE}" ]]; then
+    __mamba_setup="$("$MAMBA_EXE" shell hook --shell bash --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__mamba_setup"
+    else
+        alias micromamba="$MAMBA_EXE"
+    fi
+    unset __mamba_setup
+fi
+
+alias conda='micromamba'
+
+function mmc {
+  __venv_path=${VENV_DIR:-"${PROJECT_HOME}/$(basename "$(pwd)")"}/.venv
+  if [[ ! -d "${__venv_path}" ]]; then
+    micromamba create -y --prefix "${__venv_path}" -c conda-forge python=${PY_VERSION:-3.11} pip
+  fi
+  if [[ ! "$(pwd)" -ef "${PROJECT_HOME}/$(basename "$(pwd)")" ]]; then
+    rm -rf .venv
+    ln -sf "${__venv_path}" .venv
+  fi
+  unset __venv_path
+}
+alias mm='micromamba'
+alias mml='micromamba env list'

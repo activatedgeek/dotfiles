@@ -11,6 +11,7 @@ def deploy_tasks():
         "git",
         "jq",
         "micro",
+        "micromamba",
         "nemo",
         "python",
         "rclone",

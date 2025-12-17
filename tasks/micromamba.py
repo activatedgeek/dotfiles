@@ -7,24 +7,25 @@ from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
 
 from myinfra.facts import server as myserver_facts
+from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
 ## https://github.com/mamba-org/micromamba-releases/releases
 @dataclass
 class Micromamba(Binary):
-    version: ClassVar[str] = "2.3.2-0"
+    version: ClassVar[str] = "2.4.0-1"
 
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-64",
-                "sha256sum": "ffc3cb8d52d4d6b354bdbb979c407719c485392b74e462cbd50811aa88e58f85",
+                "sha256sum": "6b64c543743b3fc680a8138fb0ed962d9c9066af5859c29b86f1ce04bed40b76",
             },
-            "aarch64": {
+            "arm64": {
                 "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-aarch64",
-                "sha256sum": "7154d66112a623d8d930f8aab467347971d5c1403a84b1c25d19298f4fb9da03",
+                "sha256sum": "cbc9b04dbe48a096c6dc68d2c7cf0888021933c3f7c2c00b78e62bef4954d474",
             },
         }
 
@@ -61,9 +62,20 @@ def apply_linux(arch, teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name="Remove",
-        path=f"{host.get_fact(server_facts.Home)}/.mamba",
+        path=f"{remote_home}/.mamba",
+        present=not teardown,
+    )
+
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}Profile",
+        src="files/micromamba/.mm_profile",
+        dest=f"{remote_home}/.local/profile/.mm_profile",
+        mode=600,
+        create_remote_dir=False,
         present=not teardown,
     )
 
@@ -71,11 +83,13 @@ def apply_config(teardown=False):
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
-    # if kernel == "Darwin":
-    #     apply_macos(teardown=teardown)
-    if kernel == "Linux":
+    if kernel == "Darwin":
+        apply_macos(teardown=teardown)
+    elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
+
+    apply_config(teardown=teardown)
 
 
 apply()

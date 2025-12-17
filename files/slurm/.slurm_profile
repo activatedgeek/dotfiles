@@ -4,6 +4,7 @@ function spull { singularity pull docker://${1:-"${DOCKER_USERNAME}/$(basename "
 
 ## Slurm.
 alias si='sinfo -lNe'
+alias sacct='sacct --format=JobName%30,JobID,State,ExitCode,Partition,NNodes,ReqMem,NCPUS,NodeList'
 alias sshare='sshare -u $USER'
 function __sbatch {
   if [[ ! -z "${DEPS}" ]]; then
@@ -33,12 +34,16 @@ function __srun {
   fi
 
   srun --pty \
-    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-4}:00:00 \
-    --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} \
+    --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT}-$(basename $(pwd))"} \
+    --account=${SBATCH_ACCOUNT} \
+    --time=${HH:-4}:00:00 \
+    --nodes="${NNODES:-1}" ${__gpus} \
+    --mem=${SBATCH_MEM:-"64G"} \
+    --ntasks-per-node="${NTASKS:-1}" \
     "${@}"
 }
 function sdocker { __sbatch srun-docker "${@}"; }
-function sdocker-it { JOB_NAME=${JOB_NAME:-terminal} __srun srun-docker bash -l; }
+function sdocker-it { SBATCH_JOB_NAME=${SBATCH_JOB_NAME:-terminal} __srun srun-docker bash -l; }
 
 function sle { less "${SLURM_LOGDIR}/${1}.err"; }
 function slo { less "${SLURM_LOGDIR}/${1}.out"; }
@@ -50,7 +55,7 @@ alias skill='scancel -s SIGKILL'
 alias sq='squeue -u "${USER}" -o "%.10A | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'  # | %.12F %.10K
 function sjob {
   sacct --json -P -o state -j ${1} | \
-  jq -r '.jobs[0] | {id: .job_id, partition: .partition, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code, status: .state.current}'
+  jq -r '.jobs[0] | {id: .job_id, account: .account, partition: .partition, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code, status: .state.current}'
 }
 
 function snotify {

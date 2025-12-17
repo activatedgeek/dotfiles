@@ -90,20 +90,6 @@ function jaxrun {
     python "${@}"
 }
 
-## micromamba.
-function mmc {
-  __venv_path=${VENV_DIR:-"${PROJECT_HOME}/$(basename "$(pwd)")"}/.venv
-  if [[ ! -d "${__venv_path}" ]]; then
-    micromamba create -y --prefix "${__venv_path}" -c conda-forge python=${PY_VERSION:-3.11} pip
-  fi
-  if [[ ! "$(pwd)" -ef "${PROJECT_HOME}/$(basename "$(pwd)")" ]]; then
-    rm -rf .venv
-    ln -sf "${__venv_path}" .venv
-  fi
-  unset __venv_path
-}
-alias mm='micromamba -p ./.venv'
-
 ## uv.
 function uvc {
   __venv_path=${VENV_DIR:-"${PROJECT_HOME}/$(basename "$(pwd)")"}/.venv
