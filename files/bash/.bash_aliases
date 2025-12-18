@@ -19,6 +19,8 @@ alias xargs='xargs '
 
 alias rsync='rsync -avzhEP --stats'
 
+alias watch='watch '
+
 if [ -f "${STORE_HOME}/uv/.venv/bin/dvc" ]; then
   alias dvc="${STORE_HOME}/uv/.venv/bin/dvc"
 fi

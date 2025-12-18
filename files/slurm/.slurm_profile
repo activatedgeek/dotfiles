@@ -19,7 +19,7 @@ function __sbatch {
   fi
 
   sbatch --signal=B:USR1@10 \
-    --job-name="${SBATCH_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-1}:00:00 \
+    --job-name="${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-1}:00:00 \
     --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} ${__dependency} \
     "${@}"
 
@@ -34,8 +34,8 @@ function __srun {
   fi
 
   srun --pty \
-    --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT}-$(basename $(pwd))"} \
-    --account=${SBATCH_ACCOUNT} \
+    --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"} \
+    --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT} \
     --time=${HH:-4}:00:00 \
     --nodes="${NNODES:-1}" ${__gpus} \
     --mem=${SBATCH_MEM:-"64G"} \

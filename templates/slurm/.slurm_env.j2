@@ -6,5 +6,5 @@ export SBATCH_ERROR="${SLURM_LOGDIR}/%j.log"
 export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.log"
 
 {% if sbatch_account is not none %}
-export SBATCH_ACCOUNT={{ sbatch_account }}
+export SBATCH_DEFAULT_ACCOUNT={{ sbatch_account }}
 {% endif %}

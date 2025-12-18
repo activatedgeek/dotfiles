@@ -20,7 +20,7 @@ function senroot {
     __all_args="${@}"
 
     GPUS=0 \
-    SBATCH_JOB_NAME=${SBATCH_ACCOUNT}-mkenroot.run \
+    SBATCH_JOB_NAME=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-mkenroot.run \
     __srun --partition=${SBATCH_PARTITION:-cpu_interactive} bash -l -c "mkenroot ${__all_args}; exit"
 }
 
