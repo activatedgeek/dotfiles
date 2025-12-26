@@ -8,7 +8,7 @@ from pyinfra.operations import apt, brew
 def apply_macos(teardown=False):
     brew.casks(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        casks=["tailscale"],
+        casks=["tailscale-app"],
         present=not teardown,
     )
 

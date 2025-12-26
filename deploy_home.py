@@ -6,7 +6,6 @@ def deploy_tasks():
     tasks = [
         "bash",
         "bitwarden",
-        "cleanmymac",
         "cloudflare",
         "discord",
         "docker",
@@ -15,6 +14,7 @@ def deploy_tasks():
         "jq",
         "mega",
         "micro",
+        "mole",
         "netnewswire",
         "node",
         "obsidian",
