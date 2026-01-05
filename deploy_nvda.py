@@ -12,6 +12,7 @@ def deploy_tasks():
         "jq",
         "micro",
         "micromamba",
+        "mole",
         "nemo",
         "python",
         "rclone",
