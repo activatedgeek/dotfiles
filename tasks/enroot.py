@@ -49,7 +49,7 @@ def apply_config(teardown=False):
     )
 
     myfiles.template(
-        name=f"{'Remove ' if teardown else ''} Default Mounts",
+        name=f"{'Remove ' if teardown else ''}Default Mounts",
         src="templates/enroot/mounts.d/default.fstab.j2",
         dest=f"{remote_home}/.config/enroot/mounts.d/default.fstab",
         mode=600,
@@ -57,6 +57,17 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         extra_mounts=host.data.get("enroot_mounts", []),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Default Env",
+        src="templates/enroot/environ.d/default.env.j2",
+        dest=f"{remote_home}/.config/enroot/environ.d/default.env",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        extra_env=host.data.get("enroot_env", {}),
     )
 
     myfiles.template(
