@@ -5,6 +5,7 @@ def deploy_tasks():
     for task in [
         "bash",
         "bottom",
+        "brave",
         "discord",
         "enroot",
         "ghostty",

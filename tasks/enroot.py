@@ -79,6 +79,7 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         use_export=False,
+        azure_openai_api_key=host.data.get("azure_openai_api_key"),
         brave_api_key=host.data.get("brave_api_key"),
         exa_api_key=host.data.get("exa_api_key"),
         google_search_engine_id=host.data.get("google_search_engine_id"),

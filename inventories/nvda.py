@@ -142,6 +142,7 @@ linux = (
         docker_hub_password=config.INVENTORY_VARS["DOCKER_HUB_PASSWORD"],
         openai_client_id=config.INVENTORY_VARS["OPENAI_CLIENT_ID"],
         openai_client_secret=config.INVENTORY_VARS["OPENAI_CLIENT_SECRET"],
+        azure_openai_api_key=config.INVENTORY_VARS["AZURE_OPENAI_API_KEY"],
         git_gpgsign=True,
     ),
 )

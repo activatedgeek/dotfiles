@@ -6,6 +6,7 @@ def deploy_tasks():
     tasks = [
         "bash",
         "bitwarden",
+        "brave",
         "cloudflare",
         "discord",
         "docker",
