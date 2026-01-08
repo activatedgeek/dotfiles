@@ -20,6 +20,7 @@ def deploy_tasks():
         "slurm",
         "ssh",
         "starship",
+        "stirling-pdf",
         "tmux",
         "uv",
         "wandb",

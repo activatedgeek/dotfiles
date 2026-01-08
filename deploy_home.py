@@ -24,6 +24,7 @@ def deploy_tasks():
         "slack",
         "ssh",
         "starship",
+        "stirling-pdf",
         "tailscale",
         "uv",
         "wandb",
