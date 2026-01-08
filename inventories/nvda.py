@@ -87,7 +87,7 @@ slurm = (
                 ssh_port=30022,
                 ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
                 store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_account="llmservice_nemotron_super",
                 sbatch_partition="batch",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
