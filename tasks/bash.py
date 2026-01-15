@@ -94,7 +94,7 @@ def apply_config(teardown=False):
         docker_hub_username=host.data.get("docker_hub_username"),
         docker_hub_password=host.data.get("docker_hub_password"),
         goatcounter_site=host.data.get("goatcounter_site"),
-        gitlab_registry_token=host.data.get("gitlab_registry_token"),
+        gitlab_token=host.data.get("gitlab_token"),
         hcloud_token=host.data.get("hcloud_token"),
         mapbox_access_token=host.data.get("mapbox_access_token"),
     )
