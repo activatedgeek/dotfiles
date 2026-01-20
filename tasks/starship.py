@@ -14,18 +14,18 @@ from myinfra.utils import Binary
 ## https://github.com/starship/starship/releases
 @dataclass
 class Starship(Binary):
-    version: ClassVar[str] = "1.23.0"
+    version: ClassVar[str] = "1.24.2"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/starship/starship/releases/download/v{self.version}/starship-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "a66fd858b373c233b97564d22a29823d2dfa6e5f550585a5440a56da1250baa0",
+                "sha256sum": "2a24f4deaf7a2b27e441cafe259251742b5e4bdc3011e3fc654dc657d7c45c33",
             },
             "arm64": {
                 "src": f"https://github.com/starship/starship/releases/download/v{self.version}/starship-aarch64-unknown-linux-musl.tar.gz",
-                "sha256sum": "d5a99287178b42e1e76f81627cabaf4f49a3575fb223dfa3aebd70420a58e1fd",
+                "sha256sum": "559701ab549aad99c5f62ca74a65b7a5258f9c8371d5a7a6af6ef905b632ec48",
             },
         }
 

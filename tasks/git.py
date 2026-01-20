@@ -14,18 +14,18 @@ from myinfra.utils import Binary
 ## https://github.com/Wilfred/difftastic/releases
 @dataclass
 class Difftastic(Binary):
-    version: ClassVar[str] = "0.65.0"
+    version: ClassVar[str] = "0.67.0"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "1de384a69813b665e36a816f24ff4bbad15059006996a69cdf677c997a6bd5b0",
+                "sha256sum": "865ef78b86eac72aa6440e380661b442244b58e02e333ad82df8e21a254d64a9",
             },
             "arm64": {
                 "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "a3fc036c2e5b6d5680be047cd3ec49812139004fc46b2455030b0c2f00891222",
+                "sha256sum": "c824e84555cd0eaace328ffe4c934053de4fa9763213fb8e47791fdf81d1ada5",
             },
         }
 

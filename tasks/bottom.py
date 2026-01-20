@@ -14,18 +14,18 @@ from myinfra.utils import Binary
 ## https://github.com/ClementTsang/bottom/releases
 @dataclass
 class Btm(Binary):
-    version: ClassVar[str] = "0.11.1"
+    version: ClassVar[str] = "0.12.3"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/ClementTsang/bottom/releases/download/{self.version}/bottom_x86_64-unknown-linux-musl.tar.gz",
-                "sha256sum": "ff67e8ecd567c98bbb4016defd4efd8090e9b6a926a3c72cab184e73c964f0a9",
+                "sha256sum": "815da63fa6ef651fb4841bf0bf5efb54a2cbd6e3fdce80a139ed0bc7d4d27a6a",
             },
             "arm64": {
                 "src": f"https://github.com/ClementTsang/bottom/releases/download/{self.version}/bottom_aarch64-unknown-linux-musl.tar.gz",
-                "sha256sum": "d8bf90b6058edf14118eb12fa3b86070386b7376bce08df72a96f5737647b737",
+                "sha256sum": "822490a5f44d5f8f370c2a2036f51866ff17a53baee488f573e738a1be647524",
             },
         }
 

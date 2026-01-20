@@ -16,18 +16,18 @@ from myinfra.utils import Binary
 ## https://github.com/astral-sh/uv/releases
 @dataclass
 class Uv(Binary):
-    version: ClassVar[str] = "0.9.2"
+    version: ClassVar[str] = "0.9.26"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "b399aea47c961d15b83ae3ea14d616149a1babb157c53009b49a15ceafcc9fee",
+                "sha256sum": "0650696de7f403348e9dd617e1f65dc32147c106c40129138017efd8f0f01cc8",
             },
             "arm64": {
                 "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "707e3c4cdb62789bb8b2c4072a26147f8f765b8082f75db6600eb83549dd9423",
+                "sha256sum": "70e124c01c543aa444ca2e647c00eee7b31ddcb0784bd6ede6910b539b6ef98b",
             },
         }
 
@@ -43,11 +43,11 @@ class Uvx(Uv):
         return {
             "amd64": {
                 "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "421b1bb58429180a04ade98da066b5a5b6763e8ed74edef97359701c4cb42db8",
+                "sha256sum": "f28f05593cab3bf0a84fad73eae7322f1f18463e9f238a06201ef8d8a29a5a2c",
             },
             "arm64": {
                 "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "8e6e02c3f41124bf09c8ad9a1a89b7020a70f93ccc3d4b5c934b1052099d1b9e",
+                "sha256sum": "8f03c3aca204b4fca4c2bebe033eda1cf7f5321876ece79d25fb5ca1e84a9197",
             },
         }
 

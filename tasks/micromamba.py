@@ -14,18 +14,18 @@ from myinfra.utils import Binary
 ## https://github.com/mamba-org/micromamba-releases/releases
 @dataclass
 class Micromamba(Binary):
-    version: ClassVar[str] = "2.4.0-1"
+    version: ClassVar[str] = "2.5.0-1"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-64",
-                "sha256sum": "6b64c543743b3fc680a8138fb0ed962d9c9066af5859c29b86f1ce04bed40b76",
+                "sha256sum": "dd9899873602972ae3b9ec02fc11b2fb1ab51f5eab5eacdf23ef385313f22491",
             },
             "arm64": {
                 "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-aarch64",
-                "sha256sum": "cbc9b04dbe48a096c6dc68d2c7cf0888021933c3f7c2c00b78e62bef4954d474",
+                "sha256sum": "534dd24fb57a8b72a79b883d69b959d7f1c7958be9918be9ddd907a0ffdfdf0e",
             },
         }
 

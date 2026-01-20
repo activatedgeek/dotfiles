@@ -23,5 +23,12 @@ function mmc {
   fi
   unset __venv_path
 }
-alias mm='micromamba'
+
+function mm {
+    if [[ -d .venv ]]; then
+        __extra_args="-p ./.venv"
+    fi
+    micromamba ${__extra_args} "${@}"
+}
+
 alias mml='micromamba env list'
