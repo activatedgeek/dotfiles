@@ -1,5 +1,5 @@
 background-opacity = 0.9
-window-width = 119
-window-height = 31
+window-width = 140
+window-height = 32
 
 keybind = ctrl+l=clear_screen

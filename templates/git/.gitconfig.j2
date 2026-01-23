@@ -7,7 +7,9 @@
 	m = commit{{ " -s " if git_gpgsign else " " }}-m
 	p = pull
 	r = remote -v
+	root = rev-parse --show-toplevel
 	s = status
+	sroot = rev-parse --show-superproject-working-tree
 	sub = submodule update --init --recursive
 	t = log --tags --decorate --simplify-by-decoration
 [branch]

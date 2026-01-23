@@ -104,6 +104,21 @@ function uvc {
   fi
   unset __venv_path
 }
-alias uvr='uv run --no-sync'
-alias uvs='uv sync --no-install-project'
-alias uvsa='uv sync --all-extras'
+function uvr {
+    ## Assumes .venv in the root of the git repo (handles submodules).
+    if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+        _git_root="$(git rev-parse --show-superproject-working-tree)"
+        _uv_args="--no-project"
+        if [[ -z "${_git_root}" ]]; then
+            _git_root="$(git rev-parse --show-toplevel)"
+            _uv_args="--no-sync"
+        fi
+    fi
+
+    if [[ -n "${_git_root}" ]]; then
+        _uv_args="${_uv_args} -p ${_git_root}/.venv/bin/python"
+    fi
+    unset _git_root
+
+    uv run ${_uv_args} "${@}"
+}
