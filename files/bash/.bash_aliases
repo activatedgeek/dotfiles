@@ -51,12 +51,6 @@ function gdelhist {
 alias rcp='rclone -P copy'
 alias rcs='rclone -P sync'
 
-## ruff.
-alias ruffmt='uv run --no-sync ruff format'
-alias ruffck='uv run --no-sync ruff check'
-alias gruffmt='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffmt'
-alias gruffck='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffck'
-
 ## setfacl.
 alias setfaclnogo='setfacl -m g::-,o::-'
 alias setfaclrx='setfacl -m g::rx,o::rx'
@@ -122,3 +116,9 @@ function uvr {
 
     uv run ${_uv_args} "${@}"
 }
+
+## ruff.
+alias ruffmt='uvr ruff format'
+alias ruffck='uvr ruff check'
+alias gruffmt='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffmt'
+alias gruffck='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffck'

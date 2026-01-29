@@ -51,7 +51,7 @@ function snemo-l {
         echo "  snemo-l SLURM_JOB_ID [main|server|sandbox|...]"
         return 1
     fi
-    snemo-logd ${1} | __log_name=${2:-main} xargs -I{} bash -c 'less {}/${__log_name}*.log'
+    snemo-logd ${1} | __slurm_job_id=${1} __log_name=${2:-main} xargs -I{} bash -c 'less {}/*${__log_name}*${__slurm_job_id}*.log'
 }
 
-alias nes='uv run --no-sync nemo experiment status'
+alias nes='uvr nemo experiment status'
