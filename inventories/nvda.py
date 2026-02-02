@@ -87,7 +87,7 @@ slurm = (
                 ssh_port=30022,
                 ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
                 store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
@@ -126,6 +126,7 @@ linux = (
     [*[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
     dict(
         term="xterm-256color",
+        bbh_nvidia_api_key=config.INVENTORY_VARS["BBH_NVIDIA_API_KEY"],
         discord_webhook_token=config.INVENTORY_VARS["DISCORD_WEBHOOK_TOKEN"],
         nvidia_api_key=config.INVENTORY_VARS["NVIDIA_API_KEY"],
         exa_api_key=config.INVENTORY_VARS["EXA_API_KEY"],

@@ -13,6 +13,7 @@ def deploy_tasks():
         "jq",
         "micro",
         "micromamba",
+        "mise",
         "mole",
         "nemo",
         "python",

@@ -15,6 +15,7 @@ def deploy_tasks():
         "jq",
         "mega",
         "micro",
+        "mise",
         "mole",
         "netnewswire",
         "node",
