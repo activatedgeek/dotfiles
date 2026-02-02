@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+#MISE description="Run pyinfra deploy"
+
+#USAGE arg "<inventory>" help="Name of inventory" {
+#USAGE  choices "home" "nvda" "dns"
+#USAGE }
+#USAGE flag "--task <task>" help="Optionally deploy only task."
+#USAGE flag "--limit <limit>" help="Limit hosts." default="*"
+#USAGE flag "--teardown" help="Teardown deployment"
+
+if [[ -z "${usage_inventory}" ]]; then
+    echo "[ERROR] Missing inventory."
+    exit 1
+fi
+
+if [[ "${usage_teardown}" == "true" ]]; then
+    __extra_args="--data teardown=True"
+fi
+
+## Handle DNS via separate task.
+if [[ "${usage_inventory}" == "dns" ]]; then
+    usage_inventory="home"
+    usage_limit="mac"
+    usage_task="cloudflare"
+    __extra_args="${__extra_args} --data apply_dns=True"
+fi
+
+if [[ -n "${usage_task}" ]]; then
+    deploy_file="tasks/${usage_task}.py"
+else
+    deploy_file="deploy_${usage_inventory}.py"
+fi
+
+uv run \
+pyinfra -y \
+    --limit "${usage_limit}" ${__extra_args} \
+	inventories/${usage_inventory}.py \
+	${deploy_file}

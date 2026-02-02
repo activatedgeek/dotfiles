@@ -2,16 +2,15 @@
 export STORE_HOME=${STORE_HOME:-"${HOME}/store"}
 export PROJECT_HOME=${STORE_HOME}/projects
 
-export CACHE_HOME=${STORE_HOME}/.cache
-export XDG_CACHE_HOME=${CACHE_HOME}
-
 export XDG_CONFIG_HOME=${HOME}/.config
 
 export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 
-export HF_HOME=${CACHE_HOME}/huggingface
+export XDG_CACHE_HOME=${STORE_HOME}/.cache
 
-export WANDB_DIR=${CACHE_HOME}/wandb
+export HF_HOME=${XDG_CACHE_HOME}/huggingface
+
+export WANDB_DIR=${XDG_CACHE_HOME}/wandb
 if [[ ! -d  "${WANDB_DIR}" ]]; then
     mkdir -p "${WANDB_DIR}"
 fi

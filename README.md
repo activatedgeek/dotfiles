@@ -11,12 +11,12 @@ Install [`homebrew`](https://brew.sh),
 
 and install [`uv`](https://docs.astral.sh/uv/) for Python environments,
 ```shell
-brew install uv
+brew install uv mise
 ```
 
-Create a virtual environment with `uv venv`, and install,
+Install using,
 ```shell
-make install
+mise setup
 ```
 
 ### Environment Variables
@@ -41,7 +41,7 @@ See SSH [`task`](./tasks/ssh.py) for accessed paths.
 
 Then run,
 ```shell
-make infra.home
+mise deploy home
 ```
 
 Authorize each target remote host manually from the [`inventory`](./inventory) to use the SSH key,
@@ -53,12 +53,9 @@ ssh-copy-id -i files/ssh/<org>/id_ed25519 <host>
 
 Finally, run,
 ```shell
-make infra.home
+mise deploy home
 ```
 
-### Dedeploy
+Use `--teardown` flag to remove all changes.
 
-For teardown tasks,
-```shell
-make uninfra.home
-```
+**TIP**: See `mise deploy -h` for all CLI arguments.

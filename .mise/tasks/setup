@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+#MISE description="Install dependencies using uv"
+
+#USAGE flag "-f --force" help="Remove lock file."
+
+if [[ "${usage_force}" == "true" ]]; then
+    rm -f uv.lock
+fi
+
+uv sync --extra dev --upgrade
