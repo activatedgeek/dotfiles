@@ -6,7 +6,7 @@
 #USAGE  choices "home" "nvda" "dns"
 #USAGE }
 #USAGE flag "--task <task>" help="Optionally deploy only task."
-#USAGE flag "--limit <limit>" help="Limit hosts." default="*"
+#USAGE flag "-l --limit <limit>" help="Limit hosts." default="*"
 #USAGE flag "--teardown" help="Teardown deployment"
 
 if [[ -z "${usage_inventory}" ]]; then
@@ -32,7 +32,7 @@ else
     deploy_file="deploy_${usage_inventory}.py"
 fi
 
-uv run \
+# uv run \
 pyinfra -y \
     --limit "${usage_limit}" ${__extra_args} \
 	inventories/${usage_inventory}.py \

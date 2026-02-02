@@ -3,9 +3,14 @@
 #MISE description="Install dependencies using uv"
 
 #USAGE flag "-f --force" help="Remove lock file."
+#USAGE flag "-U --upgrade" help="Upgrade dependencies."
 
 if [[ "${usage_force}" == "true" ]]; then
     rm -f uv.lock
 fi
 
-uv sync --extra dev --upgrade
+if [[ "${usage_upgrade}" == "true" ]]; then
+    __extra_args="--upgrade"
+fi
+
+uv sync --extra dev ${__extra_args}
