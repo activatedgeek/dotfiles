@@ -116,9 +116,3 @@ function uvr {
 
     uv run ${_uv_args} "${@}"
 }
-
-## ruff.
-alias ruffmt='uvr ruff format'
-alias ruffck='uvr ruff check'
-alias gruffmt='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffmt'
-alias gruffck='git ls-files --other --modified --exclude-standard -- "*.py" | xargs ruffck'

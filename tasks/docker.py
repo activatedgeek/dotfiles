@@ -34,16 +34,11 @@ def apply_macos(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
     brew_prefix = host.get_fact(brew_facts.BrewPrefix)
 
-    brew.casks(
-        name=f"{'Uni' if teardown else 'I'}nstall",
-        casks=["docker"],
-        present=not teardown,
-    )
-
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
         packages=[
             "colima",
+            "docker",
             "docker-buildx",
             "docker-compose",
             "docker-credential-helper",

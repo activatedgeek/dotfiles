@@ -3,12 +3,24 @@
 #MISE description="Run ruff check and format"
 #MISE quiet=true
 
-#USAGE flag "--fix" help="Apply fixable checks."
+#USAGE flag "-f --fix" help="Apply fixable checks."
+#USAGE flag "-m --modified" help="Lint only git modified files."
 
 if [[ "${usage_fix}" == "true" ]]; then
     __check_flags="--fix"
 fi
 
-ruff check ${__check_flags}
+if [[ "${usage_modified}" == "true" ]]; then
+    __modified_files="git ls-files --other --modified --exclude-standard -- "*.py""
+fi
 
-ruff format
+ruff_check_cmd="ruff check ${__check_flags}"
+ruff_format_cmd="ruff format"
+if [[ -n "${__modified_files}" ]]; then
+    ruff_check_cmd="${__modified_files} | xargs ${ruff_check_cmd}"
+    ruff_format_cmd="${__modified_files} | xargs ${ruff_format_cmd}"
+fi
+
+if ${ruff_check_cmd}; then
+    ${ruff_format_cmd}
+fi

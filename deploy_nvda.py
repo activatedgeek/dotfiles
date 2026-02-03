@@ -7,6 +7,7 @@ def deploy_tasks():
         "bottom",
         "brave",
         "discord",
+        "docker",
         "enroot",
         "ghostty",
         "git",

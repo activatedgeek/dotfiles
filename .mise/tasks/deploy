@@ -6,9 +6,10 @@
 #USAGE arg "<inventory>" help="Name of inventory" {
 #USAGE  choices "home" "nvda" "dns"
 #USAGE }
-#USAGE flag "--task <task>" help="Optionally deploy only task."
+#USAGE flag "-t --task <task>" help="Optionally deploy only task."
 #USAGE flag "-l --limit <limit>" help="Limit hosts." default="*"
 #USAGE flag "--teardown" help="Teardown deployment"
+#USAGE flag "-r --refresh" help="Refresh deployment by cleaning cache."
 
 if [[ -z "${usage_inventory}" ]]; then
     echo "[ERROR] Missing inventory."
@@ -17,6 +18,10 @@ fi
 
 if [[ "${usage_teardown}" == "true" ]]; then
     __extra_args="--data teardown=True"
+fi
+
+if [[ "${usage_refresh}" == "true" ]]; then
+    rm -f .env.inventory
 fi
 
 ## Handle DNS via separate task.
