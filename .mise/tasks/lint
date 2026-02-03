@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+#MISE description="Run ruff check and format"
+#MISE quiet=true
+
+#USAGE flag "--fix" help="Apply fixable checks."
+
+if [[ "${usage_fix}" == "true" ]]; then
+    __check_flags="--fix"
+fi
+
+ruff check ${__check_flags}
+
+ruff format
