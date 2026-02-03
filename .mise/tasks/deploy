@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 #MISE description="Run pyinfra deploy"
+#MISE quiet=true
 
 #USAGE arg "<inventory>" help="Name of inventory" {
 #USAGE  choices "home" "nvda" "dns"

@@ -36,7 +36,7 @@ slurm = (
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_account="llmservice_nemo_robustness",
                 sbatch_partition="batch",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
