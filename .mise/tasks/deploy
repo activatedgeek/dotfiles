@@ -35,10 +35,10 @@ fi
 if [[ -n "${usage_task}" ]]; then
     deploy_file="tasks/${usage_task}.py"
 else
-    deploy_file="deploy_${usage_inventory}.py"
+    __extra_args="${__extra_args} --data inventory_id=${usage_inventory}"
+    deploy_file="deploy.py"
 fi
 
-# uv run \
 pyinfra -y \
     --limit "${usage_limit}" ${__extra_args} \
 	inventories/${usage_inventory}.py \

@@ -1,4 +1,4 @@
-from pyinfra import host, local
+from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
@@ -13,8 +13,6 @@ def apply_macos(teardown=False):
         casks=["ghostty"],
         present=not teardown,
     )
-
-    local.include("tasks/fontconfig.py")
 
 
 @deploy("Config")

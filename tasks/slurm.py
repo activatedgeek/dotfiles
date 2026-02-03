@@ -8,7 +8,7 @@ from myinfra.operations import files as myfiles
 
 @deploy("NVDA")
 def apply_nvda(teardown=False):
-    is_slurm_host = bool(host.get_fact(slurm_facts.SbatchExists))
+    is_slurm_host = bool(host.get_fact(slurm_facts.SbatchBinary))
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}srun-docker",
@@ -22,8 +22,7 @@ def apply_nvda(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
-    sbatch_bin = host.get_fact(slurm_facts.SbatchExists)
-    is_slurm_host = bool(sbatch_bin)
+    sbatch_bin = host.get_fact(slurm_facts.SbatchBinary)
 
     remote_home = host.get_fact(server_facts.Home)
 
@@ -33,7 +32,7 @@ def apply_config(teardown=False):
         dest=f"{remote_home}/.local/profile/.slurm_profile",
         mode=600,
         create_remote_dir=False,
-        present=is_slurm_host and not teardown,
+        present=not teardown,
     )
 
     myfiles.template(
@@ -42,7 +41,7 @@ def apply_config(teardown=False):
         dest=f"{remote_home}/.local/profile/.slurm_env",
         mode=600,
         create_remote_dir=False,
-        present=is_slurm_host and not teardown,
+        present=not teardown,
         ## Jinja2 Variables.
         sbatch_account=host.data.get("sbatch_account", None),
     )
@@ -53,7 +52,7 @@ def apply_config(teardown=False):
         dest=f"{remote_home}/.local/bin/sbatch",
         mode=755,
         create_remote_dir=False,
-        present=is_slurm_host and not teardown,
+        present=not teardown,
         ## Jinja2 Variables.
         sbatch_bin=sbatch_bin,
     )
@@ -64,8 +63,10 @@ def apply_config(teardown=False):
 
 def apply():
     teardown = host.data.get("teardown", False)
-
-    apply_config(teardown=teardown)
+    sbatch_bin = host.get_fact(slurm_facts.SbatchBinary)
+    is_slurm_host = bool(sbatch_bin)
+    if is_slurm_host:
+        apply_config(teardown=teardown)
 
 
 apply()

@@ -1,7 +1,7 @@
 from pyinfra.api.facts import FactBase
 
 
-class SbatchExists(FactBase):
+class SbatchBinary(FactBase):
     def requires_command(self, *_, **__):
         return "command"
 
