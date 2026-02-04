@@ -32,21 +32,14 @@ BWS_ACCESS_TOKEN="<token>"
 
 ### SSH
 
-Generate SSH keys using,
+Generate SSH keys and copy then to target host,
 ```shell
-ssh-keygen -t ed25519 -f "$(pwd)/id_ed25519" -C "$(whoami)"
+mise keygen home --auth-host <user>@<host>
 ```
-and move to appropriate folder under [SSH files](./files/ssh).
-See SSH [`task`](./tasks/ssh.py) for accessed paths.
 
 Then run,
 ```shell
 mise deploy home
-```
-
-Authorize each target remote host manually from the [`inventory`](./inventory) to use the SSH key,
-```shell
-ssh-copy-id -i files/ssh/<org>/id_ed25519 <host>
 ```
 
 ## Deploy
