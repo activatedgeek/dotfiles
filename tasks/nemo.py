@@ -70,9 +70,9 @@ def apply_nvda(teardown=False):
 
     if "linux" in host.groups:
         myfiles.copy(
-            name=f"{'Remove ' if teardown else ''}NeMo-Skills Profile",
-            src="files/nemo/.nemo_skills_profile",
-            dest=f"{remote_home}/.local/profile/.nemo_skills_profile",
+            name=f"{'Remove ' if teardown else ''}NeMo Profile",
+            src="files/nemo/.nemo_profile",
+            dest=f"{remote_home}/.local/profile/.nemo_profile",
             mode=600,
             create_remote_dir=False,
             present=not teardown,

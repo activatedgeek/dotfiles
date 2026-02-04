@@ -1,49 +1,45 @@
-## Singularity.
-alias scc='singularity cache clean'
-function spull { singularity pull docker://${1:-"${DOCKER_USERNAME}/$(basename "$(pwd)"):cu124-py311-torch"}; }
-
 ## Slurm.
 alias si='sinfo -lNe'
 alias sacct='sacct --format=JobName%30,JobID,State,ExitCode,Partition,NNodes,ReqMem,NCPUS,NodeList'
 alias sshare='sshare -u $USER'
+
 function __sbatch {
-  if [[ ! -z "${DEPS}" ]]; then
-    __dependency="--dependency=${DEPS}"
-  fi
+    if [[ ! -z "${DEPS}" ]]; then
+        __dependency="--dependency=${DEPS}"
+    fi
 
-  __gpus_exclude_list=("eos")
-  if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
-    unset GPUS
-  else
-    __gpus="--gpus-per-node=${GPUS:-1}"
-  fi
+    __gpus_exclude_list=("eos")
+    if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
+        unset GPUS
+    else
+        __gpus="--gpus-per-node=${GPUS:-1}"
+    fi
 
-  sbatch --signal=B:USR1@10 \
-    --job-name="${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-1}:00:00 \
-    --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} ${__dependency} \
-    "${@}"
+    sbatch --signal=B:USR1@10 \
+        --job-name="${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-1}:00:00 \
+        --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} ${__dependency} \
+        "${@}"
 
-  unset DEPS JOB_NAME HH NNODES MEM NTASKS CPUS GPUS
+    unset DEPS JOB_NAME HH NNODES MEM NTASKS CPUS GPUS
 }
+
 function __srun {
-  __gpus_exclude_list=("eos")
-  if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
-    unset GPUS
-  else
-    __gpus="--gpus-per-node=${GPUS:-1}"
-  fi
+    __gpus_exclude_list=("eos")
+    if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
+        unset GPUS
+    else
+        __gpus="--gpus-per-node=${GPUS:-1}"
+    fi
 
-  srun --pty \
-    --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"} \
-    --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT} \
-    --time=${HH:-4}:00:00 \
-    --nodes="${NNODES:-1}" ${__gpus} \
-    --mem=${SBATCH_MEM:-"64G"} \
-    --ntasks-per-node="${NTASKS:-1}" \
-    "${@}"
+    srun --pty \
+        --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"} \
+        --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT} \
+        --time=${HH:-4}:00:00 \
+        --nodes="${NNODES:-1}" ${__gpus} \
+        --mem=${SBATCH_MEM:-"64G"} \
+        --ntasks-per-node="${NTASKS:-1}" \
+        "${@}"
 }
-function sdocker { __sbatch srun-docker "${@}"; }
-function sdocker-it { SBATCH_JOB_NAME=${SBATCH_JOB_NAME:-terminal} __srun srun-docker bash -l; }
 
 function sle { less "${SLURM_LOGDIR}/${1}.err"; }
 function slo { less "${SLURM_LOGDIR}/${1}.out"; }
@@ -52,75 +48,72 @@ function sto { tail -n100 -f "${SLURM_LOGDIR}/${1}.out"; }
 
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'
-alias sq='squeue -u "${USER}" -o "%.10A | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'  # | %.12F %.10K
+alias sq='squeue --me -o "%.10A | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'  # | %.12F %.10K
+
 function sjob {
-  sacct --json -P -o state -j ${1} | \
-  jq -r '.jobs[0] | {id: .job_id, account: .account, partition: .partition, name: .name, workdir: .working_directory, cmd: .submit_line, runtime: .time.elapsed, start: .time.start, waittime: (.time.start - .time.submission), exit_code: .exit_code.return_code, status: .state.current}'
+    sacct --json -P -o state -j ${1} | \
+    jq -r '.jobs[0] | {
+        id: .job_id,
+        account: .account,
+        partition: .partition,
+        name: .name,
+        workdir: .working_directory,
+        cmd: .submit_line,
+        runtime: .time.elapsed,
+        start: .time.start,
+        waittime: (.time.start - .time.submission),
+        exit_code: (if .exit_code.return_code | type == "object" then .exit_code.return_code.number else .exit_code.return_code end),
+        status: (if .state.current | type == "array" then .state.current[0] else .state.current end),
+    }'
 }
 
 function snotify {
-  __job_info=$(sjob ${1})
-  if [[ $? -ne 0 ]]; then
-    echo "[ERROR]: Missing job id. Cannot notify."
-    return
-  fi
-
-  __status=${SLURM_STATUS:-$(echo "${__job_info}" | jq -r '.status')}
-  case ${__status} in
-
-    PENDING)
-      __status_emoji="vertical_traffic_light"
-      ;;
-
-    STARTED)
-      __status_emoji="green_circle"
-      ;;
-
-    RUNNING)
-      __status_emoji="bulb"
-      ;;
-
-    TIMEOUT)
-      __status_emoji="hourglass"
-      ;;
-
-    CANCELLED)
-      __status_emoji="warning"
-      ;;
-
-    COMPLETED)
-      __status_emoji="white_check_mark"
-      ;;
-
-    FAILED)
-      __status_emoji="x"
-      ;;
-
-    *)
-      __status=UNKNOWN
-      __status_emoji="alien"
-      ;;
-  esac
-
-  __name=$(echo "${__job_info}" | jq -r '.name')
-  __id=$(echo "${__job_info}" | jq -r '.id')
-  __start=$(date -d @"$(echo "${__job_info}" | jq -r '.start')" +"%b %d %Y %r %Z")
-  __waittime=$(echo "${__job_info}" | jq -r '.waittime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
-  __cmd=$(echo "${__job_info}" | jq -r '.cmd')
-  __workdir=$(echo "${__job_info}" | jq -r '.workdir')
-  __runtime=$(echo "${__job_info}" | jq -r '.runtime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
-  __exit_code=${SLURM_EXIT_CODE:-$(echo "${__job_info}" | jq -r '.exit_code')}
-
-  if [[ -f "${SLURM_LOGDIR}/${1}.out" ]]; then
-    __wandb_run_url=$(cat ${SLURM_LOGDIR}/${1}.out | grep -m 1 "View run at")
-    IFS=$' ' read -rd '' -a __wandb_run_url <<<"${__wandb_run_url}"
-    __wandb_run_url=$(echo ${__wandb_run_url[-1]} | xargs)
-    if [[ ! -z "${__wandb_run_url}" ]]; then
-      __wandb_run_url=" |  :chart_with_upwards_trend: <${__wandb_run_url}|W&B Run>"
+    if [[ -z "${1}" ]]; then
+      echo "[ERROR]: Missing job id. Cannot notify."
+      return
     fi
-  fi
 
-cat << _EOF | uv --directory="${STORE_HOME}/uv" run apprise discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
+    __job_info=$(sjob ${1})
+
+    __status=${SLURM_STATUS:-$(echo "${__job_info}" | jq -r '.status')}
+    case ${__status} in
+        PENDING)
+            __status_emoji="vertical_traffic_light"
+            ;;
+        STARTED)
+            __status_emoji="green_circle"
+            ;;
+        RUNNING)
+            __status_emoji="bulb"
+            ;;
+        TIMEOUT)
+            __status_emoji="hourglass"
+            ;;
+        CANCELLED)
+            __status_emoji="warning"
+            ;;
+        COMPLETED)
+            __status_emoji="white_check_mark"
+            ;;
+        FAILED)
+            __status_emoji="x"
+            ;;
+        *)
+            __status=UNKNOWN
+            __status_emoji="alien"
+            ;;
+    esac
+
+    __name=$(echo "${__job_info}" | jq -r '.name')
+    __id=$(echo "${__job_info}" | jq -r '.id')
+    __start=$(date -d @"$(echo "${__job_info}" | jq -r '.start')" +"%b %d %Y %r %Z")
+    __waittime=$(echo "${__job_info}" | jq -r '.waittime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
+    __cmd=$(echo "${__job_info}" | jq -r '.cmd')
+    __workdir=$(echo "${__job_info}" | jq -r '.workdir')
+    __runtime=$(echo "${__job_info}" | jq -r '.runtime' | awk '{printf "%02d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}')
+    __exit_code=${SLURM_EXIT_CODE:-$(echo "${__job_info}" | jq -r '.exit_code')}
+
+cat << _EOF | uvx apprise discord://SLURM'\'$(basename ${__workdir})@${DISCORD_WEBHOOK_TOKEN}
 ## :${__status_emoji}:  ${__name}
 -#  :id: ${__id}  |  :rocket:  ${__start}  |  :hourglass_flowing_sand: ${__waittime}
 
@@ -128,6 +121,31 @@ cat << _EOF | uv --directory="${STORE_HOME}/uv" run apprise discord://SLURM'\'$(
 > ${__cmd}
 > \`\`\`
 
--# :desktop_computer:  ${INVENTORY_HOSTNAME}:${__workdir}  |  :clock4:  ${__runtime}  |  :${__status_emoji}: _${__status}_ (Exit Code: ${__exit_code}) ${__wandb_run_url}
+-# :desktop_computer:  ${INVENTORY_HOSTNAME}:${__workdir}  |  :clock4:  ${__runtime}  |  :${__status_emoji}: _${__status}_ (Exit Code: ${__exit_code})
 _EOF
+}
+
+function sbatch_install_traps {
+    if [[ -n "${SLURM_JOB_ID}" ]]; then
+        sleep 5  ## Wait for scontrol.
+        if [[ $SLURM_PROCID -eq 0 ]]; then
+            SLURM_STATUS=STARTED snotify ${SLURM_JOB_ID}
+        fi
+
+        function on_signal {
+            trap - EXIT TERM USR1
+
+            if [[ $SLURM_PROCID -eq 0 ]]; then
+                snotify ${SLURM_JOB_ID}
+            fi
+
+            exit ${SLURM_EXIT_CODE}
+        }
+
+      trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") on_signal' EXIT
+      trap 'SLURM_EXIT_CODE=143 SLURM_STATUS=CANCELLED on_signal' TERM
+      trap 'SLURM_EXIT_CODE=142 SLURM_STATUS=TIMEOUT on_signal' USR1
+
+      echo "[INFO] Installed sbatch signal traps."
+    fi
 }

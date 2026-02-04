@@ -4,29 +4,7 @@ if [[ -f .srunrc ]]; then
   source .srunrc
 fi
 
-if [[ -n "${SLURM_JOB_ID}" ]]; then
-  sleep 5  ## Wait for scontrol.
-  if [[ $SLURM_PROCID -eq 0 ]]; then
-    SLURM_STATUS=STARTED snotify ${SLURM_JOB_ID}
-  fi
-
-  function __exit {
-    trap - EXIT
-    if [[ $SLURM_PROCID -eq 0 ]]; then
-      snotify ${SLURM_JOB_ID}
-    fi
-    exit ${SLURM_EXIT_CODE}
-  }
-
-  trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") __exit' EXIT
-  trap 'SLURM_EXIT_CODE=142 SLURM_STATUS=TIMEOUT __exit' USR1
-  trap 'SLURM_EXIT_CODE=143 SLURM_STATUS=CANCELLED __exit' TERM
-
-  IFS="=" read -r -a __sctrl <<< "$(scontrol show job "${SLURM_JOB_ID}" | grep -o 'BatchFlag=\w')"
-  __is_sbatch=${__sctrl[-1]}
-
-  export JOB_ID="${SLURM_JOB_ID}"
-fi
+sbatch_install_traps
 
 ## https://stackoverflow.com/questions/1668649/how-to-keep-quotes-in-bash-arguments
 __args=''
