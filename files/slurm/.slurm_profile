@@ -41,10 +41,8 @@ function __srun {
         "${@}"
 }
 
-function sle { less "${SLURM_LOGDIR}/${1}.err"; }
-function slo { less "${SLURM_LOGDIR}/${1}.out"; }
-function ste { tail -n100 -f "${SLURM_LOGDIR}/${1}.err"; }
-function sto { tail -n100 -f "${SLURM_LOGDIR}/${1}.out"; }
+function slog { less "${SLURM_LOGDIR}/${1}.log"; }
+function stlog { tail -n500 -f "${SLURM_LOGDIR}/${1}.log"; }
 
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'

@@ -1,5 +1,19 @@
 #!/usr/bin/env bash
 
+#SBATCH --account={{ sbatch_account }}
+{% if inventory_hostname == "eos" %}
+#SBATCH --partition=interactive
+{% elif inventory_hostname == "hsg" %}
+#SBATCH --partition=cpu
+{% else %}
+#SBATCH --partition=cpu_interactive
+{% endif %}
+#SBATCH --job-name={{ sbatch_account }}-enroot.import
+#SBATCH --time=02:00:00
+#SBATCH --mem=64G
+#SBATCH --output=/home/{{ sbatch_user }}/store/.slurm/logs/%j.log
+#SBATCH --error=/home/{{ sbatch_user }}/store/.slurm/logs/%j.log
+
 ##
 # Usage:
 #   mkenroot.sh <docker/image:tag> [output.sqsh]

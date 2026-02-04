@@ -3,27 +3,6 @@ export NEMORUN_HOME=${STORE_HOME}/.nemo_run
 export NEMO_SKILLS_DISABLE_UNCOMMITTED_CHANGES_CHECK=1
 export NEMO_SKILLS_CONFIG_DIR=${HOME}/.config/nemo_skills/cluster_configs
 
-function senroot {
-    if [[ -z "${1}" ]]; then
-        echo "[ERROR]: Missing Docker image."
-        return
-    fi
-
-    if [[ -z "${SBATCH_PARTITION}" ]]; then
-        if [[ "${INVENTORY_HOSTNAME}" = "eos" ]]; then
-            SBATCH_PARTITION=interactive
-        elif [[ "${INVENTORY_HOSTNAME}" = "hsg" ]]; then
-            SBATCH_PARTITION=cpu
-        fi
-    fi
-
-    __all_args="${@}"
-
-    GPUS=0 \
-    SBATCH_JOB_NAME=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-mkenroot.run \
-    __srun --partition=${SBATCH_PARTITION:-cpu_interactive} bash -l -c "mkenroot ${__all_args}; exit"
-}
-
 function snemo-logd {
     if [[ -z "${1}" ]]; then
         echo "[ERROR]: Missing Slurm Job ID."

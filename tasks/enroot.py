@@ -39,13 +39,17 @@ def apply_config(teardown=False):
         docker_hub_username=host.data.get("docker_hub_username"),
     )
 
-    myfiles.copy(
+    myfiles.template(
         name=f"{'Remove ' if teardown else ''}mkenroot",
-        src="files/enroot/mkenroot.sh",
+        src="templates/enroot/mkenroot.j2",
         dest=f"{remote_home}/.local/bin/mkenroot",
         mode=755,
         create_remote_dir=False,
         present=not teardown,
+        ## Jinja2 Variables.
+        inventory_hostname=host.name.split("/")[-1],
+        sbatch_user=host.data.get("ssh_user"),
+        sbatch_account=host.data.get("sbatch_account"),
     )
 
     myfiles.template(
