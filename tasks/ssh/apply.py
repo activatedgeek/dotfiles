@@ -20,7 +20,7 @@ def apply_config_home(teardown=False):
         else:
             files.sync(
                 name="Sync",
-                src="files/ssh/home",
+                src="tasks/ssh/files/home",
                 dest=f"{remote_home}/.ssh/config.d/home",
                 dir_mode=700,
                 mode=600,
@@ -50,7 +50,7 @@ def apply_config_nvda(teardown=False):
     if host.name == "@local" and not teardown:
         files.sync(
             name="Sync",
-            src="files/ssh/nvda",
+            src="tasks/ssh/files/nvda",
             dest=f"{remote_home}/.ssh/config.d/nvda",
             dir_mode=700,
             mode=600,
@@ -68,7 +68,7 @@ def apply_config_nvda(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Config",
-        src="templates/ssh/nvda/config.j2",
+        src="tasks/ssh/templates/nvda/config.j2",
         dest=f"{remote_home}/.ssh/config.d/nvda/config",
         mode=600,
         create_remote_dir=False,

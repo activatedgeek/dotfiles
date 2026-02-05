@@ -79,7 +79,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Aliases",
-        src="files/pueue/.pueue_aliases",
+        src="tasks/pueue/files/.pueue_aliases",
         dest=f"{remote_home}/.local/profile/.pueue_aliases",
         mode=600,
         create_remote_dir=False,
@@ -88,7 +88,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}prun",
-        src="files/pueue/prun",
+        src="tasks/pueue/files/prun",
         dest=f"{remote_home}/.local/bin/prun",
         mode=755,
         create_remote_dir=False,

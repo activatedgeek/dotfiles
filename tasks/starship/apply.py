@@ -34,7 +34,7 @@ class Starship(Binary):
 def apply_config(teardown=False):
     myfiles.copy(
         name="Settings",
-        src="files/starship/starship.toml",
+        src="tasks/starship/files/starship.toml",
         dest=f"{host.get_fact(server_facts.Home)}/.config/starship.toml",
         present=not teardown,
         mode=600,

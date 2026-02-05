@@ -48,7 +48,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
-        src="files/bash/.bash_profile",
+        src="tasks/bash/files/.bash_profile",
         dest=f"{remote_home}/.local/profile/.bash_profile",
         mode=600,
         create_remote_dir=False,
@@ -57,7 +57,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Env",
-        src="templates/bash/.bash_env.j2",
+        src="tasks/bash/templates/.bash_env.j2",
         dest=f"{remote_home}/.local/profile/.bash_env",
         mode=600,
         create_remote_dir=False,
@@ -82,7 +82,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Secrets Env",
-        src="templates/bash/.secrets_env.j2",
+        src="tasks/bash/templates/.secrets_env.j2",
         dest=f"{remote_home}/.local/profile/.secrets_env",
         mode=600,
         create_remote_dir=False,
@@ -101,7 +101,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}ML Secrets Env",
-        src="templates/bash/.ml_secrets_env.j2",
+        src="tasks/bash/templates/.ml_secrets_env.j2",
         dest=f"{remote_home}/.local/profile/.ml_secrets_env",
         mode=600,
         create_remote_dir=False,
@@ -126,7 +126,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Aliases",
-        src="files/bash/.bash_aliases",
+        src="tasks/bash/files/.bash_aliases",
         dest=f"{remote_home}/.local/profile/.bash_aliases",
         mode=600,
         create_remote_dir=False,

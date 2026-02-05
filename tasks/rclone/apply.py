@@ -68,7 +68,7 @@ def apply_nvda(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Conf",
-        src="templates/rclone/nvda-rclone.conf.j2",
+        src="tasks/rclone/templates/nvda-rclone.conf.j2",
         dest=f"{remote_home}/.config/rclone/rclone.conf",
         mode=600,
         create_remote_dir=False,

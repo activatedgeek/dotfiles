@@ -7,7 +7,6 @@
 #USAGE  choices "home" "nvda"
 #USAGE }
 #USAGE flag "-t --type <type>" help="Type of key to create." default="ed25519"
-#USAGE flag "-d --directory <directory>" help="Output directory." default="files/ssh"
 #USAGE flag "-A --auth-host <auth_host>" help="Target host to copy the key."
 
 if [[ -z "${usage_inventory}" ]]; then
@@ -15,13 +14,9 @@ if [[ -z "${usage_inventory}" ]]; then
     exit 1
 fi
 
-## Set expected path when default directory.
-if [[ "${usage_directory}" == "files/ssh" ]]; then
-    usage_directory=${usage_directory}/${usage_inventory}
-fi
-
-if ssh-keygen -t ${usage_type} -f "${usage_directory}/id_${usage_type}" -C "$(whoami)"; then
+output_dir=tasks/ssh/files/${usage_inventory}
+if ssh-keygen -t ${usage_type} -f "${output_dir}/id_${usage_type}" -C "$(whoami)"; then
     if [[ -n "${usage_auth_host}" ]]; then
-        ssh-copy-id -i "${usage_directory}/id_${usage_type}" ${usage_auth_host}
+        ssh-copy-id -i "${output_dir}/id_${usage_type}" ${usage_auth_host}
     fi
 fi

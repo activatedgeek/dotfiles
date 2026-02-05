@@ -71,7 +71,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}.gitconfig",
-        src="templates/git/.gitconfig.j2",
+        src="tasks/git/templates/.gitconfig.j2",
         dest=f"{remote_home}/.gitconfig",
         mode=600,
         create_remote_dir=False,
@@ -82,7 +82,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}.gitignore_global",
-        src="files/git/.gitignore_global",
+        src="tasks/git/files/.gitignore_global",
         dest=f"{remote_home}/.gitignore_global",
         present=not teardown,
         mode=600,

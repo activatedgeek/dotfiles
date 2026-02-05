@@ -21,7 +21,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Settings",
-        src="files/zed/settings.json",
+        src="tasks/zed/files/settings.json",
         dest=f"{remote_home}/.config/zed/settings.json",
         mode=600,
         create_remote_dir=False,

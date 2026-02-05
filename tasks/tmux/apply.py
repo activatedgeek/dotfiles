@@ -9,7 +9,7 @@ from myinfra.operations import files as myfiles
 def apply_config(teardown=False):
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Config",
-        src="files/tmux/.tmux.conf",
+        src="tasks/tmux/files/.tmux.conf",
         dest=f"{host.get_fact(server_facts.Home)}/.tmux.conf",
         mode=600,
         create_remote_dir=False,

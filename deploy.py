@@ -3,7 +3,7 @@ from pathlib import Path
 from pyinfra import host, local
 from pyinfra.api import exceptions
 
-ALL_TASKS = sorted([f.stem for f in (Path(__file__).parent / "tasks").glob("*.py")])
+ALL_TASKS = sorted([d.stem for d in (Path(__file__).parent / "tasks").iterdir() if d.is_dir()])
 
 SKIP_TASKS = {
     "home": {
@@ -32,7 +32,7 @@ def deploy():
         )
 
     for t in filter(lambda t: t not in SKIP_TASKS[inventory_id], ALL_TASKS):
-        local.include(f"tasks/{t}.py")
+        local.include(f"tasks/{t}/apply.py")
 
 
 deploy()

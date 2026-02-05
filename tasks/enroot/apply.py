@@ -30,7 +30,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''} Credentials",
-        src="templates/enroot/.credentials.j2",
+        src="tasks/enroot/templates/.credentials.j2",
         dest=f"{remote_home}/.config/enroot/.credentials",
         mode=600,
         create_remote_dir=False,
@@ -41,7 +41,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}mkenroot",
-        src="templates/enroot/mkenroot.j2",
+        src="tasks/enroot/templates/mkenroot.j2",
         dest=f"{remote_home}/.local/bin/mkenroot",
         mode=755,
         create_remote_dir=False,
@@ -54,7 +54,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Default Mounts",
-        src="templates/enroot/mounts.d/default.fstab.j2",
+        src="tasks/enroot/templates/mounts.d/default.fstab.j2",
         dest=f"{remote_home}/.config/enroot/mounts.d/default.fstab",
         mode=600,
         create_remote_dir=False,
@@ -65,7 +65,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Default Env",
-        src="templates/enroot/environ.d/default.env.j2",
+        src="tasks/enroot/templates/environ.d/default.env.j2",
         dest=f"{remote_home}/.config/enroot/environ.d/default.env",
         mode=600,
         create_remote_dir=False,
@@ -76,7 +76,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}ML Secrets Env",
-        src="templates/bash/.ml_secrets_env.j2",
+        src="tasks/bash/templates/.ml_secrets_env.j2",
         dest=f"{remote_home}/.config/enroot/environ.d/ml_secrets.env",
         mode=600,
         create_remote_dir=False,

@@ -28,7 +28,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Options",
-        src="files/ghostty/config",
+        src="tasks/ghostty/files/config",
         dest=f"{remote_home}/.config/ghostty/config",
         mode=600,
         create_remote_dir=False,

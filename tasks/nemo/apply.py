@@ -28,7 +28,7 @@ def apply_nemo_skills(teardown=False):
     for cluster_name, values in local_cluster_hosts.items():
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
-            src="templates/nemo/cluster_configs/local.yaml.j2",
+            src="tasks/nemo/templates/cluster_configs/local.yaml.j2",
             dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
             create_remote_dir=False,
@@ -54,7 +54,7 @@ def apply_nemo_skills(teardown=False):
     for cluster_name, values in slurm_cluster_hosts.items():
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
-            src="templates/nemo/cluster_configs/slurm.yaml.j2",
+            src="tasks/nemo/templates/cluster_configs/slurm.yaml.j2",
             dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
             create_remote_dir=False,
@@ -71,7 +71,7 @@ def apply_nvda(teardown=False):
     if "linux" in host.groups:
         myfiles.copy(
             name=f"{'Remove ' if teardown else ''}NeMo Profile",
-            src="files/nemo/.nemo_profile",
+            src="tasks/nemo/files/.nemo_profile",
             dest=f"{remote_home}/.local/profile/.nemo_profile",
             mode=600,
             create_remote_dir=False,

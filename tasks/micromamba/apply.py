@@ -72,7 +72,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
-        src="files/micromamba/.mm_profile",
+        src="tasks/micromamba/files/.mm_profile",
         dest=f"{remote_home}/.local/profile/.mm_profile",
         mode=600,
         create_remote_dir=False,

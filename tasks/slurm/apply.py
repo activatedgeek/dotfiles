@@ -12,7 +12,7 @@ def apply_nvda(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}srun-docker",
-        src="files/slurm/srun-docker",
+        src="tasks/slurm/files/srun-docker",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/srun-docker",
         mode=755,
         create_remote_dir=False,
@@ -28,7 +28,7 @@ def apply_config(teardown=False):
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
-        src="files/slurm/.slurm_profile",
+        src="tasks/slurm/files/.slurm_profile",
         dest=f"{remote_home}/.local/profile/.slurm_profile",
         mode=600,
         create_remote_dir=False,
@@ -37,7 +37,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Env",
-        src="templates/slurm/.slurm_env.j2",
+        src="tasks/slurm/templates/.slurm_env.j2",
         dest=f"{remote_home}/.local/profile/.slurm_env",
         mode=600,
         create_remote_dir=False,
@@ -48,7 +48,7 @@ def apply_config(teardown=False):
 
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}sbatch",
-        src="templates/slurm/sbatch.j2",
+        src="tasks/slurm/templates/sbatch.j2",
         dest=f"{remote_home}/.local/bin/sbatch",
         mode=755,
         create_remote_dir=False,

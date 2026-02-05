@@ -33,7 +33,7 @@ if [[ "${usage_inventory}" == "dns" ]]; then
 fi
 
 if [[ -n "${usage_task}" ]]; then
-    deploy_file="tasks/${usage_task}.py"
+    deploy_file="tasks/${usage_task}/apply.py"
 else
     __extra_args="${__extra_args} --data inventory_id=${usage_inventory}"
     deploy_file="deploy.py"

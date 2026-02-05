@@ -3,7 +3,7 @@ import os
 from pyinfra.api import config, exceptions
 
 ## Ensure SSH keys.
-for f in ["files/ssh/nvda/id_ed25519", "files/ssh/nvda/id_ed25519.pub"]:
+for f in ["tasks/ssh/files/nvda/id_ed25519", "tasks/ssh/files/nvda/id_ed25519.pub"]:
     if not os.path.isfile(f):
         raise exceptions.InventoryError(f"SSH file {f} not found.")
 
@@ -155,7 +155,7 @@ all = (
         email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
         org="nvda",
         ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
-        ssh_key="files/ssh/nvda/id_ed25519",
+        ssh_key="tasks/ssh/files/nvda/id_ed25519",
         ssh_config_file="/dev/null",
     ),
 )
