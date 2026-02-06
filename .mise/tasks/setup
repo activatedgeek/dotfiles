@@ -3,10 +3,41 @@
 #MISE description="Install dependencies using uv"
 #MISE quiet=true
 
+#USAGE flag "-d --directory <directory>" help="Path to virtual environment."
 #USAGE flag "-U --upgrade" help="Upgrade dependencies."
+#USAGE flag "-f --force" help="Force recreate environment."
 
-if [[ "${usage_upgrade}" == "true" ]]; then
-    __extra_args="--upgrade"
+if [[ -z "${usage_directory}" ]]; then
+    ## Always link environment under STORE_HOME when available.
+    if [[ -n "${STORE_HOME}" ]]; then
+        usage_directory="${STORE_HOME}/.uv/venvs/$(basename "$(pwd)")"
+    fi
 fi
 
-uv sync --extra dev ${__extra_args}
+if [[ -n "${usage_force}" ]]; then
+    rm -rf .venv
+    if [[ -n "${usage_directory}" ]]; then
+        rm -rf "${usage_directory}"
+    fi
+fi
+
+## Handle a directory different than .venv.
+if [[ -n "${usage_directory}" ]]; then
+    mkdir -p "${usage_directory}"
+    mkdir -p .venv
+
+    real_target="$(realpath .venv)"
+    expected_target="$(realpath "${usage_directory}")"
+
+    if [[ "${real_target}" != "${expected_target}" ]]; then
+        rm -rf .venv
+        ln -nsf "${expected_target}" "${real_target}"
+    fi
+fi
+
+uv_cmd=(uv sync --extra dev)
+if [[ -n "${usage_upgrade}" ]]; then
+    uv_cmd+=(--upgrade)
+fi
+
+"${uv_cmd[@]}"

@@ -1,4 +1,4 @@
-## Misc.
+## Common.
 alias buba='brew upgrade && brew autoremove && brew cleanup -s'
 
 alias dnsflush='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
@@ -7,23 +7,9 @@ alias duh='du -h --max-depth=1 --threshold=1G . | sort -hr'
 
 alias ls='ls --color=auto'
 
-alias mrun='micro run.sh && chmod +x run.sh && ./run.sh && rm run.sh'
-
-alias nano=micro
-
-alias oldrm='find . -mtime +2 -exec rm {} \;'
-
-alias repip='pip install --no-cache-dir -UI'
-
 alias xargs='xargs '
 
-alias rsync='rsync -avzhEP --stats'
-
 alias watch='watch '
-
-if [ -f "${STORE_HOME}/uv/.venv/bin/dvc" ]; then
-  alias dvc="${STORE_HOME}/uv/.venv/bin/dvc"
-fi
 
 ## docker.
 alias cst='colima start'
@@ -37,19 +23,12 @@ alias dcup='docker compose up -d'
 alias dcdown='docker compose down'
 alias dcexec='docker compose exec'
 
-## git.
-alias gblack='git ls-files --other --modified --exclude-standard -- "*.py" "*.ipynb" | black'
-function gdelhist {
-  git checkout --orphan latest_branch
-  git add -A
-  git commit -am "[skip ci] init"
-  git branch -D main
-  git branch -m main
-}
-
 ## rclone.
 alias rcp='rclone -P copy'
 alias rcs='rclone -P sync'
+
+## rsync.
+alias rsync='rsync -avzhEP --stats'
 
 ## setfacl.
 alias setfaclnogo='setfacl -m g::-,o::-'
@@ -84,35 +63,4 @@ function jaxrun {
   mpirun \
     -n ${__nproc_per_node} \
     python "${@}"
-}
-
-## uv.
-function uvc {
-  __venv_path=${VENV_DIR:-"${PROJECT_HOME}/$(basename "$(pwd)")"}/.venv
-  if [[ ! -d "${__venv_path}" ]]; then
-    uv venv --python ${PY_VERSION:-3.11} ${__venv_path}
-  fi
-  if [[ ! "$(pwd)" -ef "${PROJECT_HOME}/$(basename "$(pwd)")" ]]; then
-    rm -rf .venv
-    ln -sf "${__venv_path}" .venv
-  fi
-  unset __venv_path
-}
-function uvr {
-    ## Assumes .venv in the root of the git repo (handles submodules).
-    if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-        _git_root="$(git rev-parse --show-superproject-working-tree)"
-        _uv_args="--no-project"
-        if [[ -z "${_git_root}" ]]; then
-            _git_root="$(git rev-parse --show-toplevel)"
-            _uv_args="--no-sync"
-        fi
-    fi
-
-    if [[ -n "${_git_root}" ]]; then
-        _uv_args="${_uv_args} -p ${_git_root}/.venv/bin/python"
-    fi
-    unset _git_root
-
-    uv run ${_uv_args} "${@}"
 }
