@@ -5,32 +5,100 @@ export NEMO_SKILLS_CONFIG_DIR=${HOME}/.config/nemo_skills/cluster_configs
 
 function nrlogd {
     if [[ -z "${1}" ]]; then
-        echo "[ERROR]: Missing Slurm Job ID."
+        echo "[ERROR]: Missing <nemo_experiment_id>."
         echo "Usage:"
-        echo "  nrlogd SLURM_JOB_ID"
+        echo "  nrlogd <nemo_experiment_id>"
         return 1
     fi
-    sacct --json -P -o state -j ${1} | jq -r '.jobs[0] | .submit_line' | rev | cut -d' ' -f1 | rev | xargs cat | grep -m1 '\-\-output' | cut -d= -f2 | xargs dirname
+    exp_id=${1}
+    shift 1
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --cd)
+                do_cd="${1}"
+                shift 1
+            ;;
+            *)
+                shift 1
+            ;;
+        esac
+    done
+
+    if [[ "${exp_id}" =~ ^(.*)\_([0-9]+)$ ]]; then
+        exp_dir="${NEMORUN_HOME}/${BASH_REMATCH[1]}/${exp_id}"
+        if [[ -n "${do_cd}" ]]; then
+            cd ${exp_dir}
+        else
+            echo ${exp_dir}
+        fi
+    else
+        echo "[ERROR] Unable to construct directory."
+        return 1
+    fi
 }
 
-function nrtail {
+function nrlog {
     if [[ -z "${1}" ]]; then
-        echo "[ERROR]: Missing Slurm Job ID."
+        echo "[ERROR]: Missing <nemo_experiment_id>."
         echo "Usage:"
-        echo "  nrtail SLURM_JOB_ID [main|server|sandbox|...]"
+        echo "  nrlog <nemo_experiment_id>"
         return 1
     fi
-    nrlogd ${1} | __slurm_job_id=${1} __log_name=${2:-main} xargs -I{} bash -c 'tail -n 500 -f {}/*${__log_name}*${__slurm_job_id}*.log'
-}
+    exp_id=${1}
+    shift 1
 
-function nrless {
-    if [[ -z "${1}" ]]; then
-        echo "[ERROR]: Missing Slurm Job ID."
-        echo "Usage:"
-        echo "  nrless SLURM_JOB_ID [main|server|sandbox|...]"
+    exp_dir=$(nrlogd "${exp_id}")
+    if [[ $? -ne 0 ]]; then
         return 1
     fi
-    nrlogd ${1} | __slurm_job_id=${1} __log_name=${2:-main} xargs -I{} bash -c 'less {}/*${__log_name}*${__slurm_job_id}*.log'
-}
 
-alias nrinfo='uvr nemo experiment status'
+    tail_cmd=(tail)
+    less_cmd=(less)
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -j)
+                job_name="${2}"
+                shift 2
+            ;;
+            -n)
+                num_lines="${2}"
+                shift 2
+            ;;
+            -t)
+                task_name="${2}"
+                shift 2
+            ;;
+            --less)
+                use_less=1
+                shift 1
+            ;;
+            *)
+                tail_cmd+=(${1})
+                less_cmd+=(${1})
+                shift 1
+            ;;
+        esac
+    done
+    tail_cmd+=(-n ${num_lines:-500})
+
+    if [[ -z "${job_name}" ]]; then
+        echo "[ERROR] Missing job name argument -j"
+        return 1
+    fi
+
+    slurm_job_id=$(squeue --name ${exp_id} -o '%.10A' | grep -m1 -E '[0-9]+' | tr -d ' ')
+    if [[ -z "${slurm_job_id}" ]]; then
+        echo "[WARNING] Could not parse slurm job ID."
+    fi
+
+    tail_cmd+=(-f ${exp_dir}/${job_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
+    less_cmd+=(${exp_dir}/${job_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
+
+    if [[ $use_less -eq 1 ]]; then
+        unset use_less
+        "${less_cmd[@]}"
+    else
+        "${tail_cmd[@]}"
+    fi
+}
