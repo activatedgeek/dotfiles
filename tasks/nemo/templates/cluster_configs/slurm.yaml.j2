@@ -25,8 +25,11 @@ containers:
   nemo-rl: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-nemo-rl-latest.sqsh
   nemo-skills: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-latest.sqsh
   sandbox: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sandbox-latest.sqsh
-  sglang: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sglang-latest.sqsh
+  sglang: /home/{{ ssh_user }}/store/images/{{ sglang_version | d("nemo-skills/nemo-skills-sglang-latest")  }}.sqsh
   vllm: /home/{{ ssh_user }}/store/images/{{ vllm_version | d("nemo-skills/nemo-skills-vllm-latest")  }}.sqsh
+  edison:
+    hypotest: /home/{{ ssh_user }}/store/images/edison/dataset-server-latest.sqsh
+    gym: /home/{{ ssh_user }}/store/images/edison/nemo-gym-latest.sqsh
 
 mounts:
   - /home/{{ ssh_user }}/store:/store

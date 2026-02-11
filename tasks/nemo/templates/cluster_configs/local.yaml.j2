@@ -1,9 +1,9 @@
 containers:
-  sandbox: gitlab-master.nvidia.com/igitman/nemo-skills-configs/sandbox:latest
-  sglang: lmsysorg/sglang:v0.5.4
-  nemo-skills: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-skills:latest
   nemo-rl: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-rl:latest
-  vllm: vllm/vllm-openai:v0.13.0
+  nemo-skills: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-skills:latest
+  sandbox: gitlab-master.nvidia.com/igitman/nemo-skills-configs/sandbox:latest
+  sglang: lmsysorg/sglang:{{ sglang_version | d("v0.5.8") }}
+  vllm: vllm/vllm-openai:{{ vllm_version | d("v0.15.0") }}
 
 executor: local
 

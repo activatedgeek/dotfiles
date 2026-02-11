@@ -13,6 +13,7 @@ SKIP_TASKS = {
     },
     "nvda": {
         "bitwarden",
+        "brave",
         "cloudflare",
         "mega",
         "netnewswire",

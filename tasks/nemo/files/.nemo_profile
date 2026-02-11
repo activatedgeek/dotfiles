@@ -28,6 +28,7 @@ function nrlogd {
     if [[ "${exp_id}" =~ ^(.*)\_([0-9]+)$ ]]; then
         exp_dir="${NEMORUN_HOME}/${BASH_REMATCH[1]}/${exp_id}"
         if [[ -n "${do_cd}" ]]; then
+            unset do_cd
             cd ${exp_dir}
         else
             echo ${exp_dir}
@@ -50,6 +51,7 @@ function nrlog {
 
     exp_dir=$(nrlogd "${exp_id}")
     if [[ $? -ne 0 ]]; then
+        echo "[ERROR] Error getting experiment directory."
         return 1
     fi
 
@@ -94,6 +96,8 @@ function nrlog {
 
     tail_cmd+=(-f ${exp_dir}/${job_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
     less_cmd+=(${exp_dir}/${job_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
+
+    unset exp_dir job_name num_lines slurm_job_id task_name
 
     if [[ $use_less -eq 1 ]]; then
         unset use_less

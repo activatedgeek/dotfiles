@@ -131,7 +131,7 @@ function sbatch_install_traps {
         fi
 
         function on_signal {
-            trap - EXIT TERM USR1
+            trap - EXIT ERR HUP SIGQUIT TERM USR1
 
             if [[ $SLURM_PROCID -eq 0 ]]; then
                 snotify ${SLURM_JOB_ID}
@@ -140,9 +140,11 @@ function sbatch_install_traps {
             exit ${SLURM_EXIT_CODE}
         }
 
-      trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") on_signal' EXIT
+      trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") on_signal' EXIT ERR
+      trap 'SLURM_EXIT_CODE=129 SLURM_STATUS=CANCELLED on_signal' HUP
+      trap 'SLURM_EXIT_CODE=131 SLURM_STATUS=CANCELLED on_signal' SIGQUIT
       trap 'SLURM_EXIT_CODE=143 SLURM_STATUS=CANCELLED on_signal' TERM
-      trap 'SLURM_EXIT_CODE=142 SLURM_STATUS=TIMEOUT on_signal' USR1
+      trap 'SLURM_EXIT_CODE=999 SLURM_STATUS=TIMEOUT on_signal' USR1
 
       echo "[INFO] Installed sbatch signal traps."
     fi
