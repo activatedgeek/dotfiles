@@ -42,7 +42,7 @@ export SQSH_CACHE_DIR="${XDG_CACHE_HOME}/sqsh"
 export ENROOT_CACHE_PATH="${XDG_CACHE_HOME}/enroot/cache"
 export ENROOT_DATA_PATH="${XDG_CACHE_HOME}/enroot/data"
 
-enroot remove -f "$(basename "${sqsh_name%.*}")"
+enroot remove -f "$(basename "${sqsh_name%.*}")" || true
 rm -f "${sqsh_name}"
 
 if ! enroot import -o "${sqsh_name}" "docker://${image}"; then
