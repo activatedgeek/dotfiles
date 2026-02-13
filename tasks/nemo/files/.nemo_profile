@@ -89,15 +89,10 @@ function nrlog {
         return 1
     fi
 
-    slurm_job_id=$(squeue --name ${exp_id} -o '%.10A' | grep -m1 -E '[0-9]+' | tr -d ' ')
-    if [[ -z "${slurm_job_id}" ]]; then
-        echo "[WARNING] Could not parse slurm job ID."
-    fi
+    tail_cmd+=(-f ${exp_dir}/${job_name}/*${task_name:-"main"}*${SLURM_JOB_ID}*.log)
+    less_cmd+=(${exp_dir}/${job_name}/*${task_name:-"main"}*${SLURM_JOB_ID}*.log)
 
-    tail_cmd+=(-f ${exp_dir}/${job_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
-    less_cmd+=(${exp_dir}/${job_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
-
-    unset exp_dir job_name num_lines slurm_job_id task_name
+    unset exp_dir job_name num_lines SLURM_JOB_ID task_name
 
     if [[ $use_less -eq 1 ]]; then
         unset use_less

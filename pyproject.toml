@@ -17,7 +17,6 @@ requires-python = ">=3.11,<3.13"
 dependencies = [
     "bitwarden-sdk",
     "cloudflare",
-    "python-dotenv",
     "pyinfra",
 ]
 

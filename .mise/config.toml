@@ -1,2 +1,6 @@
 [env]
 _.python.venv = { path = ".venv" }
+_.file = { path = ".env" }
+
+BWS_ACCESS_TOKEN = { required = true, redact = true }
+BWS_ORG_ID = { required = true, redact = true }

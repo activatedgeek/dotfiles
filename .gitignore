@@ -167,3 +167,6 @@ uv.lock
 
 ## Mac
 .DS_Store
+
+## PyInfra
+.pyinfra_cache
