@@ -11,7 +11,7 @@ Match originalhost="*.aim"
     ExitOnForwardFailure yes
     LocalForward 43800 localhost:43800
     ## Kill any processes on the port before launching aim UI.
-    RemoteCommand for pid in $(lsof -ti :43800); do kill -9 $pid; done; source ~/.bash_profile; uvx -q -p 3.12 aim up -y -p 43800 --repo ${PROJECT_HOME}/$(basename $(echo %n | cut -d. -f1))
+    RemoteCommand for pid in $(lsof -ti :43800); do kill -9 $pid; done; source ~/.bash_profile; uvx -q -p 3.12 aim up -y -p 43800 --repo ${AIM_HOME}/$(basename $(echo %n | cut -d. -f1))
 
 Host bigdesk
     HostName 10.110.40.240

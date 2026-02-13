@@ -46,7 +46,7 @@ function stlog { tail -n500 -f "${SLURM_LOGDIR}/${1}.log"; }
 
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'
-alias sq='squeue --me -o "%.10A(%.10F) %.5K | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
+alias sq='squeue --me -o "%.10A | %.12F | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
 
 function sjob {
     sacct --json -P -o state -j ${1} | \
