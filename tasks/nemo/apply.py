@@ -12,7 +12,7 @@ def apply_nemo_skills(teardown=False):
 
     files.directory(
         name="Config Dir.",
-        path=f"{remote_home}/.config/nemo_skills/cluster_configs",
+        path=f"{remote_home}/.config/nemo-skills/cluster_configs",
         mode=700,
         present=not teardown,
         recursive=True,
@@ -29,7 +29,7 @@ def apply_nemo_skills(teardown=False):
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
             src="tasks/nemo/templates/cluster_configs/local.yaml.j2",
-            dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
+            dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
             create_remote_dir=False,
             present=not teardown,
@@ -55,7 +55,7 @@ def apply_nemo_skills(teardown=False):
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
             src="tasks/nemo/templates/cluster_configs/slurm.yaml.j2",
-            dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}.yaml",
+            dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
             create_remote_dir=False,
             present=not teardown,
@@ -65,7 +65,7 @@ def apply_nemo_skills(teardown=False):
         myfiles.template(
             name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config (nightly)",
             src="tasks/nemo/templates/cluster_configs/slurm.yaml.j2",
-            dest=f"{remote_home}/.config/nemo_skills/cluster_configs/{cluster_name}-nightly.yaml",
+            dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}-nightly.yaml",
             mode=600,
             create_remote_dir=False,
             present=not teardown,
