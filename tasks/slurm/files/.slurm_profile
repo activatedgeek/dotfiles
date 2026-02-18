@@ -3,42 +3,53 @@ alias si='sinfo -lNe'
 alias sacct='sacct --format=JobName%30,JobID,State,ExitCode,Partition,NNodes,ReqMem,NCPUS,NodeList'
 alias sshare='sshare -u $USER'
 
+__disable_gpus_per_node=("eos")
+
 function __sbatch {
-    if [[ ! -z "${DEPS}" ]]; then
-        __dependency="--dependency=${DEPS}"
-    fi
-
-    __gpus_exclude_list=("eos")
-    if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
+    if [[ "${__disable_gpus_per_node[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
         unset GPUS
-    else
-        __gpus="--gpus-per-node=${GPUS:-1}"
     fi
 
-    sbatch --signal=B:USR1@10 \
-        --job-name="${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd)).${JOB_NAME}" --time=${HH:-1}:00:00 \
-        --nodes="${NNODES:-1}" --ntasks-per-node="${NTASKS:-1}" ${__gpus} ${__dependency} \
-        "${@}"
+    sbatch_cmd=(
+        sbatch
+        --signal=B:USR1@10
+        --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"}
+        --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}
+        --time=${SBATCH_TIMELIMIT:-"4:00:00"}
+    )
+    if [[ -n "${GPUS}" ]]; then
+        sbatch_cmd+=(--gpus-per-node=${GPUS})
+    fi
+    sbatch_cmd+=("${@}")
 
-    unset DEPS JOB_NAME HH NNODES MEM NTASKS CPUS GPUS
+    unset SBATCH_JOB_NAME SBATCH_ACCOUNT SBATCH_TIMELIMIT GPUS
+
+    echo "${sbatch_cmd[@]}"
+    "${sbatch_cmd[@]}"
 }
 
 function __srun {
-    __gpus_exclude_list=("eos")
-    if [[ "${__gpus_exclude_list[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
+    if [[ "${__disable_gpus_per_node[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
         unset GPUS
-    else
-        __gpus="--gpus-per-node=${GPUS:-1}"
     fi
 
-    srun --pty \
-        --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"} \
-        --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT} \
-        --time=${HH:-4}:00:00 \
-        --nodes="${NNODES:-1}" ${__gpus} \
-        --mem=${SBATCH_MEM:-"64G"} \
-        --ntasks-per-node="${NTASKS:-1}" \
-        "${@}"
+    srun_cmd=(
+        srun
+        --pty
+        --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"}
+        --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}
+        --time=${SBATCH_TIMELIMIT:-"4:00:00"}
+        --mem=${SBATCH_MEM:-"64G"}
+    )
+    if [[ -n "${GPUS}" ]]; then
+        srun_cmd+=(--gpus-per-node=${GPUS})
+    fi
+    srun_cmd+=("${@}")
+
+    unset SBATCH_JOB_NAME SBATCH_ACCOUNT SBATCH_TIMELIMIT SBATCH_MEM GPUS
+
+    echo "${srun_cmd[@]}"
+    "${srun_cmd[@]}"
 }
 
 function slog { less "${SLURM_LOGDIR}/${1}.log"; }
