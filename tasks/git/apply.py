@@ -23,6 +23,7 @@ class Difftastic(Binary):
                 "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "865ef78b86eac72aa6440e380661b442244b58e02e333ad82df8e21a254d64a9",
             },
+            ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
             "arm64": {
                 "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-aarch64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "c824e84555cd0eaace328ffe4c934053de4fa9763213fb8e47791fdf81d1ada5",
@@ -45,10 +46,6 @@ def apply_macos(teardown=False):
 
 @deploy("difft")
 def apply_difft(arch, teardown=False):
-    ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
-    if arch == "arm64":
-        teardown = True
-
     binary = Difftastic(arch)
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",

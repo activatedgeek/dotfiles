@@ -15,18 +15,18 @@ from myinfra.utils import Binary
 ## https://downloads.rclone.org/
 @dataclass
 class Rclone(Binary):
-    version: ClassVar[str] = "1.71.1"
+    version: ClassVar[str] = "1.73.1"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-amd64.zip",
-                "sha256sum": "5409cb410e49903af3517654ccc65c89d89f9dc12d7a97b0e13e09a9be6dc74a",
+                "sha256sum": "10ffca7640f0483beba9a9c9f4cdb6a9ca30a13c4ab31f2329d09a832802694d",
             },
             "arm64": {
                 "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-arm64.zip",
-                "sha256sum": "024871b9bc0c47311e73ed06b1abf13208723b79b51d55b5a757d787e9340c13",
+                "sha256sum": "ea441b0133a824920af5d061b4fb66a49799fc450d6e3658f8f21e22fbe2aec0",
             },
         }
 

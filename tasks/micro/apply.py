@@ -14,18 +14,18 @@ from myinfra.utils import Binary
 ## https://github.com/zyedidia/micro/releases
 @dataclass
 class Micro(Binary):
-    version: ClassVar[str] = "2.0.14"
+    version: ClassVar[str] = "2.0.15"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/zyedidia/micro/releases/download/v{self.version}/micro-{self.version}-linux64-static.tar.gz",
-                "sha256sum": "26cab163197dd75207f7792c9ebf96ee1eb5c92b63af537ff9568eb2f8345b53",
+                "sha256sum": "2027f2e4698fa4e826523ad16b95c724bf808de479f10ec769cdd200437701b3",
             },
             "arm64": {
                 "src": f"https://github.com/zyedidia/micro/releases/download/v{self.version}/micro-{self.version}-linux-arm64.tar.gz",
-                "sha256sum": "374d22f155d8a24595ca3c153aeb3e9bf0c982ce7a014360a8a6916258958085",
+                "sha256sum": "e0b4a8234f0432474e7ee28e12ffac0fe3bd31f030ba51dc059caa2f3d6d8bfc",
             },
         }
 

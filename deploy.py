@@ -18,7 +18,6 @@ SKIP_TASKS = {
         "mega",
         "netnewswire",
         "obsidian",
-        "pueue",
         "slack",
         "tailscale",
     },

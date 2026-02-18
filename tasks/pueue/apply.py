@@ -14,15 +14,19 @@ from myinfra.utils import Binary
 ## https://github.com/Nukesor/pueue/releases
 @dataclass
 class Pueue(Binary):
-    version: ClassVar[str] = "4.0.1"
+    version: ClassVar[str] = "4.0.2"
 
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueue-x86_64-unknown-linux-musl",
-                "sha256sum": "16aea6654b3915c6495bb2f456184fd7f3d418de3f74afb5eab04ae953cdfedf",
-            }
+                "sha256sum": "b94f41f5576b2a4e9c86ec5f0f4df9a68145dd61035113ce25600e21b38f87b7",
+            },
+            "arm64": {
+                "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueue-aarch64-unknown-linux-musl",
+                "sha256sum": "3a5563377a720a23d4c8c9d6fc3066737de40e6722fab1ec773a61dab92bb970",
+            },
         }
 
 
@@ -31,10 +35,14 @@ class Pueued(Pueue):
     @property
     def _arch_map(self):
         return {
-            "x86_64": {
+            "amd64": {
                 "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueued-x86_64-unknown-linux-musl",
-                "sha256sum": "8a97b176f55929e37cda49577b28b66ea345151adf766b9d8efa8c9d81525a0b",
-            }
+                "sha256sum": "7d7f0232c1296aca82881113a8e1f0f75235732a5705854e9f337b3bd961c14a",
+            },
+            "arm64": {
+                "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueued-aarch64-unknown-linux-musl",
+                "sha256sum": "b5631e6d0c658e9c043ad731317733571d8e26444b70ce10452350344a1f34e2",
+            },
         }
 
 
