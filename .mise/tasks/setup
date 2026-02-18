@@ -9,6 +9,7 @@
 
 if [[ -n "${usage_force}" ]]; then
     rm -rf .venv
+    rm -f uv.lock
     if [[ -n "${usage_directory}" ]]; then
         rm -rf "${usage_directory}"
     fi
