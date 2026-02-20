@@ -42,38 +42,23 @@ function nrlogd {
 }
 
 function nrlog {
-    if [[ -z "${1}" ]]; then
-        echo "[ERROR]: Missing <nemo_experiment_id>."
-        echo "Usage:"
-        echo "  nrlog <nemo_experiment_id>"
-        return 1
-    fi
-    exp_id=${1}
-    shift 1
-
-    exp_dir=$(nrlogd "${exp_id}")
-    if [[ $? -ne 0 ]]; then
-        echo "[ERROR] Error getting experiment directory."
-        return 1
-    fi
-
-    tail_cmd=(tail)
+    tail_cmd=(tail -n 500)
     less_cmd=(less)
     while [[ $# -gt 0 ]]; do
         case $1 in
-            -j)
-                job_name="${2}"
+            -j|--job)
+                slurm_job_id="${2}"
                 shift 2
             ;;
-            -n)
-                num_lines="${2}"
+            -g|--group)
+                group_name="${2}"
                 shift 2
             ;;
-            -t)
+            -t|--task)
                 task_name="${2}"
                 shift 2
             ;;
-            --less)
+            -l|--less)
                 use_less=1
                 shift 1
             ;;
@@ -84,17 +69,35 @@ function nrlog {
             ;;
         esac
     done
-    tail_cmd+=(-n ${num_lines:-500})
 
-    if [[ -z "${job_name}" ]]; then
-        echo "[ERROR] Missing job name argument -j"
+    if [[ -z "${slurm_job_id}" ]]; then
+        echo "[ERROR] Missing slurm job id argument -j"
         return 1
     fi
 
-    tail_cmd+=(-f ${exp_dir}/${job_name}/*${task_name:-"main"}*${SLURM_JOB_ID}*.log)
-    less_cmd+=(${exp_dir}/${job_name}/*${task_name:-"main"}*${SLURM_JOB_ID}*.log)
+    if [[ -z "${group_name}" ]]; then
+        echo "[ERROR] Missing job name argument -n"
+        return 1
+    fi
 
-    unset exp_dir job_name num_lines SLURM_JOB_ID task_name
+    exp_id=$(sjob ${slurm_job_id})
+    if [[ $? -ne 0 ]]; then
+        echo "[ERROR] Error getting experiment ID."
+        return 1
+    else
+        exp_id=$(echo "${exp_id}" | jq -r '.name')
+    fi
+
+    exp_dir=$(nrlogd ${exp_id})
+    if [[ $? -ne 0 ]]; then
+        echo "[ERROR] Error getting experiment directory."
+        return 1
+    fi
+
+    tail_cmd+=(-f ${exp_dir}/${group_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
+    less_cmd+=(${exp_dir}/${group_name}/*${task_name:-"main"}*${slurm_job_id}*.log)
+
+    unset slurm_job_id group_name task_name exp_id exp_dir
 
     if [[ $use_less -eq 1 ]]; then
         unset use_less

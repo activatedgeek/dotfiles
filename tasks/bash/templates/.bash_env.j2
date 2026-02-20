@@ -8,7 +8,8 @@ export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
 
 export XDG_CACHE_HOME=${STORE_HOME}/.cache
 
-export DG_JIT_CACHE_DIR=${XDG_CACHE_HOME}/deep_gemm
+export DEEP_GEMM_CACHE_DIR=${XDG_CACHE_HOME}/deep_gemm
+export DG_JIT_CACHE_DIR=${DEEP_GEMM_CACHE_DIR}
 export HF_HOME=${XDG_CACHE_HOME}/huggingface
 export WANDB_DIR=${XDG_CACHE_HOME}/wandb
 if [[ ! -d  "${WANDB_DIR}" ]]; then
