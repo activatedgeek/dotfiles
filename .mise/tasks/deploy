@@ -21,7 +21,7 @@ if [[ "${usage_teardown}" == "true" ]]; then
 fi
 
 if [[ "${usage_refresh}" == "true" ]]; then
-    rm -f .env.inventory
+    rm -rf .pyinfra_cache
 fi
 
 ## Handle DNS via separate task.
