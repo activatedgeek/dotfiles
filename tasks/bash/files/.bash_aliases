@@ -11,6 +11,8 @@ alias xargs='xargs '
 
 alias watch='watch '
 
+alias fastrm='rsync -av --delete $(mktemp -d)/'
+
 ## docker.
 alias cst='colima start'
 alias cstop='colima stop'
