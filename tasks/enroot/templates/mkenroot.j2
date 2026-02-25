@@ -19,6 +19,8 @@
 #   mkenroot.sh <docker/image:tag> [output.sqsh]
 #
 
+source ~/.bash_profile; sbatch_install_traps
+
 if [[ -z "${1}" ]]; then
     echo "Missing Docker image."
     echo "Usage: mkenroot.sh [docker/image:tag]"

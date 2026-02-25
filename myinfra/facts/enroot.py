@@ -1,7 +1,7 @@
 from pyinfra.api.facts import FactBase
 
 
-class EnrootExists(FactBase):
+class EnrootBinary(FactBase):
     def requires_command(self, *_, **__):
         return "command"
 
