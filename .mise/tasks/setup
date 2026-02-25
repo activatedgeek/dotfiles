@@ -3,35 +3,18 @@
 #MISE description="Install dependencies using uv"
 #MISE quiet=true
 
-#USAGE flag "-d --directory <directory>" help="Path to virtual environment." default=".venv"
-#USAGE flag "-U --upgrade" help="Upgrade dependencies."
 #USAGE flag "-f --force" help="Force recreate environment."
+#USAGE arg "[passthru]" var=#true double_dash="required" help="Use -- to start passthrough arguments to uv sync."
 
 if [[ -n "${usage_force}" ]]; then
     rm -rf .venv
     rm -f uv.lock
-    if [[ -n "${usage_directory}" ]]; then
-        rm -rf "${usage_directory}"
-    fi
-fi
-
-## Handle a directory different than .venv.
-if [[ -n "${usage_directory}" ]]; then
-    mkdir -p "${usage_directory}"
-    mkdir -p .venv
-
-    real_target="$(realpath .venv)"
-    expected_target="$(realpath "${usage_directory}")"
-
-    if [[ "${real_target}" != "${expected_target}" ]]; then
-        rm -rf .venv
-        ln -nsf "${expected_target}" "${real_target}"
-    fi
 fi
 
 uv_cmd=(uv sync --all-extras)
-if [[ -n "${usage_upgrade}" ]]; then
-    uv_cmd+=(--upgrade)
+if [[ -n "${usage_passthru}" ]]; then
+    eval "usage_passthru=(${usage_passthru})"
+    uv_cmd+=("${usage_passthru[@]}")
 fi
 
 "${uv_cmd[@]}"
