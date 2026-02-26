@@ -13,18 +13,18 @@ from myinfra.utils import Binary
 ## https://github.com/jdx/mise/releases
 @dataclass
 class Mise(Binary):
-    version: ClassVar[str] = "v2026.2.16"
+    version: ClassVar[str] = "v2026.2.21"
 
     @property
     def _arch_map(self):
         return {
             "amd64": {
                 "src": f"https://github.com/jdx/mise/releases/download/{self.version}/mise-{self.version}-linux-x64",
-                "sha256sum": "4bfb9e5cea1c5b03f63b617361b97439e6ac676c9438b6162eee24149029bbcf",
+                "sha256sum": "5ada586f83b9f106baffb7c2b4cf84abd8511803b0c27e174a20b142c14f4792",
             },
             "arm64": {
                 "src": f"https://github.com/jdx/mise/releases/download/{self.version}/mise-{self.version}-linux-arm64",
-                "sha256sum": "391e1ccff0d04dc61927f71077c72f0555728009d8c1a5f0ee28840f3dfdbd98",
+                "sha256sum": "cb27120cfd66ac35136fd23e4248163785e0d4737309f8688ee187df1bd97570",
             },
         }
 
