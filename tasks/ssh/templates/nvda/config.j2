@@ -3,15 +3,22 @@ Host github.com gitlab-master.nvidia.com
     PreferredAuthentications publickey
     IdentityFile ~/.ssh/config.d/nvda/id_ed25519
 
-Host desk *.aim
+Host desk *.aim *.mlflow
     HostName aiapps-070225.dyn.nvidia.com
 
 Match originalhost="*.aim"
     RequestTTY yes
     ExitOnForwardFailure yes
     LocalForward 43800 localhost:43800
-    ## Kill any processes on the port before launching aim UI.
+    ## Kill any processes on the port before launch.
     RemoteCommand for pid in $(lsof -ti :43800); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); uv run --no-sync aim up -y -p 43800
+
+Match originalhost="*.mlflow"
+    RequestTTY yes
+    ExitOnForwardFailure yes
+    LocalForward 5000 localhost:5000
+    ## Kill any processes on the port before launch.
+    RemoteCommand for pid in $(lsof -ti :5000); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); uv run --no-sync mlflow server --backend-store-uri file://$(pwd)/.mlflow -p 5000
 
 Host bigdesk
     HostName 10.110.40.240
