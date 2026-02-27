@@ -1,6 +1,6 @@
 ## Slurm.
 alias si='sinfo -lNe'
-alias sacct='sacct --format=JobName%30,JobID,State,ExitCode,Partition,NNodes,ReqMem,NCPUS,NodeList'
+alias sacct='sacct --format=JobName%30,JobIDRaw,State,ExitCode,Partition,NNodes,ReqMem,NCPUS,NodeList'
 alias sshare='sshare -u $USER'
 
 __disable_gpus_per_node=("eos")
