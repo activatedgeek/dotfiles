@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar
 
-from pyinfra import host
+from pyinfra import host, local
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew
@@ -75,6 +75,8 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         git_gpgsign=host.data.get("git_gpgsign", False),
+        git_name=local.shell("id -F"),
+        git_email=host.data.email,
     )
 
     myfiles.copy(

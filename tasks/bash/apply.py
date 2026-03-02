@@ -1,4 +1,4 @@
-from pyinfra import host, local
+from pyinfra import host
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files
@@ -64,8 +64,6 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         inventory_hostname=host.name.split("/")[-1],
-        git_name=local.shell("id -F"),
-        git_email=host.data.email,
         term=host.data.get("term", None),
     )
 
