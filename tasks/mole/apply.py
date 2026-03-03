@@ -6,12 +6,6 @@ from pyinfra.operations import brew
 
 @deploy("MacOS")
 def apply_macos(teardown=False):
-    brew.tap(
-        name=f"{'Remove' if teardown else 'Add'} tap",
-        src="tw93/tap/mole",
-        present=not teardown,
-    )
-
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
         packages=["mole"],

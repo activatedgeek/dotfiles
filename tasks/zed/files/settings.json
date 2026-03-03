@@ -1,4 +1,11 @@
 {
+  "agent_servers": {
+    "OpenCode": {
+      "type": "custom",
+      "command": "opencode",
+      "args": ["acp"]
+    }
+  },
   "base_keymap": "VSCode",
   "buffer_font_fallbacks": [
     "Menlo",
