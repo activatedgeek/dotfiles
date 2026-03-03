@@ -53,12 +53,6 @@ def apply_linux(arch, teardown=False):
 
 @deploy("MacOS")
 def apply_macos(teardown=False):
-    brew.tap(
-        name=f"{'Unt' if teardown else 'T'}ap",
-        src="anomalyco/tap",
-        present=not teardown,
-    )
-
     ## NOTE(sanyamk): Always shows success even when already installed.
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
