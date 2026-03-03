@@ -16,6 +16,7 @@ SKIP_TASKS = {
         "brave",
         "cloudflare",
         "mega",
+        "micromamba",
         "netnewswire",
         "obsidian",
         "slack",
