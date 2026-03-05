@@ -76,6 +76,7 @@ def apply_config_nvda(teardown=False):
         ## Jinja2 Variables.
         slurm_hosts=slurm_hosts,
         extended=(host.name == "@local"),
+        ssh_user=host.data.ssh_user,
     )
 
     files.line(

@@ -4,7 +4,7 @@ Host github.com gitlab-master.nvidia.com
     IdentityFile ~/.ssh/config.d/nvda/id_ed25519
 
 Host desk *.aim *.mlflow
-    HostName aiapps-070225.dyn.nvidia.com
+    HostName {{ ssh_user }}.dyn.nvidia.com
 
 Match originalhost="*.aim"
     RequestTTY yes
