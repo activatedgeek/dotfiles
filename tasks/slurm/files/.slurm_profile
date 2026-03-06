@@ -62,8 +62,44 @@ function __srun {
     "${srun_cmd[@]}"
 }
 
-function slog { less "${SLURM_LOGDIR}/${1}.log"; }
-function slogt { tail -n500 -f "${SLURM_LOGDIR}/${1}.log"; }
+function slog {
+    tail_cmd=(tail -n 500)
+    less_cmd=(less)
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -j|--job)
+                slurm_job_id="${2}"
+                shift 2
+            ;;
+            -l|--less)
+                use_less=1
+                shift 1
+            ;;
+            *)
+                tail_cmd+=(${1})
+                less_cmd+=(${1})
+                shift 1
+            ;;
+        esac
+    done
+
+    if [[ -z "${slurm_job_id}" ]]; then
+        echo "[ERROR] Missing slurm job id argument -j"
+        return 1
+    fi
+
+    tail_cmd+=(-f "${SLURM_LOGDIR}/${slurm_job_id}.log")
+    less_cmd+=("${SLURM_LOGDIR}/${slurm_job_id}.log")
+
+    unset slurm_job_id
+
+    if [[ $use_less -eq 1 ]]; then
+        unset use_less
+        "${less_cmd[@]}"
+    else
+        "${tail_cmd[@]}"
+    fi
+}
 
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'
