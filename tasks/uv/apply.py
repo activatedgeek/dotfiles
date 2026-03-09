@@ -29,10 +29,6 @@ class Uv(Binary):
         }
     )
 
-    @property
-    def src_dir(self):
-        return Path(self.src.removesuffix(".tar.gz")).stem
-
 
 @dataclass
 class Uvx(Uv):
@@ -70,7 +66,7 @@ def apply_linux(arch, teardown=False):
         myfiles.download(
             name=f"{'Uni' if teardown else 'I'}nstall uv",
             src=binary.src,
-            src_dir=binary.src_dir,
+            src_dir=Path(binary.src.removesuffix(".tar.gz")).stem,
             dest=f"{remote_home}/.local/bin/uv",
             sha256sum=binary.sha256sum,
             present=not teardown,
@@ -81,7 +77,7 @@ def apply_linux(arch, teardown=False):
         myfiles.download(
             name=f"{'Uni' if teardown else 'I'}nstall uvx",
             src=binary.src,
-            src_dir=binary.src_dir,
+            src_dir=Path(binary.src.removesuffix(".tar.gz")).stem,
             dest=f"{remote_home}/.local/bin/uvx",
             sha256sum=binary.sha256sum,
             present=not teardown,
