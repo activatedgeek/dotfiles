@@ -18,6 +18,7 @@ dependencies = [
     "bitwarden-sdk",
     "cloudflare",
     "pyinfra",
+    "requests",
 ]
 
 [project.optional-dependencies]

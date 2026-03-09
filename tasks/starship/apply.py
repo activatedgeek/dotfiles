@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar
 
 from pyinfra import host
@@ -11,23 +11,22 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://github.com/starship/starship/releases
 @dataclass
 class Starship(Binary):
-    version: ClassVar[str] = "1.24.2"
-
-    @property
-    def _arch_map(self):
-        return {
+    gh_repo: ClassVar[str] = "starship/starship"
+    version: ClassVar[str] = "v1.24.2"
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/starship/starship/releases/download/v{self.version}/starship-x86_64-unknown-linux-gnu.tar.gz",
+                "name": "starship-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "2a24f4deaf7a2b27e441cafe259251742b5e4bdc3011e3fc654dc657d7c45c33",
             },
             "arm64": {
-                "src": f"https://github.com/starship/starship/releases/download/v{self.version}/starship-aarch64-unknown-linux-musl.tar.gz",
+                "name": "starship-aarch64-unknown-linux-musl.tar.gz",
                 "sha256sum": "559701ab549aad99c5f62ca74a65b7a5258f9c8371d5a7a6af6ef905b632ec48",
             },
         }
+    )
 
 
 @deploy("Config")

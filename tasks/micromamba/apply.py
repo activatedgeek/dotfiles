@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar
 
 from pyinfra import host
@@ -11,23 +11,22 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://github.com/mamba-org/micromamba-releases/releases
 @dataclass
 class Micromamba(Binary):
+    gh_repo: ClassVar[str] = "mamba-org/micromamba-releases"
     version: ClassVar[str] = "2.5.0-2"
-
-    @property
-    def _arch_map(self):
-        return {
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-64",
+                "name": "micromamba-linux-64",
                 "sha256sum": "c04571cfb0750e5432d530a3068b8fcd232ebed3133358e056e59a90b9852b00",
             },
             "arm64": {
-                "src": f"https://github.com/mamba-org/micromamba-releases/releases/download/{self.version}/micromamba-linux-aarch64",
+                "name": "micromamba-linux-aarch64",
                 "sha256sum": "a64db0d7a82107c8d64357cf035fb8f9dbbe2fc48f48b302cbc8ba1590974e20",
             },
         }
+    )
 
 
 @deploy("MacOS")

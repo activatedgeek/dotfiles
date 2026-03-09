@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar
 
 from pyinfra import host
@@ -11,23 +11,22 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://github.com/anomalyco/opencode/releases
 @dataclass
 class OpenCode(Binary):
-    version: ClassVar[str] = "1.2.15"
-
-    @property
-    def _arch_map(self):
-        return {
+    gh_repo: ClassVar[str] = "anomalyco/opencode"
+    version: ClassVar[str] = "v1.2.22"
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/anomalyco/opencode/releases/download/v{self.version}/opencode-linux-x64.tar.gz",
-                "sha256sum": "741df4d63dff3e5e01063e0352db69a77d7f4e9f7878c0587cf69a142f378337",
+                "name": "opencode-linux-x64.tar.gz",
+                "sha256sum": "e966c4416b194d3b00905714c0861f99d3bfb9c328f1ddbdbb3068b16d7eeb07",
             },
             "arm64": {
-                "src": f"https://github.com/anomalyco/opencode/releases/download/v{self.version}/opencode-linux-arm64.tar.gz",
-                "sha256sum": "711f5902a2dabfb1e7d831b21f91e47ab6286b58903ae95d1f35d40478cc9223",
+                "name": "opencode-linux-arm64.tar.gz",
+                "sha256sum": "e59fb3d6e7f6c61b17ae4330ee6088bd2fd2e4e8e1ab256151b3a685ae0c8fc7",
             },
         }
+    )
 
 
 @deploy("Linux")
@@ -53,10 +52,32 @@ def apply_linux(arch, teardown=False):
 
 @deploy("MacOS")
 def apply_macos(teardown=False):
-    ## NOTE(sanyamk): Always shows success even when already installed.
+    ## @NOTE: Always shows success even when already installed.
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
         packages=["anomalyco/tap/opencode"],
+        present=not teardown,
+    )
+
+
+@deploy("Config")
+def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    files.directory(
+        name="Directory",
+        path=f"{remote_home}/.config/opencode",
+        mode=700,
+        recursive=True,
+        present=not teardown,
+    )
+
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}opencode.json",
+        src="tasks/opencode/files/opencode.json",
+        dest=f"{remote_home}/.config/opencode/opencode.json",
+        mode=600,
+        create_remote_dir=False,
         present=not teardown,
     )
 
@@ -69,6 +90,8 @@ def apply():
     elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
+
+    apply_config(teardown=teardown)
 
 
 apply()

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar
 
 from pyinfra import host
@@ -11,39 +11,38 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://github.com/Nukesor/pueue/releases
 @dataclass
 class Pueue(Binary):
+    gh_repo: ClassVar[str] = "Nukesor/pueue"
     version: ClassVar[str] = "4.0.2"
-
-    @property
-    def _arch_map(self):
-        return {
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueue-x86_64-unknown-linux-musl",
+                "name": "pueue-x86_64-unknown-linux-musl",
                 "sha256sum": "b94f41f5576b2a4e9c86ec5f0f4df9a68145dd61035113ce25600e21b38f87b7",
             },
             "arm64": {
-                "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueue-aarch64-unknown-linux-musl",
+                "name": "pueue-aarch64-unknown-linux-musl",
                 "sha256sum": "3a5563377a720a23d4c8c9d6fc3066737de40e6722fab1ec773a61dab92bb970",
             },
         }
+    )
 
 
 @dataclass
 class Pueued(Pueue):
-    @property
-    def _arch_map(self):
-        return {
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueued-x86_64-unknown-linux-musl",
+                "name": "pueued-x86_64-unknown-linux-musl",
                 "sha256sum": "7d7f0232c1296aca82881113a8e1f0f75235732a5705854e9f337b3bd961c14a",
             },
             "arm64": {
-                "src": f"https://github.com/Nukesor/pueue/releases/download/v{self.version}/pueued-aarch64-unknown-linux-musl",
+                "name": "pueued-aarch64-unknown-linux-musl",
                 "sha256sum": "b5631e6d0c658e9c043ad731317733571d8e26444b70ce10452350344a1f34e2",
             },
         }
+    )
 
 
 @deploy("Linux")

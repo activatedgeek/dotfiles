@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar
 
 from pyinfra import host, local
@@ -11,24 +11,23 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://github.com/Wilfred/difftastic/releases
 @dataclass
 class Difftastic(Binary):
+    gh_repo: ClassVar[str] = "Wilfred/difftastic"
     version: ClassVar[str] = "0.67.0"
-
-    @property
-    def _arch_map(self):
-        return {
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-x86_64-unknown-linux-gnu.tar.gz",
+                "name": "difft-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "865ef78b86eac72aa6440e380661b442244b58e02e333ad82df8e21a254d64a9",
             },
             ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
             "arm64": {
-                "src": f"https://github.com/Wilfred/difftastic/releases/download/{self.version}/difft-aarch64-unknown-linux-gnu.tar.gz",
+                "name": "difft-aarch64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "c824e84555cd0eaace328ffe4c934053de4fa9763213fb8e47791fdf81d1ada5",
             },
         }
+    )
 
 
 @deploy("MacOS")

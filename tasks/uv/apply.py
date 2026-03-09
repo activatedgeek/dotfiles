@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import ClassVar
 
@@ -12,23 +12,22 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://github.com/astral-sh/uv/releases
 @dataclass
 class Uv(Binary):
-    version: ClassVar[str] = "0.10.6"
-
-    @property
-    def _arch_map(self):
-        return {
+    gh_repo: ClassVar[str] = "astral-sh/uv"
+    version: ClassVar[str] = "0.10.9"
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "1cec0cda74b129b3e15ed7ff80d0ce303c5e3446cd0dbc47675e908052587419",
+                "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "8f8aa2a27b00bf3b35880b2e943bb8fd58714abe0981f8467b90e75faab41131",
             },
             "arm64": {
-                "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "7644a9b798e80c5b448c212d5051435ca978d3fc2210c6be9c0af7f997108ef7",
+                "name": "uv-aarch64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "2452f3680578ab0e1bee5e035dcac2486445770ac4ccc98cefc743c5740c352f",
             },
         }
+    )
 
     @property
     def src_dir(self):
@@ -37,18 +36,18 @@ class Uv(Binary):
 
 @dataclass
 class Uvx(Uv):
-    @property
-    def _arch_map(self):
-        return {
+    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
+        default_factory=lambda: {
             "amd64": {
-                "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "2037193e82ecb74eaa503536da780098b4ab5512b44726d231b9247b8a3be182",
+                "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "f970b2576b7ae459afe8be1826f9812ddd5fa431a9ddfea155fae52e7443ac74",
             },
             "arm64": {
-                "src": f"https://github.com/astral-sh/uv/releases/download/{self.version}/uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "aec87f57554961a48905d0fea7e9486c30bd8750755d42760464b4eacac47fed",
+                "name": "uv-aarch64-unknown-linux-gnu.tar.gz",
+                "sha256sum": "6fa59bc46bffff8ea41dfb21ea9c82d38928c539b2a5688cbdb29cd518e1c09b",
             },
         }
+    )
 
 
 @deploy("Linux")

@@ -12,20 +12,20 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 
 
-## https://downloads.rclone.org/
 @dataclass
 class Rclone(Binary):
-    version: ClassVar[str] = "1.73.1"
+    gh_repo: ClassVar[str] = "rclone/rclone"
+    version: ClassVar[str] = "v1.73.1"
 
     @property
-    def _arch_map(self):
+    def asset_map(self) -> dict[str, dict[str, str]]:
         return {
             "amd64": {
-                "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-amd64.zip",
+                "name": f"rclone-{self.version}-linux-amd64.zip",
                 "sha256sum": "10ffca7640f0483beba9a9c9f4cdb6a9ca30a13c4ab31f2329d09a832802694d",
             },
             "arm64": {
-                "src": f"https://downloads.rclone.org/v{self.version}/rclone-v{self.version}-linux-arm64.zip",
+                "name": f"rclone-{self.version}-linux-arm64.zip",
                 "sha256sum": "ea441b0133a824920af5d061b4fb66a49799fc450d6e3658f8f21e22fbe2aec0",
             },
         }

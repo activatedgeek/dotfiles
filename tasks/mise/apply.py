@@ -10,21 +10,21 @@ from myinfra.facts import server as myserver_facts
 from myinfra.utils import Binary
 
 
-## https://github.com/jdx/mise/releases
 @dataclass
 class Mise(Binary):
-    version: ClassVar[str] = "v2026.2.21"
+    gh_repo: ClassVar[str] = "jdx/mise"
+    version: ClassVar[str] = "v2026.3.5"
 
     @property
-    def _arch_map(self):
+    def asset_map(self) -> dict[str, dict[str, str]]:
         return {
             "amd64": {
-                "src": f"https://github.com/jdx/mise/releases/download/{self.version}/mise-{self.version}-linux-x64",
-                "sha256sum": "5ada586f83b9f106baffb7c2b4cf84abd8511803b0c27e174a20b142c14f4792",
+                "name": f"mise-{self.version}-linux-x64",
+                "sha256sum": "18c0934d8ffcb84712b4cf52becfd67f6b1241fab110ad6dde34f51dfb206f8f",
             },
             "arm64": {
-                "src": f"https://github.com/jdx/mise/releases/download/{self.version}/mise-{self.version}-linux-arm64",
-                "sha256sum": "cb27120cfd66ac35136fd23e4248163785e0d4737309f8688ee187df1bd97570",
+                "name": f"mise-{self.version}-linux-arm64",
+                "sha256sum": "070eb5a993280d6c67a96ba061bc0244385ca9e79c0c7db10c1865f14a474d6e",
             },
         }
 
