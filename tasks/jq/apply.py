@@ -13,7 +13,7 @@ from myinfra.utils import Binary
 @dataclass
 class Jq(Binary):
     gh_repo: ClassVar[str] = "jqlang/jq"
-    version: ClassVar[str] = "1.8.1"
+    version: ClassVar[str] = "jq-1.8.1"
     asset_map: ClassVar[dict[str, dict[str, str]]] = field(
         default_factory=lambda: {
             "amd64": {
@@ -26,10 +26,6 @@ class Jq(Binary):
             },
         }
     )
-
-    @property
-    def src(self) -> str:
-        return f"{self.assets_url}/jq-{self.version}/{self.asset_map[self.arch]['name']}"
 
 
 @deploy("MacOS")

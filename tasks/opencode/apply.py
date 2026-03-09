@@ -14,16 +14,16 @@ from myinfra.utils import Binary
 @dataclass
 class OpenCode(Binary):
     gh_repo: ClassVar[str] = "anomalyco/opencode"
-    version: ClassVar[str] = "v1.2.22"
+    version: ClassVar[str] = "v1.2.24"
     asset_map: ClassVar[dict[str, dict[str, str]]] = field(
         default_factory=lambda: {
             "amd64": {
                 "name": "opencode-linux-x64.tar.gz",
-                "sha256sum": "e966c4416b194d3b00905714c0861f99d3bfb9c328f1ddbdbb3068b16d7eeb07",
+                "sha256sum": "364cb57af526e1afdbab1e9863d019395c37399e205a487475a44bf466bec67e",
             },
             "arm64": {
                 "name": "opencode-linux-arm64.tar.gz",
-                "sha256sum": "e59fb3d6e7f6c61b17ae4330ee6088bd2fd2e4e8e1ab256151b3a685ae0c8fc7",
+                "sha256sum": "ad7b4780671ea7ca9383b29892e12c417f9314960a657df8eb29b91c509726cd",
             },
         }
     )

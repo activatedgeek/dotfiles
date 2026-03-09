@@ -14,16 +14,16 @@ from myinfra.utils import Binary
 @dataclass
 class Pueue(Binary):
     gh_repo: ClassVar[str] = "Nukesor/pueue"
-    version: ClassVar[str] = "4.0.2"
+    version: ClassVar[str] = "v4.0.4"
     asset_map: ClassVar[dict[str, dict[str, str]]] = field(
         default_factory=lambda: {
             "amd64": {
                 "name": "pueue-x86_64-unknown-linux-musl",
-                "sha256sum": "b94f41f5576b2a4e9c86ec5f0f4df9a68145dd61035113ce25600e21b38f87b7",
+                "sha256sum": "c1b10d7e4e62211075ddd0e1dc3e8cbfc5a43d662cb3be7402a28504e23fcb51",
             },
             "arm64": {
                 "name": "pueue-aarch64-unknown-linux-musl",
-                "sha256sum": "3a5563377a720a23d4c8c9d6fc3066737de40e6722fab1ec773a61dab92bb970",
+                "sha256sum": "759bf5100a51024997111c6913aaf3330a0cdfd893ff552dcf429ae9b5e01e09",
             },
         }
     )
@@ -35,11 +35,11 @@ class Pueued(Pueue):
         default_factory=lambda: {
             "amd64": {
                 "name": "pueued-x86_64-unknown-linux-musl",
-                "sha256sum": "7d7f0232c1296aca82881113a8e1f0f75235732a5705854e9f337b3bd961c14a",
+                "sha256sum": "5afeff6adbafb909e8d54e2caff158e6966c2adffa2c09e60fd631cc51b60390",
             },
             "arm64": {
                 "name": "pueued-aarch64-unknown-linux-musl",
-                "sha256sum": "b5631e6d0c658e9c043ad731317733571d8e26444b70ce10452350344a1f34e2",
+                "sha256sum": "332c5ef74270b64aeaf04894c8c04826f3422eb7d50dbd1a8e0706d74a42f653",
             },
         }
     )
