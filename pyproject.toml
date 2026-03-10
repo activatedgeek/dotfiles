@@ -23,7 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "ruff",
+    "prek",
 ]
 
 [tool.setuptools]

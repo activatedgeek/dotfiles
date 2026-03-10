@@ -18,3 +18,6 @@ if [[ -n "${usage_passthru}" ]]; then
 fi
 
 "${uv_cmd[@]}"
+
+## Install pre-commit hook.
+prek install
