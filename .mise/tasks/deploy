@@ -16,12 +16,14 @@ if [[ -z "${usage_inventory}" ]]; then
     exit 1
 fi
 
+# shellcheck disable=SC2154
 if [[ "${usage_refresh}" == "true" ]]; then
     rm -rf .pyinfra_cache
 fi
 
 pyinfra_cmd=(pyinfra -y)
 
+# shellcheck disable=SC2154
 if [[ "${usage_teardown}" == "true" ]]; then
     pyinfra_cmd+=(--data teardown=True)
 fi
@@ -35,13 +37,13 @@ if [[ "${usage_inventory}" == "dns" ]]; then
 fi
 
 pyinfra_cmd+=(
-    --data inventory_id=${usage_inventory}
+    --data inventory_id="${usage_inventory}"
     --limit "${usage_limit}"
-    inventories/${usage_inventory}.py
+    "inventories/${usage_inventory}.py"
 )
 
 if [[ -n "${usage_task}" ]]; then
-    pyinfra_cmd+=(tasks/${usage_task}/apply.py)
+    pyinfra_cmd+=("tasks/${usage_task}/apply.py")
 else
     pyinfra_cmd+=(deploy.py)
 fi

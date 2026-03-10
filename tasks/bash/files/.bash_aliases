@@ -1,3 +1,4 @@
+# shellcheck disable=SC2148
 ## Common.
 alias buba='brew upgrade && brew autoremove && brew cleanup -s'
 
@@ -18,7 +19,6 @@ alias cst='colima start'
 alias cstop='colima stop'
 
 alias drunit='docker run --rm -it'
-alias drmi='docker rmi $(docker images | grep "^<none>" | awk "{print $3}")'
 alias dprune='docker system prune'
 
 alias dcup='docker compose up -d'
@@ -53,17 +53,17 @@ function ddprun {
 
   torchrun \
       --rdzv-backend=c10d \
-      --nnodes=${__nnodes} \
-      --nproc_per_node=${__nproc_per_node} \
-      --rdzv_id=${__rdzv_id} \
-      --rdzv_endpoint=${__rdzv_endpoint} \
-      --node_rank=${__node_rank} \
+      --nnodes="${__nnodes}" \
+      --nproc_per_node="${__nproc_per_node}" \
+      --rdzv_id="${__rdzv_id}" \
+      --rdzv_endpoint="${__rdzv_endpoint}" \
+      --node_rank="${__node_rank}" \
   "${@}"
 }
 function jaxrun {
   __nproc_per_node=${NPROC_PER_NODE:-$(python -c "import torch; print(torch.cuda.device_count())")}
   mpirun \
-    -n ${__nproc_per_node} \
+    -n "${__nproc_per_node}" \
     python "${@}"
 }
 
@@ -88,7 +88,7 @@ function safe_echo {
 
     ## Also mask any other protected env vars.
     for env_row in $(env | grep -E 'TOKEN|API_KEY|PASSWORD'); do
-        mask_vars+=($(echo "${env_row}" | cut -d= -f1))
+        mask_vars+=("$(echo "${env_row}" | cut -d= -f1)")
     done
 
     for mask_var in "${mask_vars[@]}"; do

@@ -1,6 +1,7 @@
 #!/usr/bin/env -S bash -l
 
 if [[ -f .srunrc ]]; then
+  # shellcheck disable=SC1091
   source .srunrc
 fi
 
@@ -25,19 +26,22 @@ if [[ ! -f "${__container_image}" ]]; then
   __container_image=${__docker_name}:${__docker_tag}
 fi
 
+# shellcheck disable=SC2155
 export PYTHONPATH=$(pwd):${PYTHONPATH}
 export NNODES=${SLURM_NNODES}
 export NPROC_PER_NODE=${SLURM_GPUS_ON_NODE}
 export MPROC_GROUPID=${SLURM_JOB_ID}
+# shellcheck disable=SC2155
 export MPROC_HOST=$(hostname)
+# shellcheck disable=SC2155
 export MPROC_PORT=$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
 
 for i in $(seq 0 $(( SLURM_NNODES - 1 ))); do
   export MRANK=${i}
 
   srun -N 1 -n 1 \
-      --container-image=${__container_image} \
-      --container-mounts=$(pwd):"/code/$(basename "$(pwd)")" \
+      --container-image="${__container_image}" \
+      --container-mounts="$(pwd)":"/code/$(basename "$(pwd)")" \
       --container-workdir="/code/$(basename "$(pwd)")" \
         bash -l -c "${__args}" &
 
@@ -47,9 +51,10 @@ done
 
 SLURM_EXIT_CODE=$?
 for p in "${__pids[@]}"; do
-  wait ${p}
+  wait "${p}"
   __exit_code=$?
   if [[ $__exit_code -ne 0 ]]; then
+    # shellcheck disable=SC2034
     SLURM_EXIT_CODE=$__exit_code
   fi
 done
