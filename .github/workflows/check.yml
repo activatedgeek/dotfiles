@@ -7,7 +7,7 @@ on:
       - .github/workflows/check.yml
       - '**.py'
 jobs:
-  run-lint:
+  run-prek:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

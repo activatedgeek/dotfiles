@@ -1,6 +1,6 @@
 # dotfiles
 
-[![Lint](https://github.com/activatedgeek/dotfiles/actions/workflows/lint.yml/badge.svg)](https://github.com/activatedgeek/dotfiles/actions/workflows/lint.yml)
+[![Lint](https://github.com/activatedgeek/dotfiles/actions/workflows/check.yml/badge.svg)](https://github.com/activatedgeek/dotfiles/actions/workflows/check.yml)
 
 ## Setup
 
