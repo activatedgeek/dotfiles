@@ -3,21 +3,29 @@ on:
   push:
     branches:
       - '*'
-    paths:
-      - .github/workflows/check.yml
-      - '**.py'
 jobs:
   run-prek:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
       - name: Setup prek
         uses: j178/prek-action@v1
         with:
           install-only: true
       - name: Run prek
-        run: prek run --all-files --show-diff-on-failure
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            prek run \
+              --from-ref "origin/${{ github.base_ref }}" \
+              --to-ref "${{ github.sha }}" \
+              --show-diff-on-failure
+          else
+            prek run --all-files --show-diff-on-failure
+          fi
       - name: Discord Notify
         uses: sarisia/actions-status-discord@v1
         if: always()
