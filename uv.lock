@@ -260,6 +260,21 @@ wheels = [
 ]
 
 [[package]]
+name = "dotfiles"
+version = "0.0.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "myinfra" },
+    { name = "prek" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "myinfra", editable = "packages/myinfra" },
+    { name = "prek" },
+]
+
+[[package]]
 name = "gevent"
 version = "25.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -404,7 +419,7 @@ wheels = [
 
 [[package]]
 name = "myinfra"
-source = { editable = "." }
+source = { editable = "packages/myinfra" }
 dependencies = [
     { name = "bitwarden-sdk" },
     { name = "cloudflare" },
@@ -412,20 +427,13 @@ dependencies = [
     { name = "requests" },
 ]
 
-[package.optional-dependencies]
-dev = [
-    { name = "prek" },
-]
-
 [package.metadata]
 requires-dist = [
     { name = "bitwarden-sdk" },
     { name = "cloudflare" },
-    { name = "prek", marker = "extra == 'dev'" },
     { name = "pyinfra" },
     { name = "requests" },
 ]
-provides-extras = ["dev"]
 
 [[package]]
 name = "packaging"

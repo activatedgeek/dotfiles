@@ -21,7 +21,7 @@ mise setup
 
 ### Environment Variables
 
-Setup the following environment variables (optionally in a `.env` file).
+Setup the following environment variables (optionally in a `pyinfra/.env` file).
 - `BWS_ORG_ID`: Bitwarden Organization ID to get secrets from. See [docs](https://bitwarden.com/help/secrets-manager-cli/#authentication).
 - `BWS_ACCESS_TOKEN`: Bitwarden Secrets token to get secrets. See [docs](https://github.com/bitwarden/sdk/tree/main/languages/python).
 

@@ -1,0 +1,108 @@
+import myinfra.facts.enroot as enroot_facts
+import myinfra.operations.files as myfiles
+from pyinfra.api import deploy
+from pyinfra.facts import server as server_facts
+from pyinfra.operations import files
+
+from pyinfra import host
+
+
+@deploy("Config")
+def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    files.directory(
+        name=f"{'Remove ' if teardown else ''}Directory",
+        path=f"{remote_home}/.config/enroot",
+        mode=700,
+        present=not teardown,
+        recursive=True,
+    )
+
+    for d in ["mounts.d", "environ.d"]:
+        files.directory(
+            name=f"{'Remove ' if teardown else ''}{d}",
+            path=f"{remote_home}/.config/enroot/{d}",
+            mode=700,
+            present=not teardown,
+            recursive=True,
+        )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''} Credentials",
+        src="tasks/enroot/templates/.credentials.j2",
+        dest=f"{remote_home}/.config/enroot/.credentials",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        docker_hub_username=host.data.get("docker_hub_username"),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}mkenroot",
+        src="tasks/enroot/templates/mkenroot.j2",
+        dest=f"{remote_home}/.local/bin/mkenroot",
+        mode=755,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        inventory_hostname=host.name.split("/")[-1],
+        sbatch_user=host.data.get("ssh_user"),
+        sbatch_account=host.data.get("sbatch_account"),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Default Mounts",
+        src="tasks/enroot/templates/mounts.d/default.fstab.j2",
+        dest=f"{remote_home}/.config/enroot/mounts.d/default.fstab",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        extra_mounts=host.data.get("enroot_mounts", []),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}Default Env",
+        src="tasks/enroot/templates/environ.d/default.env.j2",
+        dest=f"{remote_home}/.config/enroot/environ.d/default.env",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        extra_env=host.data.get("enroot_env", {}),
+    )
+
+    myfiles.template(
+        name=f"{'Remove ' if teardown else ''}ML Secrets Env",
+        src="tasks/bash/templates/.ml_secrets_env.j2",
+        dest=f"{remote_home}/.config/enroot/environ.d/ml_secrets.env",
+        mode=600,
+        create_remote_dir=False,
+        present=not teardown,
+        ## Jinja2 Variables.
+        use_export=False,
+        azure_openai_api_key=host.data.get("azure_openai_api_key"),
+        brave_api_key=host.data.get("brave_api_key"),
+        exa_api_key=host.data.get("exa_api_key"),
+        hf_token=host.data.get("hf_token"),
+        ngc_api_key=host.data.get("ngc_api_key"),
+        nvinf_api_key=host.data.get("nvinf_api_key"),
+        openai_api_key=host.data.get("openai_api_key"),
+        tavily_api_key=host.data.get("tavily_api_key"),
+        wandb_api_key=host.data.get("wandb_api_key"),
+        wandb_username=host.data.get("wandb_username"),
+        wandb_entity=host.data.get("wandb_entity"),
+    )
+
+
+def apply():
+    teardown = host.data.get("teardown", False)
+    kernel = host.get_fact(server_facts.Kernel)
+    enroot_exists = host.get_fact(enroot_facts.EnrootBinary)
+    if kernel == "Linux" and enroot_exists:
+        apply_config(teardown=teardown)
+
+
+apply()

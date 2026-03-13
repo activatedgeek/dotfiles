@@ -1,47 +1,11 @@
-[build-system]
-requires = [
-    "setuptools",
-    "wheel"
-]
-build-backend = "setuptools.build_meta"
-
 [project]
-dynamic = [
-    "version",
-]
-
-name = "myinfra"
-license = { text = "Apache License 2.0" }
+name = "dotfiles"
+version = "0.0.0"
 
 requires-python = ">=3.11,<3.13"
 dependencies = [
-    "bitwarden-sdk",
-    "cloudflare",
-    "pyinfra",
-    "requests",
-]
-
-[project.optional-dependencies]
-dev = [
+    "myinfra",
     "prek",
-]
-
-[tool.setuptools]
-include-package-data = false
-
-[tool.setuptools.dynamic]
-version = { attr = "myinfra.__init__.__version__" }
-
-[tool.setuptools.packages.find]
-exclude = [
-    "*files.*",
-    "*files",
-    "*inventories.*",
-    "*inventories",
-    "*tasks.*",
-    "*tasks",
-    "*templates.*",
-    "*templates",
 ]
 
 [tool.ruff]
@@ -50,3 +14,6 @@ line-length = 119
 
 [tool.ruff.lint]
 extend-select = ["I"]
+
+[tool.uv.sources]
+myinfra = { path = "packages/myinfra", editable = true }

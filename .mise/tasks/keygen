@@ -2,6 +2,7 @@
 
 #MISE description="Generate pyinfra deploy"
 #MISE quiet=true
+#MISE dir="pyinfra"
 
 #USAGE arg "<inventory>" help="Name of inventory" {
 #USAGE  choices "home" "nvda"
