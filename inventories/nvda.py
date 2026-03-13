@@ -139,6 +139,7 @@ linux = (
         ngc_api_key=config.INVENTORY_VARS.get("NGC_API_KEY"),
         nvinf_api_key=config.INVENTORY_VARS.get("NVINF_API_KEY"),
         openai_api_key=config.INVENTORY_VARS.get("OPENAI_API_KEY"),
+        oxen_auth_token=config.INVENTORY_VARS.get("OXEN_AUTH_TOKEN"),
         tavily_api_key=config.INVENTORY_VARS.get("TAVILY_API_KEY"),
         wandb_api_key=config.INVENTORY_VARS.get("WANDB_API_KEY"),
         wandb_username=config.INVENTORY_VARS.get("WANDB_USERNAME"),
