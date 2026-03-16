@@ -10,24 +10,25 @@ dynamic = [
     "version",
 ]
 
-name = "myinfra"
+name = "xfiles"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 
 requires-python = ">=3.11,<3.13"
 dependencies = [
-    "bitwarden-sdk",
-    "cloudflare",
-    "pyinfra",
-    "requests",
+    "tqdm",
 ]
+
+[project.optional-dependencies]
+aim = ["aim"]
+mlflow = ["mlflow"]
 
 [tool.setuptools]
 include-package-data = true
 package-dir = {"" = "src"}
 
 [tool.setuptools.dynamic]
-version = { attr = "myinfra.__init__.__version__" }
+version = { attr = "xfiles.__init__.__version__" }
 
 [tool.setuptools.packages.find]
 where = ["src"]

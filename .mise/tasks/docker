@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+#MISE description="Build docker images"
+#MISE quiet=true
+
+#USAGE arg "<file>" help="Path to Dockerfile."
+#USAGE flag "-n --name <name>" help="Name of image."
+#USAGE flag "-t --tag <tag>" help="Image identifier." default="latest"
+#USAGE flag "--push" help="Push image"
+#USAGE flag "--rm" help="Remove image after build"
+#USAGE arg "[passthru]" var=#true double_dash="required" help="Use -- to start passthrough arguments to uv sync."
+
+if [[ -z "${usage_file}" ]]; then
+    echo "[ERROR] Missing docker file"
+fi
+
+if [[ -z "${usage_name}" ]]; then
+    usage_name=$(git remote get-url origin | sed -E 's/.*[:\/](.*\/.*)\.git$/\1/')
+    if [[ "${usage_file}" == *.Dockerfile ]]; then
+        usage_name=${usage_name}/$(basename "${usage_file}" | cut -d. -f1)
+    fi
+fi
+
+# shellcheck disable=SC2154
+docker_image=${usage_name}:${usage_tag}
+
+docker_cmd=(docker build)
+if [[ -n "${usage_passthru}" ]]; then
+    eval "usage_passthru=(${usage_passthru})"
+    docker_cmd+=("${usage_passthru[@]}")
+fi
+docker_cmd+=(
+    --file "${usage_file}"
+    --tag "${docker_image}"
+    "${MISE_PROJECT_ROOT:-"."}"
+)
+
+echo "${docker_cmd[@]}"
+if "${docker_cmd[@]}"; then
+    if [[ -n "${usage_push}" ]]; then
+        docker push "${docker_image}"
+    fi
+
+    if [[ -n "${usage_rm}" ]]; then
+        docker rmi "${docker_image}"
+    fi
+fi
