@@ -15,7 +15,7 @@ def apply_macos(teardown=False):
 
 
 @deploy("Stirling PDF")
-def apply():
+def _apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Darwin":
