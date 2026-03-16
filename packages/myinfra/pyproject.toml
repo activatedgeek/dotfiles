@@ -1,33 +1,22 @@
 [build-system]
-requires = [
-    "setuptools",
-    "wheel"
-]
 build-backend = "setuptools.build_meta"
+requires = ["setuptools", "wheel"]
 
 [project]
-dynamic = [
-    "version",
-]
-
 name = "myinfra"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-
 requires-python = ">=3.11,<3.13"
-dependencies = [
-    "bitwarden-sdk",
-    "cloudflare",
-    "pyinfra",
-    "requests",
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
+dynamic = ["version"]
+dependencies = ["bitwarden-sdk", "cloudflare", "pyinfra", "requests"]
 
 [tool.setuptools]
 include-package-data = true
-package-dir = {"" = "src"}
-
-[tool.setuptools.dynamic]
-version = { attr = "myinfra.__init__.__version__" }
-
-[tool.setuptools.packages.find]
-where = ["src"]
+package-dir = { "" = "src" }
+dynamic.version = { attr = "myinfra.__init__.__version__" }
+packages.find.where = ["src"]

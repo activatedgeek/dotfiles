@@ -1,20 +1,19 @@
 [project]
 name = "dotfiles"
 version = "0.0.0a"
-
 requires-python = ">=3.11,<3.13"
-dependencies = [
-    "myinfra",
-    "xfiles",
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
 ]
+dependencies = ["myinfra", "xfiles"]
+
+[tool.uv]
+sources.myinfra = { path = "packages/myinfra", editable = true }
+sources.xfiles = { path = "packages/xfiles", editable = true }
 
 [tool.ruff]
 target-version = "py311"
 line-length = 119
-
-[tool.ruff.lint]
-extend-select = ["I"]
-
-[tool.uv.sources]
-myinfra = { path = "packages/myinfra", editable = true }
-xfiles = { path = "packages/xfiles", editable = true }
+lint.extend-select = ["I"]

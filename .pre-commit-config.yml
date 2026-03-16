@@ -14,7 +14,7 @@ repos:
       - id: mixed-line-ending
       - id: trailing-whitespace
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.5
+    rev: v0.15.6
     hooks:
       - id: ruff-check
         args: [--fix]
@@ -23,14 +23,16 @@ repos:
     rev: v0.21.0
     hooks:
       - id: yamlfmt
-  - repo: https://github.com/tox-dev/tox-toml-fmt
-    rev: v1.9.1
-    hooks:
-      - id: tox-toml-fmt
+        args: [-lint]
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: v0.11.0.1
     hooks:
       - id: shellcheck
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format
+      - id: taplo-lint
   - repo: https://github.com/hadolint/hadolint
     rev: v2.14.0
     hooks:
