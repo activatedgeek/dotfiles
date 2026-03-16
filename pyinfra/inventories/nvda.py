@@ -136,7 +136,6 @@ all = (
     [*[h for h, _ in mac[0]], *linux[0]],
     dict(
         email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
-        org="nvda",
         ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
         ssh_key="tasks/ssh/files/nvda/id_ed25519",
         ssh_config_file="/dev/null",

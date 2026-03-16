@@ -25,7 +25,6 @@ mac = (
 all = (
     [h for h, _ in mac[0]],
     dict(
-        org="home",
         email=config.INVENTORY_VARS["EMAIL"],
         skip_tasks={
             "enroot",

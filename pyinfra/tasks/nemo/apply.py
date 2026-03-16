@@ -95,7 +95,7 @@ def apply_nvda(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
-    if host.data.get("org", "") == "nvda":
+    if "nvda" in host.groups:
         apply_nvda(teardown=teardown)
 
 

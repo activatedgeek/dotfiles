@@ -98,9 +98,9 @@ def apply_config(teardown=False):
         recursive=True,
     )
 
-    if host.data.get("org") == "home":
+    if "home" in host.groups:
         apply_config_home(teardown=teardown)
-    elif host.data.get("org") == "nvda":
+    elif "nvda" in host.groups:
         apply_config_nvda(teardown=teardown)
 
 
