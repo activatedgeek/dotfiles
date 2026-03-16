@@ -7,8 +7,9 @@
 #USAGE arg "<inventory>" help="Name of inventory" {
 #USAGE  choices "home" "nvda"
 #USAGE }
-#USAGE flag "-t --type <type>" help="Type of key to create." default="ed25519"
+#USAGE flag "-t --type <type>" help="Type of key to create for SSH/GPG." default="ed25519"
 #USAGE flag "-A --auth-host <auth_host>" help="Target host to copy the key."
+#USAGE flag "--gpg" help="Target host to copy the key(s)."
 
 if [[ -z "${usage_inventory}" ]]; then
     echo "[ERROR] Missing inventory."
@@ -23,6 +24,29 @@ if [[ ! -f "${output_dir}/id_${usage_type}" ]]; then
     ssh-keygen -t "${usage_type}" -f "${output_dir}/id_${usage_type}" -C "$(whoami)"
 fi
 
-if [[ ($? -eq 0) && (-n "${usage_auth_host}") ]]; then
+if [[ -n "${usage_gpg}" ]]; then
+    gpg_name=$(id -F)
+    gpg_email=$(osascript -e 'tell application "Contacts" to value of first email of my card')
+
+    if ! gpg --list-secret-keys "${gpg_name} <${gpg_email}>" >/dev/null 2>&1; then
+        ## NOTE: Use `gpg --armor --export <fingerprint>` to get the public key to upload to Github/Gitlab/HuggingFace.
+        gpg --batch \
+            --pinentry-mode loopback \
+            --passphrase "" \
+            --quick-generate-key "${gpg_name} <${gpg_email}>" \
+            "${usage_type}" \
+            sign 0
+    fi
+fi
+
+if [[ -n "${usage_auth_host}" ]]; then
     ssh-copy-id -i "${output_dir}/id_${usage_type}" "${usage_auth_host}"
+
+    if [[ -n "${usage_gpg}" ]]; then
+        gpg_fingerprint=$(gpg --list-keys --with-colons "${gpg_name} <${gpg_email}>" | awk -F: '/^fpr:/ {print $10; exit}')
+
+        gpg --armor --export-secret-keys "${gpg_fingerprint}" | ssh "${usage_auth_host}" gpg --import
+        # shellcheck disable=SC2029
+        ssh "${usage_auth_host}" "echo '${gpg_fingerprint}:6:' | gpg --import-ownertrust"
+    fi
 fi

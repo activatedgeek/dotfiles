@@ -11,7 +11,7 @@ Install [`homebrew`](https://brew.sh),
 
 and install [`uv`](https://docs.astral.sh/uv/) for Python environments,
 ```shell
-brew install uv mise
+brew install uv mise gnupg
 ```
 
 Install using,

@@ -50,6 +50,8 @@
 	autoSetupRemote = true
 [rebase]
 	autostash = true
+[tag]
+	gpgsign = {{ git_gpgsign | string | lower }}
 #[url "git@github.com:"]
 #	insteadOf = "https://github.com/"
 [user]

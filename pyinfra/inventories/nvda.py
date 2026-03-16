@@ -126,7 +126,6 @@ slurm = (
 linux = (
     [*[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
     dict(
-        git_gpgsign=True,
         term="xterm-256color",
         ## Secrets.
         azure_openai_api_key=config.INVENTORY_VARS.get("AZURE_OPENAI_API_KEY"),
@@ -140,7 +139,6 @@ linux = (
         ngc_api_key=config.INVENTORY_VARS.get("NGC_API_KEY"),
         nvinf_api_key=config.INVENTORY_VARS.get("NVINF_API_KEY"),
         openai_api_key=config.INVENTORY_VARS.get("OPENAI_API_KEY"),
-        oxen_auth_token=config.INVENTORY_VARS.get("OXEN_AUTH_TOKEN"),
         tavily_api_key=config.INVENTORY_VARS.get("TAVILY_API_KEY"),
         wandb_api_key=config.INVENTORY_VARS.get("WANDB_API_KEY"),
         wandb_username=config.INVENTORY_VARS.get("WANDB_USERNAME"),
@@ -156,6 +154,7 @@ all = (
         ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
         ssh_key="tasks/ssh/files/nvda/id_ed25519",
         ssh_config_file="/dev/null",
+        git_gpgsign=True,
         skip_tasks={
             "bitwarden",
             "brave",
