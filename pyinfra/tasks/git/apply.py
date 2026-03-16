@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar
 
+import myinfra.facts.git as git_facts
 from myinfra.facts import server as myserver_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
@@ -8,7 +9,7 @@ from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew
 
-from pyinfra import host, local
+from pyinfra import host
 
 
 @dataclass
@@ -75,8 +76,9 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         git_gpgsign=host.data.get("git_gpgsign", False),
-        git_name=local.shell("id -F"),
+        git_name=host.get_fact(myserver_facts.UserFullName),
         git_email=host.data.email,
+        git_xet=bool(host.get_fact(git_facts.GitXetBinary, path=f"{remote_home}/.local/bin/git-xet")),
     )
 
     myfiles.copy(

@@ -44,16 +44,15 @@ if [[ "${usage_inventory}" == "dns" ]]; then
     pyinfra_cmd+=(--data apply_dns=True)
 fi
 
+if [[ -n "${usage_task}" ]]; then
+    pyinfra_cmd+=(--data apply_tasks="${usage_task}")
+fi
+
 pyinfra_cmd+=(
     --limit "${usage_limit}"
     "inventories/${usage_inventory}.py"
+    deploy.py
 )
-
-if [[ -n "${usage_task}" ]]; then
-    pyinfra_cmd+=("tasks/${usage_task}/apply.py")
-else
-    pyinfra_cmd+=(deploy.py)
-fi
 
 echo "${pyinfra_cmd[@]}"
 "${pyinfra_cmd[@]}"

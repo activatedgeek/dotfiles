@@ -35,6 +35,12 @@
 	process = git-lfs filter-process
 [init]
 	defaultBranch = main
+{% if git_xet is defined and git_xet %}
+[lfs "customtransfer.xet"]
+    path = git-xet
+    args = transfer
+    concurrent = true
+{% endif %}
 [pager]
 	difftool = true
 [pull]
