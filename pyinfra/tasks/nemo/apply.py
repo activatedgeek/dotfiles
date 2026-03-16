@@ -89,7 +89,7 @@ def apply_nvda(teardown=False):
             present=not teardown,
         )
 
-    if "desktop" in host.groups:
+    if any([g in host.groups for g in ["desktop", "mac"]]):
         apply_nemo_skills(teardown=teardown)
 
 

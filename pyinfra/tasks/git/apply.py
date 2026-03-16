@@ -75,7 +75,6 @@ def apply_config(teardown=False):
         create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
-        git_gpgsign=host.data.get("git_gpgsign", False),
         git_name=host.get_fact(myserver_facts.UserFullName),
         git_email=host.data.email,
         git_xet=bool(host.get_fact(git_facts.GitXetBinary, path=f"{remote_home}/.local/bin/git-xet")),

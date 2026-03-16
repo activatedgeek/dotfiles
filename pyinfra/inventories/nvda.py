@@ -18,14 +18,14 @@ desktop = (
                 store_home="/home/${USER}/store",
             ),
         ),
-        (
-            "@ssh/bigdesk",
-            dict(
-                ssh_hostname="10.110.40.240",
-                store_home="/mnt/ssd/home/${USER}",
-                skip=True,
-            ),
-        ),
+        # (
+        #     "@ssh/bigdesk",
+        #     dict(
+        #         ssh_hostname="10.110.40.240",
+        #         store_home="/mnt/ssd/home/${USER}",
+        #         teardown=True,
+        #     ),
+        # ),
     ],
     dict(),
 )
@@ -82,31 +82,33 @@ slurm = (
                 ],
             ),
         ),
-        (
-            "@ssh/lax",
-            dict(
-                ssh_port=30022,
-                ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
-                store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
-            ),
-        ),
-        (
-            "@ssh/nrt",
-            dict(
-                ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemotron_nano",
-                sbatch_partition="batch_block1",
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
-            ),
-        ),
+        # (
+        #     "@ssh/lax",
+        #     dict(
+        #         ssh_port=30022,
+        #         ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
+        #         store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+        #         sbatch_account="llmservice_nemo_reasoning",
+        #         sbatch_partition="batch",
+        #         enroot_mounts=[
+        #             "/lustre/fsw/portfolios/llmservice",
+        #         ],
+        #         teardown=True,
+        #     ),
+        # ),
+        # (
+        #     "@ssh/nrt",
+        #     dict(
+        #         ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
+        #         store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+        #         sbatch_account="llmservice_nemotron_nano",
+        #         sbatch_partition="batch_block1",
+        #         enroot_mounts=[
+        #             "/lustre/fsw/portfolios/llmservice",
+        #         ],
+        #         teardown=True,
+        #     ),
+        # ),
         (
             "@ssh/ord",
             dict(
@@ -127,6 +129,27 @@ linux = (
     [*[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
     dict(
         term="xterm-256color",
+    ),
+)
+
+all = (
+    [*[h for h, _ in mac[0]], *linux[0]],
+    dict(
+        email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
+        org="nvda",
+        ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
+        ssh_key="tasks/ssh/files/nvda/id_ed25519",
+        ssh_config_file="/dev/null",
+        skip_tasks={
+            "bitwarden",
+            "brave",
+            "cloudflare",
+            "mega",
+            "netnewswire",
+            "obsidian",
+            "slack",
+            "tailscale",
+        },
         ## Secrets.
         azure_openai_api_key=config.INVENTORY_VARS.get("AZURE_OPENAI_API_KEY"),
         brave_api_key=config.INVENTORY_VARS.get("BRAVE_API_KEY"),
@@ -143,27 +166,5 @@ linux = (
         wandb_api_key=config.INVENTORY_VARS.get("WANDB_API_KEY"),
         wandb_username=config.INVENTORY_VARS.get("WANDB_USERNAME"),
         wandb_entity=config.INVENTORY_VARS.get("WANDB_ENTITY"),
-    ),
-)
-
-all = (
-    [*[h for h, _ in mac[0]], *linux[0]],
-    dict(
-        email=config.INVENTORY_VARS["NVIDIA_EMAIL"],
-        org="nvda",
-        ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
-        ssh_key="tasks/ssh/files/nvda/id_ed25519",
-        ssh_config_file="/dev/null",
-        git_gpgsign=True,
-        skip_tasks={
-            "bitwarden",
-            "brave",
-            "cloudflare",
-            "mega",
-            "netnewswire",
-            "obsidian",
-            "slack",
-            "tailscale",
-        },
     ),
 )

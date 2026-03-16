@@ -4,7 +4,7 @@
 	d = difftool
 	f = fetch --all -p
 	l = -c diff.external=difft log --ext-diff
-	m = commit{{ " -s " if git_gpgsign else " " }}-m
+	m = commit -s -m
 	p = pull
 	r = remote -v
 	root = rev-parse --show-toplevel
@@ -15,7 +15,7 @@
 [branch]
 	sort = -committerdate
 [commit]
-	gpgsign = {{ git_gpgsign | string | lower }}
+	gpgsign = true
 [core]
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
@@ -51,7 +51,7 @@
 [rebase]
 	autostash = true
 [tag]
-	gpgsign = {{ git_gpgsign | string | lower }}
+	gpgsign = true
 #[url "git@github.com:"]
 #	insteadOf = "https://github.com/"
 [user]
