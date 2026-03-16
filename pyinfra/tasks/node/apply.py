@@ -24,6 +24,7 @@ def apply_config(teardown=False):
         )
 
 
+@deploy("Node")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -31,6 +32,3 @@ def apply():
         apply_macos(teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

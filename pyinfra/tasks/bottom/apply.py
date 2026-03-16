@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 
 from myinfra.facts import server as myserver_facts
@@ -15,8 +15,10 @@ from pyinfra import host
 class Btm(Binary):
     gh_repo: ClassVar[str] = "ClementTsang/bottom"
     version: ClassVar[str] = "0.12.3"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "bottom_x86_64-unknown-linux-musl.tar.gz",
                 "sha256sum": "815da63fa6ef651fb4841bf0bf5efb54a2cbd6e3fdce80a139ed0bc7d4d27a6a",
@@ -26,7 +28,6 @@ class Btm(Binary):
                 "sha256sum": "822490a5f44d5f8f370c2a2036f51866ff17a53baee488f573e738a1be647524",
             },
         }
-    )
 
 
 @deploy("Linux")
@@ -52,6 +53,7 @@ def apply_config(teardown=False):
         )
 
 
+@deploy("Bottom")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -59,6 +61,3 @@ def apply():
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
         apply_config(teardown=teardown)
-
-
-apply()

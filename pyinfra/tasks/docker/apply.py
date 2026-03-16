@@ -70,12 +70,10 @@ def apply_macos(teardown=False):
         server.shell._inner(commands=["docker buildx install"])
 
 
+@deploy("Docker")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
         apply_config(teardown=teardown)
-
-
-apply()

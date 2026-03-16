@@ -61,12 +61,10 @@ def apply_config(teardown=False):
     #     apply_nvda(teardown=teardown)
 
 
+@deploy("Slurm")
 def apply():
     teardown = host.data.get("teardown", False)
     sbatch_bin = host.get_fact(slurm_facts.SbatchBinary)
     is_slurm_host = bool(sbatch_bin)
     if is_slurm_host:
         apply_config(teardown=teardown)
-
-
-apply()

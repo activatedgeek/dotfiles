@@ -63,6 +63,7 @@ def apply_config(teardown=False):
         )
 
 
+@deploy("Micro")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -73,6 +74,3 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

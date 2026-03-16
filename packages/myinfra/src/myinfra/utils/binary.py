@@ -14,9 +14,6 @@ class Binary:
     version: ClassVar[str]
     """Version of the binary."""
 
-    asset_map: ClassVar[dict[Arch, dict[Literal["name", "sha256sum"], str]]]
-    """Map of the asset name and corresponding sha256sum."""
-
     use_latest: bool = field(default=False)
     """Check whether the specified version is the latest."""
 
@@ -45,6 +42,11 @@ class Binary:
     def latest(self):
         if self.gh_repo:
             return self.gh_latest_release()
+
+    @property
+    def asset_map(self) -> dict[Arch, dict[Literal["name", "sha256sum"], str]]:
+        """Map of the asset name and corresponding sha256sum."""
+        raise NotImplementedError
 
     @property
     def src(self) -> str:

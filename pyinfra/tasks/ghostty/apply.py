@@ -36,12 +36,10 @@ def apply_config(teardown=False):
     )
 
 
+@deploy("Ghostty")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
         apply_config(teardown=teardown)
-
-
-apply()

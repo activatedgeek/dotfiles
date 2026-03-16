@@ -14,11 +14,9 @@ def apply_macos(teardown=False):
     )
 
 
+@deploy("NetNewsWire")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
-
-
-apply()

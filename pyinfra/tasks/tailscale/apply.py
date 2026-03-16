@@ -40,6 +40,7 @@ def apply_linux(teardown=False):
     )
 
 
+@deploy("Tailscale")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -47,6 +48,3 @@ def apply():
         apply_macos(teardown=teardown)
     # elif kernel == "Linux":
     #     apply_linux(teardown=teardown)
-
-
-apply()

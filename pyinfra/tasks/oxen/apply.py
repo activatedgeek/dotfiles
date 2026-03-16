@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 
 from myinfra.facts import server as myserver_facts
@@ -15,8 +15,10 @@ from pyinfra import host, local
 class Oxen(Binary):
     gh_repo: ClassVar[str] = "Oxen-AI/Oxen"
     version: ClassVar[str] = "v0.45.0"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "oxen-linux-x86_64.tar.gz",
                 "sha256sum": "7ba46b091c118a7567f9ad19a6eacfecfa4dc2513785a0e82078a4970947da13",
@@ -26,7 +28,6 @@ class Oxen(Binary):
                 "sha256sum": "c53c9eac091ae96b3c3b076aec004e20d0d769c87dd01dde09e3c70c29647fd4",
             },
         }
-    )
 
 
 @deploy("Linux")
@@ -89,7 +90,8 @@ def apply_config(teardown=False):
     )
 
 
-def apply():
+@deploy("Oxen")
+def _apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Darwin":
@@ -99,6 +101,3 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

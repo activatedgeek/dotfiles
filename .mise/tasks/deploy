@@ -12,8 +12,11 @@
 #USAGE flag "-l --limit <limit>" help="Limit hosts." default="*"
 #USAGE flag "--teardown" help="Teardown deployment"
 
-if [[ -f ".env" ]]; then
-    export "$(cat .env | xargs)"
+if [[ -f .env ]]; then
+    set -a
+    # shellcheck disable=SC1091
+    source .env
+    set +a
 fi
 
 if [[ -z "${usage_inventory}" ]]; then
@@ -42,7 +45,6 @@ if [[ "${usage_inventory}" == "dns" ]]; then
 fi
 
 pyinfra_cmd+=(
-    --data inventory_id="${usage_inventory}"
     --limit "${usage_limit}"
     "inventories/${usage_inventory}.py"
 )

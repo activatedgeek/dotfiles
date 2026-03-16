@@ -91,6 +91,7 @@ def apply_config(teardown=False):
         apply_nvda(teardown=teardown)
 
 
+@deploy("Rclone")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -101,6 +102,3 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

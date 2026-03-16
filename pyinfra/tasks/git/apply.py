@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 
 from myinfra.facts import server as myserver_facts
@@ -15,8 +15,10 @@ from pyinfra import host, local
 class Difftastic(Binary):
     gh_repo: ClassVar[str] = "Wilfred/difftastic"
     version: ClassVar[str] = "0.67.0"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "difft-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "865ef78b86eac72aa6440e380661b442244b58e02e333ad82df8e21a254d64a9",
@@ -27,7 +29,6 @@ class Difftastic(Binary):
                 "sha256sum": "c824e84555cd0eaace328ffe4c934053de4fa9763213fb8e47791fdf81d1ada5",
             },
         }
-    )
 
 
 @deploy("MacOS")
@@ -88,6 +89,7 @@ def apply_config(teardown=False):
     )
 
 
+@deploy("Git")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -98,6 +100,3 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

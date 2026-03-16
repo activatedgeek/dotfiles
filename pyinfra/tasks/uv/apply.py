@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import ClassVar
 
@@ -16,8 +16,10 @@ from pyinfra import host
 class Uv(Binary):
     gh_repo: ClassVar[str] = "astral-sh/uv"
     version: ClassVar[str] = "0.10.9"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "8f8aa2a27b00bf3b35880b2e943bb8fd58714abe0981f8467b90e75faab41131",
@@ -27,13 +29,13 @@ class Uv(Binary):
                 "sha256sum": "2452f3680578ab0e1bee5e035dcac2486445770ac4ccc98cefc743c5740c352f",
             },
         }
-    )
 
 
 @dataclass
 class Uvx(Uv):
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "f970b2576b7ae459afe8be1826f9812ddd5fa431a9ddfea155fae52e7443ac74",
@@ -43,7 +45,6 @@ class Uvx(Uv):
                 "sha256sum": "6fa59bc46bffff8ea41dfb21ea9c82d38928c539b2a5688cbdb29cd518e1c09b",
             },
         }
-    )
 
 
 @deploy("Linux")
@@ -94,6 +95,7 @@ def apply_macos(teardown=False):
     )
 
 
+@deploy("Uv")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -102,6 +104,3 @@ def apply():
     elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
-
-
-apply()

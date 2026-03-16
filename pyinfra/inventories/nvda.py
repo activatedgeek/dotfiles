@@ -23,6 +23,7 @@ desktop = (
             dict(
                 ssh_hostname="10.110.40.240",
                 store_home="/mnt/ssd/home/${USER}",
+                skip=True,
             ),
         ),
     ],
@@ -155,5 +156,15 @@ all = (
         ssh_user=config.INVENTORY_VARS["NVIDIA_EMAIL"].split("@")[0],
         ssh_key="tasks/ssh/files/nvda/id_ed25519",
         ssh_config_file="/dev/null",
+        skip_tasks={
+            "bitwarden",
+            "brave",
+            "cloudflare",
+            "mega",
+            "netnewswire",
+            "obsidian",
+            "slack",
+            "tailscale",
+        },
     ),
 )

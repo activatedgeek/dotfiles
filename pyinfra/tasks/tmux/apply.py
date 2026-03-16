@@ -17,11 +17,9 @@ def apply_config(teardown=False):
     )
 
 
+@deploy("Tmux")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Linux":
         apply_config(teardown=teardown)
-
-
-apply()

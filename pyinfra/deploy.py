@@ -1,40 +1,23 @@
+import importlib.util
 from pathlib import Path
 
-from pyinfra.api import exceptions
-
-from pyinfra import host, local
-
-ALL_TASKS = sorted([d.stem for d in (Path(__file__).parent / "tasks").iterdir() if d.is_dir()])
-
-SKIP_TASKS = {
-    "home": {
-        "enroot",
-        "micromamba",
-        "nemo",
-    },
-    "nvda": {
-        "bitwarden",
-        "brave",
-        "cloudflare",
-        "mega",
-        "micromamba",
-        "netnewswire",
-        "obsidian",
-        "slack",
-        "tailscale",
-    },
-}
+from pyinfra import host, logger
 
 
-def deploy():
-    inventory_id = host.data.get("inventory_id")
-    if inventory_id not in SKIP_TASKS:
-        raise exceptions.DeployError(
-            f'Unsupported inventory "{inventory_id}". Pass --data inventory_id=<id> with possible values {list(SKIP_TASKS.keys())}'
-        )
+def main():
+    if host.data.get("skip", False):
+        logger.warning(f"Skipping {host.name}.")
+        return
 
-    for t in filter(lambda t: t not in SKIP_TASKS[inventory_id], ALL_TASKS):
-        local.include(f"tasks/{t}/apply.py")
+    all_tasks = sorted([d.stem for d in (Path(__file__).parent / "tasks").iterdir() if d.is_dir()])
+    skip_tasks = host.data.get("skip_tasks", {})
+    for task in filter(lambda t: t not in skip_tasks, all_tasks):
+        task_spec = importlib.util.spec_from_file_location(f"pyinfra._dynamic.tasks.{task}", f"tasks/{task}/apply.py")
+        task = importlib.util.module_from_spec(task_spec)
+        task_spec.loader.exec_module(task)
+
+        if callable(getattr(task, "apply", None)):
+            task.apply()
 
 
-deploy()
+main()

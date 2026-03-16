@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from pathlib import Path
 
 from bitwarden_sdk import BitwardenClient, DeviceType, client_settings_from_dict
@@ -7,11 +8,18 @@ from pyinfra.api import config, exceptions
 
 from pyinfra import logger
 
-PYINFRA_CACHE = ".pyinfra_cache"
+PYINFRA_CACHE_PATH = Path(__file__).parent / ".pyinfra_cache"
 
 
 def setup_inventory_vars():
-    cache_file = Path(PYINFRA_CACHE) / "inventory_vars.json"
+    try:
+        inventory_file = Path([arg for arg in sys.argv if arg.startswith("inventories") and Path(arg).is_file()][0])
+        inventory_name = Path(inventory_file).stem
+    except IndexError as e:
+        raise exceptions.DeployError("Missing inventory file") from e
+
+    cache_file = PYINFRA_CACHE_PATH / "inventories" / inventory_name / "vars.json"
+    cache_file.parent.mkdir(exist_ok=True, parents=True, mode=0o700)
 
     if not cache_file.is_file():
         bws_access_token = os.getenv("BWS_ACCESS_TOKEN")

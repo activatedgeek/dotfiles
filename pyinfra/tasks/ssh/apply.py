@@ -104,10 +104,8 @@ def apply_config(teardown=False):
         apply_config_nvda(teardown=teardown)
 
 
+@deploy("SSH")
 def apply():
     teardown = host.data.get("teardown", False)
 
     apply_config(teardown=teardown)
-
-
-apply()

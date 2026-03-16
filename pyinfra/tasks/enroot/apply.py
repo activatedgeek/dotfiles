@@ -97,12 +97,10 @@ def apply_config(teardown=False):
     )
 
 
+@deploy("Enroot")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
     enroot_exists = host.get_fact(enroot_facts.EnrootBinary)
     if kernel == "Linux" and enroot_exists:
         apply_config(teardown=teardown)
-
-
-apply()

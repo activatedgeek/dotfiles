@@ -26,10 +26,8 @@ def apply_config(teardown=False):
         apply_config_home(teardown=teardown)
 
 
+@deploy("Cron")
 def apply():
     teardown = host.data.get("teardown", False)
 
     apply_config(teardown=teardown)
-
-
-apply()

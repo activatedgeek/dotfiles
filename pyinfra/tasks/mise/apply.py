@@ -16,7 +16,7 @@ class Mise(Binary):
     version: ClassVar[str] = "v2026.3.5"
 
     @property
-    def asset_map(self) -> dict[str, dict[str, str]]:
+    def asset_map(self):
         return {
             "amd64": {
                 "name": f"mise-{self.version}-linux-x64",
@@ -59,6 +59,7 @@ def apply_macos(teardown=False):
     )
 
 
+@deploy("Mise")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -67,6 +68,3 @@ def apply():
     elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
-
-
-apply()

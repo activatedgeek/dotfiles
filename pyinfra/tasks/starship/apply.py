@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 
 from myinfra.facts import server as myserver_facts
@@ -15,8 +15,10 @@ from pyinfra import host
 class Starship(Binary):
     gh_repo: ClassVar[str] = "starship/starship"
     version: ClassVar[str] = "v1.24.2"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "starship-x86_64-unknown-linux-gnu.tar.gz",
                 "sha256sum": "2a24f4deaf7a2b27e441cafe259251742b5e4bdc3011e3fc654dc657d7c45c33",
@@ -26,7 +28,6 @@ class Starship(Binary):
                 "sha256sum": "559701ab549aad99c5f62ca74a65b7a5258f9c8371d5a7a6af6ef905b632ec48",
             },
         }
-    )
 
 
 @deploy("Config")
@@ -63,6 +64,7 @@ def apply_linux(arch, teardown=False):
     )
 
 
+@deploy("Starship")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -73,6 +75,3 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

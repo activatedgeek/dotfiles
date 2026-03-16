@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 
 from myinfra.facts import server as myserver_facts
@@ -15,8 +15,10 @@ from pyinfra import host
 class OpenCode(Binary):
     gh_repo: ClassVar[str] = "anomalyco/opencode"
     version: ClassVar[str] = "v1.2.24"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "opencode-linux-x64.tar.gz",
                 "sha256sum": "364cb57af526e1afdbab1e9863d019395c37399e205a487475a44bf466bec67e",
@@ -26,7 +28,6 @@ class OpenCode(Binary):
                 "sha256sum": "ad7b4780671ea7ca9383b29892e12c417f9314960a657df8eb29b91c509726cd",
             },
         }
-    )
 
 
 @deploy("Linux")
@@ -82,6 +83,7 @@ def apply_config(teardown=False):
     )
 
 
+@deploy("OpenCode")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -92,6 +94,3 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
-
-
-apply()

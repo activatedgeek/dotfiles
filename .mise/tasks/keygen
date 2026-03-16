@@ -18,8 +18,11 @@ fi
 output_dir=tasks/ssh/files/${usage_inventory}
 
 # shellcheck disable=SC2154
-if ssh-keygen -t "${usage_type}" -f "${output_dir}/id_${usage_type}" -C "$(whoami)"; then
-    if [[ -n "${usage_auth_host}" ]]; then
-        ssh-copy-id -i "${output_dir}/id_${usage_type}" "${usage_auth_host}"
-    fi
+if [[ ! -f "${output_dir}/id_${usage_type}" ]]; then
+    # shellcheck disable=SC2154
+    ssh-keygen -t "${usage_type}" -f "${output_dir}/id_${usage_type}" -C "$(whoami)"
+fi
+
+if [[ ($? -eq 0) && (-n "${usage_auth_host}") ]]; then
+    ssh-copy-id -i "${output_dir}/id_${usage_type}" "${usage_auth_host}"
 fi

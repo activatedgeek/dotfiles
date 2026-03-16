@@ -27,5 +27,9 @@ all = (
     dict(
         org="home",
         email=config.INVENTORY_VARS["EMAIL"],
+        skip_tasks={
+            "enroot",
+            "nemo",
+        },
     ),
 )

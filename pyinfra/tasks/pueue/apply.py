@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import ClassVar
 
 from myinfra.facts import server as myserver_facts
@@ -15,8 +15,10 @@ from pyinfra import host
 class Pueue(Binary):
     gh_repo: ClassVar[str] = "Nukesor/pueue"
     version: ClassVar[str] = "v4.0.4"
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "pueue-x86_64-unknown-linux-musl",
                 "sha256sum": "c1b10d7e4e62211075ddd0e1dc3e8cbfc5a43d662cb3be7402a28504e23fcb51",
@@ -26,13 +28,13 @@ class Pueue(Binary):
                 "sha256sum": "759bf5100a51024997111c6913aaf3330a0cdfd893ff552dcf429ae9b5e01e09",
             },
         }
-    )
 
 
 @dataclass
 class Pueued(Pueue):
-    asset_map: ClassVar[dict[str, dict[str, str]]] = field(
-        default_factory=lambda: {
+    @property
+    def asset_map(self):
+        return {
             "amd64": {
                 "name": "pueued-x86_64-unknown-linux-musl",
                 "sha256sum": "5afeff6adbafb909e8d54e2caff158e6966c2adffa2c09e60fd631cc51b60390",
@@ -42,7 +44,6 @@ class Pueued(Pueue):
                 "sha256sum": "332c5ef74270b64aeaf04894c8c04826f3422eb7d50dbd1a8e0706d74a42f653",
             },
         }
-    )
 
 
 @deploy("Linux")
@@ -110,6 +111,7 @@ def apply_config(teardown=False):
         )
 
 
+@deploy("Pueue")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
@@ -117,6 +119,3 @@ def apply():
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
         apply_config(teardown=teardown)
-
-
-apply()
