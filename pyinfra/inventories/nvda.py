@@ -74,7 +74,7 @@ slurm = (
             "@ssh/iad",
             dict(
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="batch_block1,batch_block3,batch_block4",
                 enroot_mounts=[
@@ -113,7 +113,7 @@ slurm = (
             "@ssh/ord",
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partition="polar,polar3,polar4,grizzly",
                 enroot_mounts=[
