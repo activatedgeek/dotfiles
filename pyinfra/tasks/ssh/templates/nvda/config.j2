@@ -11,7 +11,7 @@ Match originalhost="*.aim"
     ExitOnForwardFailure yes
     LocalForward 43800 localhost:43800
     ## Kill any processes on the port before launch.
-    RemoteCommand for pid in $(lsof -ti :43800); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); uv run --no-sync aim up -y -p 43800
+    RemoteCommand for pid in $(lsof -ti :43800); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); mise aim up -p 43800
 
 Match originalhost="*.lab"
     RequestTTY yes

@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+#MISE description="Run aim"
+#MISE quiet=true
+
+#USAGE arg "<command>" help="Command to run" {
+#USAGE  choices "up" "sync"
+#USAGE }
+#USAGE flag "--repo <repo>" env="AIM_REPO" help="Path to repository"
+#USAGE flag "-p --port <port>" help="Port." default="43800"
+#USAGE flag "--prune" help="Prune before sync."
+#USAGE flag "--reindex" help="Reindex before sync."
+#USAGE flag "--remote <remote>" help="Name of rclone remote for sync." default="aim"
+
+usage_repo="${usage_repo:-$(pwd)}"
+
+# shellcheck disable=SC2154
+if [[ "${usage_command}" = "up" ]]; then
+    # shellcheck disable=SC2154
+    aim up -y --repo "${usage_repo}" -p "${usage_port}"
+
+elif [[ "${usage_command}" = "sync" ]]; then
+    # shellcheck disable=SC2154
+    if [[ "${usage_prune}" == "true" ]]; then
+        aim storage --repo "${usage_repo}" prune
+    fi
+
+    # shellcheck disable=SC2154
+    if [[ "${usage_reindex}" == "true" ]]; then
+        aim storage --repo "${usage_repo}" reindex -y
+    fi
+
+    # shellcheck disable=SC2154
+    rclone -P sync "${usage_repo}/.aim" "${usage_remote}":"$(basename "${usage_repo}")" --checksum
+
+else
+    echo "[ERROR] Unsupported command ${usage_command}."
+    exit 1
+fi
