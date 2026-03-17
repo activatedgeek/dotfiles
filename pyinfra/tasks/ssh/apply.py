@@ -58,12 +58,12 @@ def apply_config_nvda(teardown=False):
             exclude=["*git*"],
         )
 
-    slurm_hosts = {
+    ssh_config_hosts = {
         f"{ihost.name.split('/')[-1]}": {
             "hostname": ihost.data.ssh_hostname,
             "port": ihost.data.get("ssh_port", 22),
         }
-        for ihost in inventory.get_group("slurm")
+        for ihost in inventory.get_group("linux")
     }
 
     myfiles.template(
@@ -74,9 +74,8 @@ def apply_config_nvda(teardown=False):
         create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
-        slurm_hosts=slurm_hosts,
+        hosts=ssh_config_hosts,
         extended=(host.name == "@local"),
-        ssh_user=host.data.ssh_user,
     )
 
     files.line(

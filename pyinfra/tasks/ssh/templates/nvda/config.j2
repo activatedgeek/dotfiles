@@ -3,42 +3,31 @@ Host github.com gitlab-master.nvidia.com hf.co
     PreferredAuthentications publickey
     IdentityFile ~/.ssh/config.d/nvda/id_ed25519
 
-Host desk *.aim *.lab *.mlflow
-    HostName {{ ssh_user }}.dyn.nvidia.com
-
 Match originalhost="*.aim"
-    RequestTTY yes
-    ExitOnForwardFailure yes
     LocalForward 43800 localhost:43800
     ## Kill any processes on the port before launch.
     RemoteCommand for pid in $(lsof -ti :43800); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); mise aim up -p 43800
 
 Match originalhost="*.lab"
-    RequestTTY yes
-    ExitOnForwardFailure yes
     LocalForward 8888 localhost:8888
     ## Kill any processes on the port before launch.
     RemoteCommand for pid in $(lsof -ti :8888); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); uv run --no-sync jupyter lab -y --no-browser --port 8888
 
-Match originalhost="*.mlflow"
+Host *.aim *.lab
+    HostName {{ hosts.desk.hostname }}
+    Port {{ hosts.desk.port }}
     RequestTTY yes
     ExitOnForwardFailure yes
-    LocalForward 5000 localhost:5000
-    ## Kill any processes on the port before launch.
-    RemoteCommand for pid in $(lsof -ti :5000); do kill -9 $pid; done; source ~/.bash_profile; cd ${HOME}/code/$(echo %n | cut -d. -f1); uv run --no-sync mlflow server --backend-store-uri file://$(pwd)/.mlflow -p 5000
-
-Host bigdesk
-    HostName 10.110.40.240
 {% endif %}
 
-{% for host, attrs in slurm_hosts.items() +%}
+{% for host, attrs in hosts.items() +%}
 Host {{ host }}
-    HostName {{ attrs["hostname"] }}
-    Port {{ attrs["port"] }}
+    HostName {{ attrs.hostname }}
+    Port {{ attrs.port }}
 {% endfor %}
 
 {% if extended is defined and extended %}
-Match host="*.nvidia.com",originalhost="*desk"
+Match host="*.nvidia.com"
     IdentityFile ~/.ssh/config.d/nvda/id_ed25519
     ForwardAgent yes
     AddKeysToAgent yes

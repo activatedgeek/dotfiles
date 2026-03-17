@@ -18,14 +18,14 @@ desktop = (
                 store_home="/home/${USER}/store",
             ),
         ),
-        # (
-        #     "@ssh/bigdesk",
-        #     dict(
-        #         ssh_hostname="10.110.40.240",
-        #         store_home="/mnt/ssd/home/${USER}",
-        #         teardown=True,
-        #     ),
-        # ),
+        (
+            "@ssh/bigdesk",
+            dict(
+                ssh_hostname="aiapps-110221.dyn.nvidia.com",
+                store_home="/mnt/ssd/home/${USER}",
+                skip=True,
+            ),
+        ),
     ],
     dict(),
 )
@@ -82,33 +82,33 @@ slurm = (
                 ],
             ),
         ),
-        # (
-        #     "@ssh/lax",
-        #     dict(
-        #         ssh_port=30022,
-        #         ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
-        #         store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
-        #         sbatch_account="llmservice_nemo_reasoning",
-        #         sbatch_partition="batch",
-        #         enroot_mounts=[
-        #             "/lustre/fsw/portfolios/llmservice",
-        #         ],
-        #         teardown=True,
-        #     ),
-        # ),
-        # (
-        #     "@ssh/nrt",
-        #     dict(
-        #         ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
-        #         store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-        #         sbatch_account="llmservice_nemotron_nano",
-        #         sbatch_partition="batch_block1",
-        #         enroot_mounts=[
-        #             "/lustre/fsw/portfolios/llmservice",
-        #         ],
-        #         teardown=True,
-        #     ),
-        # ),
+        (
+            "@ssh/lax",
+            dict(
+                ssh_port=30022,
+                ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
+                store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_partition="batch",
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+                skip=True,
+            ),
+        ),
+        (
+            "@ssh/nrt",
+            dict(
+                ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemotron_nano",
+                sbatch_partition="batch_block1",
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+                skip=True,
+            ),
+        ),
         (
             "@ssh/ord",
             dict(
