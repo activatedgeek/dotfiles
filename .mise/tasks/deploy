@@ -26,7 +26,7 @@ fi
 
 # shellcheck disable=SC2154
 if [[ "${usage_refresh}" == "true" ]]; then
-    rm -rf .pyinfra_cache
+    rm -rf ".pyinfra_cache/inventories/${usage_inventory}"
 fi
 
 pyinfra_cmd=(pyinfra -y)

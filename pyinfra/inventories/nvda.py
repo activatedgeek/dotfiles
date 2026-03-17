@@ -152,6 +152,8 @@ all = (
         ## Secrets.
         azure_openai_api_key=config.INVENTORY_VARS.get("AZURE_OPENAI_API_KEY"),
         brave_api_key=config.INVENTORY_VARS.get("BRAVE_API_KEY"),
+        dagshub_username=config.INVENTORY_VARS.get("DAGSHUB_USERNAME"),
+        dagshub_user_token=config.INVENTORY_VARS.get("DAGSHUB_USER_TOKEN"),
         discord_webhook_token=config.INVENTORY_VARS.get("DISCORD_WEBHOOK_TOKEN"),
         docker_hub_username=config.INVENTORY_VARS.get("DOCKER_HUB_USERNAME"),
         docker_hub_password=config.INVENTORY_VARS.get("DOCKER_HUB_PASSWORD"),

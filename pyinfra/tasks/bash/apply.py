@@ -108,6 +108,7 @@ def apply_config(teardown=False):
         use_export=True,
         azure_openai_api_key=host.data.get("azure_openai_api_key"),
         brave_api_key=host.data.get("brave_api_key"),
+        dagshub_user_token=host.data.get("dagshub_user_token"),
         exa_api_key=host.data.get("exa_api_key"),
         hf_token=host.data.get("hf_token"),
         ngc_api_key=host.data.get("ngc_api_key"),

@@ -75,6 +75,8 @@ def apply_nvda(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         hosts=linux_hosts,
+        dagshub_username=host.data.get("dagshub_username"),
+        dagshub_user_token=host.data.get("dagshub_user_token"),
     )
 
 

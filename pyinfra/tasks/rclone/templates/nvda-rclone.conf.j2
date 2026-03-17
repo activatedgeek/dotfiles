@@ -1,3 +1,5 @@
+{% include "tasks/rclone/templates/rclone.conf.j2" %}
+
 {% for host, attrs in hosts.items() +%}
 [{{ host }}]
 type = sftp
