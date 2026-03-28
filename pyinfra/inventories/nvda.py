@@ -115,7 +115,7 @@ slurm = (
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="polar,polar3,polar4,grizzly",
+                sbatch_partition="polar,polar3,polar4",
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
