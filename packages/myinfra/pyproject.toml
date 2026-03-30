@@ -13,7 +13,13 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
 ]
 dynamic = ["version"]
-dependencies = ["bitwarden-sdk", "cloudflare", "pyinfra", "requests"]
+dependencies = [
+  "bitwarden-sdk",
+  "cloudflare",
+  "diskcache",
+  "pyinfra",
+  "requests",
+]
 
 [tool.setuptools]
 include-package-data = true

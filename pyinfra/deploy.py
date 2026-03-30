@@ -1,5 +1,6 @@
-import importlib.util
 from pathlib import Path
+
+from myinfra.utils import load_task_module
 
 from pyinfra import host, logger
 
@@ -15,10 +16,7 @@ def main():
         all_tasks &= set(host.data.get("apply_tasks").split(","))
 
     for task in all_tasks:
-        task_spec = importlib.util.spec_from_file_location(f"pyinfra._dynamic.tasks.{task}", f"tasks/{task}/apply.py")
-        task = importlib.util.module_from_spec(task_spec)
-        task_spec.loader.exec_module(task)
-
+        task, _ = load_task_module(task, f"tasks/{task}/apply.py")
         if callable(getattr(task, "apply", None)):
             task.apply()
 

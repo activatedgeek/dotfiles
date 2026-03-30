@@ -11,6 +11,7 @@
 #USAGE flag "-t --task <task>" help="Optionally deploy only task."
 #USAGE flag "-l --limit <limit>" help="Limit hosts." default="*"
 #USAGE flag "--teardown" help="Teardown deployment"
+#USAGE arg "[passthru]" var=#true double_dash="required" help="Use -- to start passthrough arguments to pyinfra."
 
 if [[ -f .env ]]; then
     set -a
@@ -53,6 +54,11 @@ pyinfra_cmd+=(
     "inventories/${usage_inventory}.py"
     deploy.py
 )
+
+if [[ -n "${usage_passthru}" ]]; then
+    eval "usage_passthru=(${usage_passthru})"
+    pyinfra_cmd+=("${usage_passthru[@]}")
+fi
 
 echo "${pyinfra_cmd[@]}"
 "${pyinfra_cmd[@]}"

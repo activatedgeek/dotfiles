@@ -14,9 +14,6 @@ class Binary:
     version: ClassVar[str]
     """Version of the binary."""
 
-    use_latest: bool = field(default=False)
-    """Check whether the specified version is the latest."""
-
     gh_repo: ClassVar[str | None] = field(default=None)
     """GitHub <username>/<repo>."""
 
@@ -27,11 +24,6 @@ class Binary:
         if self.arch not in self.asset_map:
             raise ValueError(f"Unsupported arch {self.arch}")
 
-        if self.use_latest:
-            latest_version = self.latest
-            if latest_version is not None and latest_version != self.version:
-                raise ValueError(f"Found updated version {latest_version} (!= {self.version}).")
-
         if self.gh_repo:
             self.assets_url = f"https://github.com/{self.gh_repo}/releases/download"
 
@@ -39,7 +31,7 @@ class Binary:
             raise ValueError("assets_url cannot be none.")
 
     @property
-    def latest(self):
+    def latest(self) -> str | None:
         if self.gh_repo:
             return self.gh_latest_release()
 
@@ -58,7 +50,7 @@ class Binary:
 
     def gh_latest_release(self) -> str:
         if not self.gh_repo:
-            raise ValueError("gh_repo must be set to use _github_release")
+            raise ValueError("gh_repo must be set.")
 
         response = requests.get(f"https://api.github.com/repos/{self.gh_repo}/releases/latest", timeout=10)
         response.raise_for_status()
