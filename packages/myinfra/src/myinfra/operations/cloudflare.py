@@ -6,11 +6,6 @@ from pyinfra import host
 
 from ..facts import cloudflare as cf_facts
 
-client = Cloudflare(
-    api_email=host.data.cloudflare_email,
-    api_key=host.data.cloudflare_api_key,
-)
-
 
 @operation()
 def dns(
@@ -31,6 +26,11 @@ def dns(
         type=type,
         record=record,
         value=value,
+    )
+
+    client = Cloudflare(
+        api_email=host.data.cloudflare_email,
+        api_key=host.data.cloudflare_api_key,
     )
 
     if dns_record_id:

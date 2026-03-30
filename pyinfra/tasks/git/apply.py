@@ -7,7 +7,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew
+from pyinfra.operations import brew, python
 
 from pyinfra import host
 
@@ -48,6 +48,13 @@ def apply_macos(teardown=False):
 @deploy("difft")
 def apply_difft(arch, teardown=False):
     binary = Difftastic(arch)
+
+    python.call(
+        name="Check Latest",
+        function=binary.is_latest,
+        _run_once=True,
+    )
+
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
         src=binary.src,

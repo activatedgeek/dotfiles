@@ -103,7 +103,8 @@ function slog {
 
 alias scancel='scancel -u "${USER}"'
 alias skill='scancel -s SIGKILL'
-alias sq='squeue --me -o "%.10A | %.12F | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
+# alias sq='squeue --me -o "%.10A | %.12F | %.10P | %.4t | %.9L | %.5D %.10m %.4C %.18b | %j %R"'
+alias sq='squeue --me -o "%.10A | %.20i | %.10P | %.4t | %.9L | %j %R"'
 
 function sjob {
     sacct --json -P -o state -j ${1} | \

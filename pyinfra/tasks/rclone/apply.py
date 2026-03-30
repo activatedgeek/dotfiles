@@ -7,7 +7,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files
+from pyinfra.operations import brew, files, python
 
 from pyinfra import host, inventory
 
@@ -43,6 +43,13 @@ def apply_macos(teardown=False):
 @deploy("Linux")
 def apply_linux(arch, teardown=False):
     binary = Rclone(arch)
+
+    python.call(
+        name="Check Latest",
+        function=binary.is_latest,
+        _run_once=True,
+    )
+
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
         src=binary.src,

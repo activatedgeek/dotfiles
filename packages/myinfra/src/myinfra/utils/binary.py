@@ -3,6 +3,8 @@ from typing import ClassVar, Literal
 
 import requests
 
+from pyinfra import host, logger
+
 Arch = Literal["amd64", "arm64"]
 
 
@@ -34,6 +36,17 @@ class Binary:
     def latest(self) -> str | None:
         if self.gh_repo:
             return self.gh_latest_release()
+
+    def is_latest(self):
+        latest_version = host.data.binary_versions.get(self.__class__.__name__)
+
+        if latest_version is not None:
+            if self.version != latest_version:
+                logger.warning(
+                    f"Update available for {self.__class__.__name__.lower()}: {latest_version} (!= {latest_version})."
+                )
+
+            return self.version == latest_version
 
     @property
     def asset_map(self) -> dict[Arch, dict[Literal["name", "sha256sum"], str]]:

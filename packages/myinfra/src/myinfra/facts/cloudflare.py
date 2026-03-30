@@ -4,14 +4,14 @@ from pyinfra.api.facts import FactBase
 
 from pyinfra import host
 
-client = Cloudflare(
-    api_email=host.data.cloudflare_email,
-    api_key=host.data.cloudflare_api_key,
-)
-
 
 class Zone(FactBase):
     def command(self, zone):
+        client = Cloudflare(
+            api_email=host.data.cloudflare_email,
+            api_key=host.data.cloudflare_api_key,
+        )
+
         result = client.zones.list(name=zone).result
         if len(result) != 1:
             raise FactError(f"Zone '{zone}' not found")
@@ -24,6 +24,11 @@ class Zone(FactBase):
 
 class DNSRecord(FactBase):
     def command(self, zone_id, type, record, value, zone_name=None):
+        client = Cloudflare(
+            api_email=host.data.cloudflare_email,
+            api_key=host.data.cloudflare_api_key,
+        )
+
         results = client.dns.records.list(
             match="any",
             type=type,

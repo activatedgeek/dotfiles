@@ -149,6 +149,8 @@ all = (
             "slack",
             "tailscale",
         },
+        ## Latest binary versions
+        binary_versions=config.BINARY_VERSIONS,
         ## Secrets.
         azure_openai_api_key=config.SECRETS.get("AZURE_OPENAI_API_KEY"),
         brave_api_key=config.SECRETS.get("BRAVE_API_KEY"),
