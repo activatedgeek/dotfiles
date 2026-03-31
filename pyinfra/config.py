@@ -18,7 +18,7 @@ def get_secrets():
     except IndexError as e:
         raise exceptions.DeployError("Missing inventory file") from e
 
-    cache = Cache(config.CACHE_PATH)
+    cache = Cache(config.CACHE_HOME)
 
     secrets = cache.get(f"secrets/bw/{inventory_name}")
     if secrets is None:
@@ -28,7 +28,7 @@ def get_secrets():
         if bws_access_token is None or bws_org_id is None:
             raise exceptions.DeployError("Missing Bitwarden environment variables BWS_ACCESS_TOKEN / BWS_ORG_ID")
 
-        logger.info("Loading inventory variables from Bitwarden Secrets...")
+        logger.info("Loading Bitwarden Secrets...")
 
         client = BitwardenClient(
             client_settings_from_dict({"deviceType": DeviceType.SDK, "userAgent": "Python dotfiles"})
@@ -40,35 +40,44 @@ def get_secrets():
             secret = client.secrets().get(secret.id).data
             secrets[secret.key] = secret.value
 
-        cache.set(f"secrets/bw/{inventory_name}", secrets, expire=7 * 24 * 60 * 60)
+        cache.set(f"secrets/bw/{inventory_name}", secrets, expire=config.CACHE_TTL)
 
     return secrets
 
 
 def get_latest_binary_versions():
-    cache = Cache(config.CACHE_PATH)
+    binary_cls_map = {}
+    for task in set(sorted([d.stem for d in (Path(__file__).parent / "tasks").iterdir() if d.is_dir()])):
+        task, _ = load_task_module(task, f"tasks/{task}/apply.py")
+        for _, cls in inspect.getmembers(task, inspect.isclass):
+            if cls is Binary or not issubclass(cls, Binary):
+                continue
+
+            binary_cls_map[cls.__name__] = cls
+
+    cache = Cache(config.CACHE_HOME)
 
     latest_versions = cache.get("versions/latest")
     if latest_versions is None:
-        latest_versions = {}
+        logger.info("Fetching latest binary versions...")
 
-        for task in set(sorted([d.stem for d in (Path(__file__).parent / "tasks").iterdir() if d.is_dir()])):
-            task, _ = load_task_module(task, f"tasks/{task}/apply.py")
-            for _, cls in inspect.getmembers(task, inspect.isclass):
-                if cls is Binary or not issubclass(cls, Binary):
-                    continue
+        latest_versions = {k: cls("amd64").latest for k, cls in binary_cls_map.items()}
+        cache.set("versions/latest", latest_versions, expire=config.CACHE_TTL)
 
-                latest_versions[cls.__name__] = cls
+    for k, cls in binary_cls_map.items():
+        logger.debug(f"Binary {cls.__name__.lower()}: {latest_versions[k]} (Current: {cls.version})")
 
-        logger.info(f"Fetching latest versions for: ({', '.join(sorted(latest_versions.keys()))})...")
-        latest_versions = {k: cls("amd64").latest for k, cls in latest_versions.items()}
-
-        cache.set("versions/latest", latest_versions, expire=7 * 24 * 60 * 60)
+        if latest_versions[k] is not None:
+            if cls.version != latest_versions[k]:
+                logger.warning(
+                    f"Update available for {cls.__name__.lower()}: {latest_versions[k]} (!= {cls.version})."
+                )
 
     return latest_versions
 
 
-config.CACHE_PATH = Path(__file__).parent / ".pyinfra_cache"
+config.CACHE_HOME = Path(os.getenv("PYINFRA_CACHE_HOME", Path(__file__).parent / ".pyinfra_cache"))
+config.CACHE_TTL = int(os.getenv("PYINFRA_CACHE_TTL", 7 * 24 * 60 * 60))
 config.FAIL_PERCENT = 0
 config.SHELL = "bash"
 config.SECRETS = get_secrets()

@@ -5,7 +5,7 @@ from myinfra.facts import server as myserver_facts
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files, python
+from pyinfra.operations import brew, files
 
 from pyinfra import host
 
@@ -13,18 +13,18 @@ from pyinfra import host
 @dataclass
 class Mise(Binary):
     gh_repo: ClassVar[str] = "jdx/mise"
-    version: ClassVar[str] = "v2026.3.5"
+    version: ClassVar[str] = "v2026.3.18"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": f"mise-{self.version}-linux-x64",
-                "sha256sum": "18c0934d8ffcb84712b4cf52becfd67f6b1241fab110ad6dde34f51dfb206f8f",
+                "sha256sum": "ef451d0af42443e20fed5d1952a33e9deb6cda8dc31cdc7d77d86fceddf91529",
             },
             "arm64": {
                 "name": f"mise-{self.version}-linux-arm64",
-                "sha256sum": "070eb5a993280d6c67a96ba061bc0244385ca9e79c0c7db10c1865f14a474d6e",
+                "sha256sum": "7c50f4fa3bf01234c801c77b99ef57f4f3d9add32f298ce40c95b31bdace2b3b",
             },
         }
 
@@ -41,12 +41,6 @@ def apply_linux(arch, teardown=False):
         )
     else:
         binary = Mise(arch)
-
-        python.call(
-            name="Check Latest",
-            function=binary.is_latest,
-            _run_once=True,
-        )
 
         files.download(
             name="mise",

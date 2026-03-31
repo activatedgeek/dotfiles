@@ -6,7 +6,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files, python
+from pyinfra.operations import brew, files
 
 from pyinfra import host
 
@@ -14,18 +14,18 @@ from pyinfra import host
 @dataclass
 class OpenCode(Binary):
     gh_repo: ClassVar[str] = "anomalyco/opencode"
-    version: ClassVar[str] = "v1.2.24"
+    version: ClassVar[str] = "v1.3.10"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "opencode-linux-x64.tar.gz",
-                "sha256sum": "364cb57af526e1afdbab1e9863d019395c37399e205a487475a44bf466bec67e",
+                "sha256sum": "df0dfb4d696b414fc55183d194d07bb86e0145c9ac5862a17ba81703d1b444a1",
             },
             "arm64": {
                 "name": "opencode-linux-arm64.tar.gz",
-                "sha256sum": "ad7b4780671ea7ca9383b29892e12c417f9314960a657df8eb29b91c509726cd",
+                "sha256sum": "a3b935cba3e24eb930cd060bdc4a3bb70e699e7412ff60d61fef5cdbef5ea9a7",
             },
         }
 
@@ -42,12 +42,6 @@ def apply_linux(arch, teardown=False):
         )
     else:
         binary = OpenCode(arch)
-
-        python.call(
-            name="Check Latest",
-            function=binary.is_latest,
-            _run_once=True,
-        )
 
         myfiles.download(
             name="Install",

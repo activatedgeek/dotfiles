@@ -7,7 +7,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files, python
+from pyinfra.operations import brew, files
 
 from pyinfra import host, inventory
 
@@ -15,18 +15,18 @@ from pyinfra import host, inventory
 @dataclass
 class Rclone(Binary):
     gh_repo: ClassVar[str] = "rclone/rclone"
-    version: ClassVar[str] = "v1.73.1"
+    version: ClassVar[str] = "v1.73.3"
 
     @property
     def asset_map(self) -> dict[str, dict[str, str]]:
         return {
             "amd64": {
                 "name": f"rclone-{self.version}-linux-amd64.zip",
-                "sha256sum": "10ffca7640f0483beba9a9c9f4cdb6a9ca30a13c4ab31f2329d09a832802694d",
+                "sha256sum": "41bd63149d3bd281f9d8fb02fd8c0406234634a59cd0f591b86ad3f1e2f6abb7",
             },
             "arm64": {
                 "name": f"rclone-{self.version}-linux-arm64.zip",
-                "sha256sum": "ea441b0133a824920af5d061b4fb66a49799fc450d6e3658f8f21e22fbe2aec0",
+                "sha256sum": "d0e0c8eb62ca0bbd74f3e61e274a3c27103ca2c31e59e6b468018c87d364c0d9",
             },
         }
 
@@ -44,16 +44,10 @@ def apply_macos(teardown=False):
 def apply_linux(arch, teardown=False):
     binary = Rclone(arch)
 
-    python.call(
-        name="Check Latest",
-        function=binary.is_latest,
-        _run_once=True,
-    )
-
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
         src=binary.src,
-        src_dir=f"rclone-v{binary.version}-linux-{Path(binary.src).stem.split('-')[-1]}",
+        src_dir=f"rclone-{binary.version}-linux-{Path(binary.src).stem.split('-')[-1]}",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/rclone",
         sha256sum=binary.sha256sum,
         present=not teardown,

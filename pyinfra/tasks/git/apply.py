@@ -7,7 +7,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, python
+from pyinfra.operations import brew
 
 from pyinfra import host
 
@@ -15,19 +15,19 @@ from pyinfra import host
 @dataclass
 class Difftastic(Binary):
     gh_repo: ClassVar[str] = "Wilfred/difftastic"
-    version: ClassVar[str] = "0.67.0"
+    version: ClassVar[str] = "0.68.0"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "difft-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "865ef78b86eac72aa6440e380661b442244b58e02e333ad82df8e21a254d64a9",
+                "sha256sum": "e2113dfc71cb67c99b567a0c66ba67cfcc46261a762e5909539e0c5d21411b24",
             },
             ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
             "arm64": {
                 "name": "difft-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "c824e84555cd0eaace328ffe4c934053de4fa9763213fb8e47791fdf81d1ada5",
+                "sha256sum": "65c8dc5cf294f74d7292dc2e7b247ea3864bfcdef85e0260f2d06cba90da2a16",
             },
         }
 
@@ -48,12 +48,6 @@ def apply_macos(teardown=False):
 @deploy("difft")
 def apply_difft(arch, teardown=False):
     binary = Difftastic(arch)
-
-    python.call(
-        name="Check Latest",
-        function=binary.is_latest,
-        _run_once=True,
-    )
 
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",

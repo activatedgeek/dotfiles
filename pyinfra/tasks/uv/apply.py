@@ -7,7 +7,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files, python
+from pyinfra.operations import brew, files
 
 from pyinfra import host
 
@@ -15,18 +15,18 @@ from pyinfra import host
 @dataclass
 class Uv(Binary):
     gh_repo: ClassVar[str] = "astral-sh/uv"
-    version: ClassVar[str] = "0.10.9"
+    version: ClassVar[str] = "0.11.2"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "8f8aa2a27b00bf3b35880b2e943bb8fd58714abe0981f8467b90e75faab41131",
+                "sha256sum": "5c339318bf969cb34848d7616a0c9e6ab27478a8b5cb46dd3ae94d182ea5aa8d",
             },
             "arm64": {
                 "name": "uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "2452f3680578ab0e1bee5e035dcac2486445770ac4ccc98cefc743c5740c352f",
+                "sha256sum": "6df7e4d21f3bba10f46a202d0bd04e2c59408b0a7c8e71c352384f28a4f050f2",
             },
         }
 
@@ -38,11 +38,11 @@ class Uvx(Uv):
         return {
             "amd64": {
                 "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "f970b2576b7ae459afe8be1826f9812ddd5fa431a9ddfea155fae52e7443ac74",
+                "sha256sum": "27383ce65cdcc5cf4957ccbc191a2f9b045aeb8ff767940039b86da8b08844ed",
             },
             "arm64": {
                 "name": "uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "6fa59bc46bffff8ea41dfb21ea9c82d38928c539b2a5688cbdb29cd518e1c09b",
+                "sha256sum": "6750fd480ecae148d56c7879d8323432f13a218ea3829279d72fc8d62fc84206",
             },
         }
 
@@ -64,12 +64,6 @@ def apply_linux(arch, teardown=False):
         )
     else:
         binary = Uv(arch)
-
-        python.call(
-            name="Check Latest",
-            function=binary.is_latest,
-            _run_once=True,
-        )
 
         myfiles.download(
             name=f"{'Uni' if teardown else 'I'}nstall uv",
