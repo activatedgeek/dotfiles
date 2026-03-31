@@ -1,4 +1,14 @@
 {
+  "agent_servers": {
+    "claude-acp": {
+      "favorite_config_option_values": {
+        "model": [
+          "opus[1m]"
+        ]
+      },
+      "type": "registry"
+    }
+  },
   "agent": {
     "default_profile": "write",
     "default_model": {

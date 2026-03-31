@@ -33,6 +33,18 @@ desktop = (
 slurm = (
     [
         (
+            "@ssh/aws-dfw",
+            dict(
+                ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_partition="batch",
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+            ),
+        ),
+        (
             "@ssh/dfw",
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
@@ -80,20 +92,6 @@ slurm = (
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
-            ),
-        ),
-        (
-            "@ssh/lax",
-            dict(
-                ssh_port=30022,
-                ssh_hostname="lbd-lax-cs-001-login-01.nvidia.com",
-                store_home="/scratch/fsw/portfolios/llmservice/projects/llmservice_nemo_robustness/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
-                skip_host=True,
             ),
         ),
         (
@@ -146,7 +144,6 @@ all = (
             "mega",
             "netnewswire",
             "obsidian",
-            "opencode",
             "slack",
             "tailscale",
         },

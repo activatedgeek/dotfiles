@@ -46,7 +46,7 @@ def apply_linux(arch, teardown=False):
     myfiles.download(
         name=f"{'Uni' if teardown else 'I'}nstall",
         src=binary.src,
-        src_dir=f"micro-{binary.version}",
+        src_dir=f"micro-{binary.version[1:]}",
         dest=f"{host.get_fact(server_facts.Home)}/.local/bin/micro",
         sha256sum=binary.sha256sum,
         mode=755,

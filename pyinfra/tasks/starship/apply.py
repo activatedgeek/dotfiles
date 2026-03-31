@@ -20,8 +20,8 @@ class Starship(Binary):
     def asset_map(self):
         return {
             "amd64": {
-                "name": "starship-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "2a24f4deaf7a2b27e441cafe259251742b5e4bdc3011e3fc654dc657d7c45c33",
+                "name": "starship-x86_64-unknown-linux-musl.tar.gz",
+                "sha256sum": "e41335e5a6ae8939139cf8fb02cb50eae4c500ef25d45da090bb7f26e8e2ecdc",
             },
             "arm64": {
                 "name": "starship-aarch64-unknown-linux-musl.tar.gz",
