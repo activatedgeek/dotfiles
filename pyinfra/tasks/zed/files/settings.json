@@ -1,6 +1,42 @@
 {
-  "agent_servers": {
-
+  "agent": {
+    "default_profile": "write",
+    "default_model": {
+      "provider": "ollama",
+      "model": "minimax-m2.7",
+      "enable_thinking": true
+    },
+    "tool_permissions": {
+      "default": "confirm",
+      "tools": {
+        "diagnostics": {
+          "default": "allow"
+        },
+        "fetch": {
+          "default": "allow"
+        },
+        "find_path": {
+          "default": "allow",
+        },
+        "grep": {
+          "default": "allow",
+        },
+        "list_directory": {
+          "default": "allow",
+        },
+        "now": {
+          "default": "allow",
+        },
+        "read_file": {
+          "default": "allow",
+        }
+      }
+    }
+  },
+  "language_models": {
+    "ollama": {
+      "api_url": "https://ollama.com"
+    }
   },
   "base_keymap": "VSCode",
   "buffer_font_fallbacks": [
