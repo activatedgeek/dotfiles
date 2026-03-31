@@ -23,7 +23,7 @@ desktop = (
             dict(
                 ssh_hostname="aiapps-110221.dyn.nvidia.com",
                 store_home="/mnt/ssd/home/${USER}",
-                skip=True,
+                skip_host=True,
             ),
         ),
     ],
@@ -93,7 +93,7 @@ slurm = (
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
-                skip=True,
+                skip_host=True,
             ),
         ),
         (
@@ -106,7 +106,7 @@ slurm = (
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
-                skip=True,
+                skip_host=True,
             ),
         ),
         (
@@ -146,6 +146,7 @@ all = (
             "mega",
             "netnewswire",
             "obsidian",
+            "opencode",
             "slack",
             "tailscale",
         },
@@ -164,6 +165,7 @@ all = (
         hf_token=config.SECRETS.get("HF_TOKEN"),
         ngc_api_key=config.SECRETS.get("NGC_API_KEY"),
         nvinf_api_key=config.SECRETS.get("NVINF_API_KEY"),
+        ollama_api_key=config.SECRETS.get("OLLAMA_API_KEY"),
         openai_api_key=config.SECRETS.get("OPENAI_API_KEY"),
         tavily_api_key=config.SECRETS.get("TAVILY_API_KEY"),
         wandb_api_key=config.SECRETS.get("WANDB_API_KEY"),

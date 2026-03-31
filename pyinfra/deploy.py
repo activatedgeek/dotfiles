@@ -6,7 +6,7 @@ from pyinfra import host, logger
 
 
 def main():
-    if host.data.get("skip", False):
+    if host.data.get("skip_host", False):
         logger.warning(f"Skipping {host.name}.")
         return
 

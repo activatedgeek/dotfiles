@@ -16,11 +16,12 @@ def unzip(path):
 
 
 @operation()
-def untar(path, flags=None):
+def tar(path, flags=None):
     if host.get_fact(server_facts.Which, command="tar"):
         yield StringCommand(
             "tar",
-            f"-x{flags or ''}f",
+            *(flags or tuple()),
+            "-xf",
             QuoteString(path),
             "-C",
             QuoteString(Path(path).parent),

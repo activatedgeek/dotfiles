@@ -49,6 +49,7 @@ def apply_nemo_skills(teardown=False):
             "disable_cpu_partition": ihost.data.get("nemo_skills_disable_cpu_partition"),
         }
         for ihost in inventory.get_group("slurm")
+        if not ihost.data.get("skip_host", False)
     }
 
     for cluster_name, values in slurm_cluster_hosts.items():

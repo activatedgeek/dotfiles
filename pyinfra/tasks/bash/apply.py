@@ -113,6 +113,7 @@ def apply_config(teardown=False):
         hf_token=host.data.get("hf_token"),
         ngc_api_key=host.data.get("ngc_api_key"),
         nvinf_api_key=host.data.get("nvinf_api_key"),
+        ollama_api_key=host.data.get("ollama_api_key"),
         openai_api_key=host.data.get("openai_api_key"),
         tavily_api_key=host.data.get("tavily_api_key"),
         wandb_api_key=host.data.get("wandb_api_key"),

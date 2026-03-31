@@ -95,9 +95,11 @@ def download(src, dest, src_dir=None, sha256sum=None, present=True, mode=None):
             )
 
             if src.endswith(".tar.gz"):
-                yield from archive.untar._inner(path=str(temp_dir / Path(src).name))
+                yield from archive.tar._inner(path=str(temp_dir / Path(src).name))
             elif src.endswith(".tar.bz2"):
-                yield from archive.untar._inner(path=str(temp_dir / Path(src).name), flags="j")
+                yield from archive.tar._inner(path=str(temp_dir / Path(src).name), flags=("-j",))
+            elif src.endswith(".tar.zst"):
+                yield from archive.tar._inner(path=str(temp_dir / Path(src).name), flags=("--zstd",))
             elif src.endswith(".zip"):
                 yield from archive.unzip._inner(path=str(temp_dir / Path(src).name))
             else:
