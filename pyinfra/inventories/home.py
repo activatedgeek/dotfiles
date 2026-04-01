@@ -12,6 +12,7 @@ mac = (
                 goatcounter_site=config.SECRETS.get("GOATCOUNTER_SITE"),
                 hcloud_token=config.SECRETS.get("HCLOUD_TOKEN"),
                 mapbox_access_token=config.SECRETS.get("MAPBOX_ACCESS_TOKEN"),
+                ollama_api_key=config.SECRETS.get("OLLAMA_API_KEY"),
                 vault_pass=config.SECRETS["VAULT_PASS"],
                 wandb_api_key=config.SECRETS.get("WANDB_API_KEY"),
                 wandb_username=config.SECRETS.get("WANDB_USERNAME"),

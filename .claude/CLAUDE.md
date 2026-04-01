@@ -73,7 +73,7 @@ Hosts can set `skip_host=True` to be excluded from deploys by default.
 
 ### Secret & Cache Management (`pyinfra/config.py`)
 
-Secrets are fetched from Bitwarden SDK using `BWS_ACCESS_TOKEN` + `BWS_ORG_ID` env vars (or `pyinfra/.env`), keyed by inventory name, and cached in `.pyinfra_cache/` for 7 days. Binary latest-version checks (GitHub API) are also cached here. Pass `--refresh` to wipe the cache.
+Secrets are fetched from Bitwarden SDK using `BWS_ACCESS_TOKEN` in `pyinfra/.env`, and cached in `.pyinfra_cache/` for 1 day. Binary latest-version checks (GitHub API) are also cached here. Pass `--refresh` to wipe the cache.
 
 ### Binary Version Management
 

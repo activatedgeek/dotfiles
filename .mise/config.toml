@@ -2,5 +2,8 @@
 _.python.venv = { path = ".venv" }
 
 [tools]
-hadolint = "latest"
-prek = "latest"
+bitwarden-secrets-manager = { version = "latest", version_prefix = "bws-v" }
+hadolint = { version = "latest" }
+jq = { version = "latest" }
+prek = { version = "latest" }
+uv = { version = "latest" }

@@ -11,7 +11,7 @@ Install [`homebrew`](https://brew.sh),
 
 and install [`uv`](https://docs.astral.sh/uv/) for Python environments,
 ```shell
-brew install uv mise gnupg
+brew install mise gpg2
 ```
 
 Install using,
@@ -22,11 +22,9 @@ mise setup
 ### Environment Variables
 
 Setup the following environment variables (optionally in a `pyinfra/.env` file).
-- `BWS_ORG_ID`: Bitwarden Organization ID to get secrets from. See [docs](https://bitwarden.com/help/secrets-manager-cli/#authentication).
-- `BWS_ACCESS_TOKEN`: Bitwarden Secrets token to get secrets. See [docs](https://github.com/bitwarden/sdk/tree/main/languages/python).
+- `BWS_ACCESS_TOKEN`: Bitwarden Secrets token. See [docs](https://bitwarden.com/help/secrets-manager-cli/#authentication).
 
 ```shell
-BWS_ORG_ID="<id>"
 BWS_ACCESS_TOKEN="<token>"
 ```
 

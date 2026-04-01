@@ -77,7 +77,7 @@ def get_latest_binary_versions():
 
 
 config.CACHE_HOME = Path(os.getenv("PYINFRA_CACHE_HOME", Path(__file__).parent / ".pyinfra_cache"))
-config.CACHE_TTL = int(os.getenv("PYINFRA_CACHE_TTL", 7 * 24 * 60 * 60))
+config.CACHE_TTL = int(os.getenv("PYINFRA_CACHE_TTL", 24 * 60 * 60))
 config.FAIL_PERCENT = 0
 config.SHELL = "bash"
 config.SECRETS = get_secrets()
