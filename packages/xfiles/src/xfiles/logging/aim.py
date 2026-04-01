@@ -38,15 +38,16 @@ class AimTracker:
         if run_hash is None and name:
             self.name = name
 
-        if tags:
-            self.tags = tags
+        tags = tags.split(",") if isinstance(tags, str) else (tags or [])
+        tags += os.getenv("AIM_TAGS", "").split(",")
+        self.tags = tags
 
     @property
-    def id(self):
+    def id(self) -> str:
         return self.run.hash
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self.run.name
 
     @name.setter
@@ -54,16 +55,15 @@ class AimTracker:
         self.run.name = name
 
     @property
-    def tags(self):
+    def tags(self) -> list[str]:
         return self.run.tags
 
     @tags.setter
     def tags(self, tags: list[str]):
-        for t in tags:
-            self.run.add_tag(t)
+        [self.run.add_tag(t) for t in set(_t.strip() for _t in tags)]
 
     @property
-    def config(self):
+    def config(self) -> dict:
         return self.run.get(self.config_key, {})
 
     @config.setter
@@ -71,7 +71,7 @@ class AimTracker:
         self.run[self.config_key] = {**self.config, **new_config}
 
     @property
-    def rc(self):
+    def rc(self) -> dict:
         return self.run.get(self.runtime_config_key, {})
 
     @rc.setter

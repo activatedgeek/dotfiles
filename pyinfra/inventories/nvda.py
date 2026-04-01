@@ -33,7 +33,7 @@ desktop = (
 slurm = (
     [
         (
-            "@ssh/aws-dfw",
+            "@ssh/adfw",
             dict(
                 ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
