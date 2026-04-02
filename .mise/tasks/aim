@@ -8,7 +8,6 @@
 #USAGE }
 #USAGE flag "--repo <repo>" env="AIM_REPO" help="Path to repository"
 #USAGE flag "-p --port <port>" help="Port." default="43800"
-#USAGE flag "--prune" help="Prune before sync."
 #USAGE flag "--reindex" help="Reindex before sync."
 #USAGE flag "--remote <remote>" help="Name of rclone remote for sync." default="aim"
 
@@ -21,12 +20,8 @@ if [[ "${usage_command}" = "up" ]]; then
 
 elif [[ "${usage_command}" = "sync" ]]; then
     # shellcheck disable=SC2154
-    if [[ "${usage_prune}" == "true" ]]; then
-        aim storage --repo "${usage_repo}" prune
-    fi
-
-    # shellcheck disable=SC2154
     if [[ "${usage_reindex}" == "true" ]]; then
+        aim storage --repo "${usage_repo}" prune
         aim storage --repo "${usage_repo}" reindex -y
     fi
 

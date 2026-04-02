@@ -72,7 +72,7 @@
   "icon_theme": {
     "mode": "system",
     "light": "Material Icon Theme",
-    "dark": "Zed (Default)"
+    "dark": "Material Icon Theme"
   },
   "line_numbers": true,
   "minimap": {
@@ -82,6 +82,6 @@
     "diagnostics": true,
     "metrics": false
   },
-  "theme": "Gruvbox Dark Soft",
+  "theme": "Catppuccin Frappé",
   "ui_font_size": 16
 }

@@ -60,7 +60,7 @@ class AimTracker:
 
     @tags.setter
     def tags(self, tags: list[str]):
-        [self.run.add_tag(t) for t in set(_t.strip() for _t in tags)]
+        [self.run.add_tag(t) for t in set(_t.strip() for _t in tags) if t]
 
     @property
     def config(self) -> dict:
