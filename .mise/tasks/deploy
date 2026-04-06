@@ -22,7 +22,7 @@ fi
 
 if [[ -n "${BWS_ACCESS_TOKEN}" ]]; then
     # shellcheck disable=SC2155
-    export BWS_ORG_ID=$(bws project list | jq -r '.[0].organizationId')
+    export BWS_ORG_ID=$(bws project list | yq -p json -r '.[0].organizationId')
 else
     echo "[ERROR] Missing BWS_ACCESS_TOKEN."
     exit 1

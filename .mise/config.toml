@@ -4,6 +4,6 @@ _.python.venv = { path = ".venv" }
 [tools]
 bitwarden-secrets-manager = { version = "latest", version_prefix = "bws-v" }
 hadolint = { version = "latest" }
-jq = { version = "latest" }
+yq = { version = "latest" }
 prek = { version = "latest" }
 uv = { version = "latest" }

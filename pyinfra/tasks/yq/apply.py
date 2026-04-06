@@ -60,7 +60,7 @@ def apply_linux(arch, teardown=False):
         )
 
 
-@deploy("Jq")
+@deploy("Yq")
 def apply():
     teardown = host.data.get("teardown", False)
     kernel = host.get_fact(server_facts.Kernel)
