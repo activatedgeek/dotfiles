@@ -72,7 +72,7 @@ def apply_nemo_skills(teardown=False):
             present=not teardown,
             ## Jinja2 Variables.
             **values,
-            vllm_version="vllm-openai-nightly",
+            vllm_version="nightly",
         )
 
 

@@ -8,7 +8,7 @@
 #USAGE }
 #USAGE flag "--repo <repo>" env="AIM_REPO" help="Path to repository"
 #USAGE flag "-p --port <port>" help="Port." default="43800"
-#USAGE flag "--reindex" help="Reindex before sync."
+#USAGE flag "--reindex" default="true" negate="--no-reindex" help="Reindex before sync."
 #USAGE flag "--remote <remote>" help="Name of rclone remote for sync." default="aim"
 
 usage_repo="${usage_repo:-$(pwd)}"

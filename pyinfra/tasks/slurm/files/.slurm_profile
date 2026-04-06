@@ -45,6 +45,7 @@ function __srun {
     srun_cmd=(
         srun
         --pty
+        --no-container-mount-home
         --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"}
         --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}
         --partition=${SBATCH_PARTITION}
