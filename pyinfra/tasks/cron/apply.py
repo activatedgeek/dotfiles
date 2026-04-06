@@ -6,18 +6,17 @@ from pyinfra import host
 
 @deploy("Home")
 def apply_config_home(teardown=False):
-    if host.name == "@local":
-        ## Remove logs every hour.
-        server.crontab(
-            name="Cron Logs",
-            command="rm -rf /tmp/*.log",
-            minute="0",
-            hour="12",
-            month="*",
-            day_of_week="*",
-            day_of_month="*",
-            present=not teardown,
-        )
+    ## Remove logs every hour.
+    server.crontab(
+        name="Cron Logs",
+        command="rm -rf /tmp/*.log",
+        minute="0",
+        hour="12",
+        month="*",
+        day_of_week="*",
+        day_of_month="*",
+        present=not teardown,
+    )
 
 
 @deploy("Config")

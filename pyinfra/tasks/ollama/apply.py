@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar
 
+from myinfra.facts import mac as mac_facts
 from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
@@ -62,3 +63,7 @@ def apply():
     # elif kernel == "Linux":
     #     arch = host.get_fact(myserver_facts.DpkgArch)
     #     apply_linux(arch, teardown=teardown)
+
+
+def pre_check():
+    return not host.get_fact(mac_facts.MacOSVM)

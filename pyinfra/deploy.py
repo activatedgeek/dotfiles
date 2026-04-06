@@ -11,12 +11,39 @@ def main():
         return
 
     all_tasks = set(sorted([d.stem for d in (Path(__file__).parent / "tasks").iterdir() if d.is_dir()]))
-    all_tasks -= host.data.get("skip_tasks", set())
+
+    if host.data.get("skip_tasks"):
+        skip_tasks = set(
+            [
+                t.strip()
+                for t in (
+                    host.data.skip_tasks.split(",") if isinstance(host.data.skip_tasks, str) else host.data.skip_tasks
+                )
+                if t.strip()
+            ]
+        )
+        all_tasks -= skip_tasks
+
     if host.data.get("apply_tasks"):
-        all_tasks &= set(host.data.get("apply_tasks").split(","))
+        apply_tasks = set(
+            [
+                t.strip()
+                for t in (
+                    host.data.apply_tasks.split(",")
+                    if isinstance(host.data.apply_tasks, str)
+                    else host.data.apply_tasks
+                )
+                if t.strip()
+            ]
+        )
+        all_tasks &= apply_tasks
 
     for task in all_tasks:
         task, _ = load_task_module(task, f"tasks/{task}/apply.py")
+
+        if callable(getattr(task, "pre_check", None)) and not task.pre_check():
+            continue
+
         if callable(getattr(task, "apply", None)):
             task.apply()
 

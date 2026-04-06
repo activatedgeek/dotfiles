@@ -27,10 +27,6 @@ all = (
     [h for h, _ in mac[0]],
     dict(
         email=config.SECRETS["EMAIL"],
-        skip_tasks={
-            "enroot",
-            "nemo",
-        },
         ## Latest binary versions
         binary_versions=config.BINARY_VERSIONS,
     ),

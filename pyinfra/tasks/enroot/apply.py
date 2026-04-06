@@ -105,3 +105,7 @@ def apply():
     enroot_exists = host.get_fact(enroot_facts.EnrootBinary)
     if kernel == "Linux" and enroot_exists:
         apply_config(teardown=teardown)
+
+
+def pre_check():
+    return "nvda" in host.groups

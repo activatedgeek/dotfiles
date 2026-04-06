@@ -137,9 +137,6 @@ def apply_backup(zone_id, teardown=False):
 
 @deploy("Cloudflare")
 def apply(teardown=False):
-    if not all([host.data.get(k, "") for k in ["cloudflare_email", "cloudflare_api_key"]]):
-        return
-
     zone_id = host.get_fact(cf_facts.Zone, "sanyamkapoor.com")
 
     if host.data.get("apply_dns", False):
@@ -154,3 +151,7 @@ def apply(teardown=False):
         apply_txt_records(zone_id)
 
     apply_backup(zone_id, teardown=teardown)
+
+
+def pre_check():
+    return "home" in host.groups and all([host.data.get(k, "") for k in ["cloudflare_email", "cloudflare_api_key"]])

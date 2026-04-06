@@ -1,5 +1,6 @@
 from myinfra.facts import brew as brew_facts
 from myinfra.facts import docker as docker_facts
+from myinfra.facts import mac as mac_facts
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import brew, files, server
@@ -77,3 +78,7 @@ def apply():
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
         apply_config(teardown=teardown)
+
+
+def pre_check():
+    return not host.get_fact(mac_facts.MacOSVM)

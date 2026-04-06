@@ -1,18 +1,17 @@
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import files
+from pyinfra.operations import brew, files
 
 from pyinfra import host
 
 
 @deploy("MacOS")
 def apply_macos(teardown=False):
-    # brew.packages(
-    #     name=f"{'Uni' if teardown else 'I'}nstall",
-    #     packages=["python"],
-    #     present=not teardown,
-    # )
-    ...
+    brew.packages(
+        name=f"{'Uni' if teardown else 'I'}nstall",
+        packages=["python@3.12"],
+        present=not teardown,
+    )
 
 
 @deploy("Config")

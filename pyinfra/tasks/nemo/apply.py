@@ -105,3 +105,7 @@ def apply():
     teardown = host.data.get("teardown", False)
 
     apply_config(teardown=teardown)
+
+
+def pre_check():
+    return "nvda" in host.groups
