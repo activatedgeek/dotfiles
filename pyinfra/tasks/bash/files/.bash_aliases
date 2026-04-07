@@ -14,6 +14,8 @@ alias watch='watch '
 
 alias fastrm='rsync -av --delete $(mktemp -d)/'
 
+alias jq='yq -p json -o json'
+
 ## docker.
 alias cst='colima start'
 alias cstop='colima stop'
