@@ -108,6 +108,18 @@ slurm = (
             ),
         ),
         (
+            "@ssh/nsvg",
+            dict(
+                ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_partition="batch",
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+            ),
+        ),
+        (
             "@ssh/ord",
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
