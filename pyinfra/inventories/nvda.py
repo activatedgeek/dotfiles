@@ -139,12 +139,10 @@ all = (
         ssh_config_file="/dev/null",
         skip_tasks={
             "bitwarden",
-            "brave",
             "cloudflare",
             "mega",
             "netnewswire",
             "obsidian",
-            "slack",
             "tailscale",
         },
         ## Latest binary versions
