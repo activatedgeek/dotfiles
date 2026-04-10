@@ -1,67 +1,14 @@
 ## Slurm.
+export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}
+export SINGULARITY_CACHEDIR=${XDG_CACHE_HOME}
+
+export SLURM_LOGDIR="${STORE_HOME}/.slurm/logs"
+export SBATCH_ERROR="${SLURM_LOGDIR}/%j.log"
+export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.log"
+
 alias si='sinfo -lNe'
 alias sacct='sacct --format=JobName%24,JobIDRaw,State%8,ExitCode%4,Partition,AllocTRES%56,NodeList'
 alias sshare='sshare -u $USER'
-
-__disable_gpus_per_node=("eos")
-
-function __sbatch {
-    if [[ "${__disable_gpus_per_node[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
-        unset GPUS
-    fi
-
-    sbatch_cmd=(
-        sbatch
-        --signal=B:USR1@10
-        --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"}
-        --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}
-        --time=${SBATCH_TIMELIMIT:-"4:00:00"}
-    )
-    if [[ -n "${GPUS}" ]]; then
-        sbatch_cmd+=(--gpus-per-node=${GPUS})
-    fi
-    sbatch_cmd+=("${@}")
-
-    unset SBATCH_JOB_NAME SBATCH_ACCOUNT SBATCH_TIMELIMIT GPUS
-
-    echo "${sbatch_cmd[@]}"
-    "${sbatch_cmd[@]}"
-}
-
-function __srun {
-    if [[ "${__disable_gpus_per_node[*]}" =~ "${INVENTORY_HOSTNAME}" ]]; then
-        unset GPUS
-    fi
-
-    if [[ -z "${SBATCH_PARTITION}" ]]; then
-        SBATCH_PARTITION=cpu_interactive
-        if [[ "${INVENTORY_HOSTNAME}" == "eos" ]]; then
-            SBATCH_PARTITION=interactive
-        elif [[ "${INVENTORY_HOSTNAME}" == "hsg" ]]; then
-            SBATCH_PARTITION=cpu
-        fi
-    fi
-
-    srun_cmd=(
-        srun
-        --pty
-        --no-container-mount-home
-        --job-name=${SBATCH_JOB_NAME:-"${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}-$(basename $(pwd))"}
-        --account=${SBATCH_ACCOUNT:-$SBATCH_DEFAULT_ACCOUNT}
-        --partition=${SBATCH_PARTITION}
-        --time=${SBATCH_TIMELIMIT:-"4:00:00"}
-        --mem=${SBATCH_MEM:-"64G"}
-    )
-    if [[ -n "${GPUS}" ]]; then
-        srun_cmd+=(--gpus-per-node=${GPUS})
-    fi
-    srun_cmd+=("${@}")
-
-    unset SBATCH_JOB_NAME SBATCH_ACCOUNT SBATCH_PARTITION SBATCH_TIMELIMIT SBATCH_MEM GPUS
-
-    echo "${srun_cmd[@]}"
-    "${srun_cmd[@]}"
-}
 
 function slog {
     tail_cmd=(tail -n 500)

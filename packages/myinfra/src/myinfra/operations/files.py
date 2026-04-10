@@ -55,7 +55,7 @@ def template(
     jinja_env_kwargs=None,
     **data,
 ):
-    jinja_env_kwargs = {"trim_blocks": True, **(jinja_env_kwargs or {})}
+    jinja_env_kwargs = {"trim_blocks": True, "lstrip_blocks": True, **(jinja_env_kwargs or {})}
 
     if present:
         yield from files.template._inner(

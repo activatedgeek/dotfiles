@@ -12,12 +12,18 @@ partition: {{ sbatch_partitions.gpu.partition }}
 cpu_partition: {{ sbatch_partitions.cpu.partition }}
 timeouts:
   {{ sbatch_partitions.gpu.partition }}: 04:00:00
-  {{ sbatch_partitions.gpu_interactive.partition }}: 04:00:00
+  {%  if sbatch_partitions.gpu_interactive.partition != sbatch_partitions.gpu.partition %}
+  {{ sbatch_partitions.gpu_interactive.partition }}: 02:00:00
+  {% endif %}
+  {%  if sbatch_partitions.cpu.partition != sbatch_partitions.gpu.partition %}
   {{ sbatch_partitions.cpu.partition }}: 04:00:00
-  {{ sbatch_partitions.cpu_interactive.partition }}: 04:00:00
+  {% endif %}
+  {%  if sbatch_partitions.cpu_interactive.partition not in [sbatch_partitions.cpu.partition, sbatch_partitions.gpu_interactive.partition] %}
+  {{ sbatch_partitions.cpu_interactive.partition }}: 02:00:00
+  {% endif %}
 
-{% if disable_gpus_per_node is defined and disable_gpus_per_node %}
-disable_gpus_per_node: {{ disable_gpus_per_node }}
+{% if "gpus_per_node" in sbatch_params and sbatch_params.gpus_per_node == -1 %}
+disable_gpus_per_node: True
 {% endif %}
 
 containers:

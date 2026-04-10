@@ -36,14 +36,16 @@ def apply_config(teardown=False):
     )
 
     myfiles.template(
-        name=f"{'Remove ' if teardown else ''}Env",
-        src="tasks/slurm/templates/.slurm_env.j2",
-        dest=f"{remote_home}/.local/profile/.slurm_env",
+        name=f"{'Remove ' if teardown else ''}Aliases",
+        src="tasks/slurm/templates/.slurm_aliases.j2",
+        dest=f"{remote_home}/.local/profile/.slurm_aliases",
         mode=600,
         create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
-        sbatch_account=host.data.get("sbatch_account", None),
+        sbatch_account=host.data.sbatch_account,
+        sbatch_partitions=host.data.sbatch_partitions,
+        sbatch_params=host.data.get("sbatch_params", {}),
     )
 
     myfiles.template(

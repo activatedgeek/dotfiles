@@ -1,0 +1,102 @@
+function __sbatch {
+    local kind="cpu" sbatch_args=()
+    local sbatch_cmd=(
+        sbatch
+        --signal=B:USR1@10
+        -A {{ sbatch_account }}
+    )
+
+    while [[ $# -gt 0 ]]; do
+        case "${1}" in
+            --gpus-per-node)
+                kind="gpu"
+                {% if "gpus_per_node" in sbatch_params %}
+                {% if sbatch_params.gpus_per_node > 0 %}
+                sbatch_args+=("${1}" {{ sbatch_params.gpus_per_node }})
+                {% endif %}
+                {% else %}
+                sbatch_args+=("${1}" "${2}")
+                {% endif %}
+                shift 2
+            ;;
+            *) srun_args+=("${1}"); shift ;;
+      esac
+    done
+
+    if [[ "${kind}" == "gpu" ]]; then
+        sbatch_cmd+=(
+            -p {{ sbatch_partitions.gpu.partition }}
+            {% if "qos" in sbatch_partitions.gpu %}
+            -q {{ sbatch_partitions.gpu.qos }}
+            {% endif %}
+        )
+    else
+        sbatch_cmd+=(
+            -p {{ sbatch_partitions.cpu.partition }}
+            {% if "qos" in sbatch_partitions.cpu %}
+            -q {{ sbatch_partitions.cpu.qos }}
+            {% endif %}
+        )
+    fi
+
+    sbatch_cmd+=(
+        -t 4:00:00
+        -J {{ sbatch_account }}-sbatch.$(basename $(pwd))
+        "${sbatch_args[@]}"
+    )
+
+    echo "${sbatch_cmd[*]}"
+    "${sbatch_cmd[@]}"
+}
+
+function __srun {
+    local kind="cpu" srun_args=()
+    local srun_cmd=(
+        srun
+        --pty
+        --no-container-mount-home
+        -A {{ sbatch_account }}
+    )
+
+    while [[ $# -gt 0 ]]; do
+        case "${1}" in
+            --gpus-per-node)
+                kind="gpu"
+                {% if "gpus_per_node" in sbatch_params %}
+                {% if sbatch_params.gpus_per_node > 0 %}
+                srun_args+=("${1}" {{ sbatch_params.gpus_per_node }})
+                {% endif %}
+                {% else %}
+                srun_args+=("${1}" "${2}")
+                {% endif %}
+                shift 2
+            ;;
+            *) srun_args+=("${1}"); shift ;;
+      esac
+    done
+
+    if [[ "${kind}" == "gpu" ]]; then
+        srun_cmd+=(
+            -p {{ sbatch_partitions.gpu_interactive.partition }}
+            {% if "qos" in sbatch_partitions.gpu_interactive %}
+            -q {{ sbatch_partitions.gpu_interactive.qos }}
+            {% endif %}
+        )
+    else
+        srun_cmd+=(
+            -p {{ sbatch_partitions.cpu_interactive.partition }}
+            {% if "qos" in sbatch_partitions.cpu_interactive %}
+            -q {{ sbatch_partitions.cpu_interactive.qos }}
+            {% endif %}
+        )
+    fi
+
+    srun_cmd+=(
+        -t 2:00:00
+        -J {{ sbatch_account }}-srun.$(basename $(pwd))
+        "${srun_args[@]}"
+    )
+
+    echo "${srun_cmd[*]}"
+    "${srun_cmd[@]}"
+}

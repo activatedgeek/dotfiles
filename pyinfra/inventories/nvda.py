@@ -53,6 +53,9 @@ slurm = (
                     cpu=dict(partition="cpu", qos="cpu-short"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
                 ),
+                sbatch_params=dict(
+                    gpus_per_node=4,
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
@@ -87,10 +90,12 @@ slurm = (
                     cpu=dict(partition="batch"),
                     cpu_interactive=dict(partition="interactive"),
                 ),
+                sbatch_params=dict(
+                    gpus_per_node=-1,
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/llmservice_nemo_reasoning",
                 ],
-                nemo_skills_disable_gpus_per_node=True,
             ),
         ),
         (
@@ -104,6 +109,9 @@ slurm = (
                     gpu_interactive=dict(partition="batch", qos="interactive"),
                     cpu=dict(partition="cpu", qos="cpu-short"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-short"),
+                ),
+                sbatch_params=dict(
+                    gpus_per_node=4,
                 ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
