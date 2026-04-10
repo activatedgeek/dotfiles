@@ -1,5 +1,6 @@
 import myinfra.facts.enroot as enroot_facts
 import myinfra.operations.files as myfiles
+from myinfra.facts import slurm as slurm_facts
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
 from pyinfra.operations import files
@@ -48,8 +49,9 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         inventory_hostname=host.name.split("/")[-1],
-        sbatch_user=host.data.get("ssh_user"),
-        sbatch_account=host.data.get("sbatch_account"),
+        sbatch_user=host.data.ssh_user,
+        sbatch_account=host.data.sbatch_account,
+        sbatch_partitions=host.data.sbatch_partitions,
     )
 
     myfiles.template(
@@ -108,4 +110,4 @@ def apply():
 
 
 def pre_check():
-    return "nvda" in host.groups
+    return "nvda" in host.groups and host.get_fact(slurm_facts.SbatchBinary)

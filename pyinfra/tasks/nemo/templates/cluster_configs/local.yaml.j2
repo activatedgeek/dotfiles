@@ -1,7 +1,7 @@
 containers:
-  nemo-rl: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-rl:latest
-  nemo-skills: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-skills:latest
-  sandbox: gitlab-master.nvidia.com/igitman/nemo-skills-configs/sandbox:latest
+  nemo-rl: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-rl:{{ ns_nemo_rl_version | d("latest")  }}
+  nemo-skills: gitlab-master.nvidia.com/igitman/nemo-skills-configs/nemo-skills:{{ ns_version | d("latest")  }}
+  sandbox: gitlab-master.nvidia.com/igitman/nemo-skills-configs/sandbox:{{ ns_sandbox_version | d("latest")  }}
   sglang: lmsysorg/sglang:{{ sglang_version | d("latest") }}
   vllm: vllm/vllm-openai:{{ vllm_version | d("latest") }}
 

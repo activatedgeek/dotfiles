@@ -30,6 +30,15 @@ desktop = (
     dict(),
 )
 
+##
+# For partition info, run
+#   ```shell
+#   scontrol show partitions | grep -E "PartitionName|AllowQos|QoS"
+#   ```
+# For qos info, run
+#   ```shell
+#   sacctmgr show qos format=Name%16,MaxWall,MinTRES,MaxTRES,MaxJobsPU,MaxSubmitPU,MaxTRESPU
+#   ```
 slurm = (
     [
         (
@@ -38,7 +47,12 @@ slurm = (
                 ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch"),
+                    gpu_interactive=dict(partition="batch", qos="interactive"),
+                    cpu=dict(partition="cpu", qos="cpu-short"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
@@ -50,7 +64,12 @@ slurm = (
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch"),
+                    gpu_interactive=dict(partition="interactive"),
+                    cpu=dict(partition="cpu_short"),
+                    cpu_interactive=dict(partition="cpu_interactive"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
@@ -62,12 +81,16 @@ slurm = (
                 ssh_hostname="login-eos02.eos.clusters.nvidia.com",
                 store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
-                nemo_skills_disable_gpus_per_node=True,
-                nemo_skills_disable_cpu_partition=True,
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch"),
+                    gpu_interactive=dict(partition="interactive"),
+                    cpu=dict(partition="batch"),
+                    cpu_interactive=dict(partition="interactive"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/llmservice_nemo_reasoning",
                 ],
+                nemo_skills_disable_gpus_per_node=True,
             ),
         ),
         (
@@ -76,7 +99,12 @@ slurm = (
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch"),
+                    gpu_interactive=dict(partition="batch", qos="interactive"),
+                    cpu=dict(partition="cpu", qos="cpu-short"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-short"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
@@ -88,23 +116,15 @@ slurm = (
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch_block1,batch_block3,batch_block4",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch_block1,batch_block3,batch_block4"),
+                    gpu_interactive=dict(partition="interactive"),
+                    cpu=dict(partition="cpu_short"),
+                    cpu_interactive=dict(partition="cpu_interactive"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
-            ),
-        ),
-        (
-            "@ssh/nrt",
-            dict(
-                ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemotron_nano",
-                sbatch_partition="batch_block1",
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
-                skip_host=True,
             ),
         ),
         (
@@ -113,7 +133,12 @@ slurm = (
                 ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="batch",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch"),
+                    gpu_interactive=dict(partition="batch", qos="interactive"),
+                    cpu=dict(partition="cpu", qos="cpu-short"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],
@@ -125,7 +150,12 @@ slurm = (
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partition="polar,polar3,polar4",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="polar,polar3,polar4"),
+                    gpu_interactive=dict(partition="interactive"),
+                    cpu=dict(partition="cpu_short"),
+                    cpu_interactive=dict(partition="cpu_interactive"),
+                ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
                 ],

@@ -6,25 +6,24 @@ ssh_tunnel:
   pre_command: HEADLESS=1 source ~/.bash_profile
 
 executor: slurm
+account: {{ sbatch_account }}
+mail_type: FAIL
+partition: {{ sbatch_partitions.gpu.partition }}
+cpu_partition: {{ sbatch_partitions.cpu.partition }}
+timeouts:
+  {{ sbatch_partitions.gpu.partition }}: 04:00:00
+  {{ sbatch_partitions.gpu_interactive.partition }}: 04:00:00
+  {{ sbatch_partitions.cpu.partition }}: 04:00:00
+  {{ sbatch_partitions.cpu_interactive.partition }}: 04:00:00
+
 {% if disable_gpus_per_node is defined and disable_gpus_per_node %}
 disable_gpus_per_node: {{ disable_gpus_per_node }}
 {% endif %}
-account: {{ sbatch_account }}
-mail_type: FAIL
-partition: {{ sbatch_partition }}
-{% if disable_cpu_partition is not defined or not disable_cpu_partition %}
-cpu_partition: {{ sbatch_cpu_partition }}
-{% endif %}
-timeouts:
-  {{ sbatch_partition }}: 04:00:00
-  interactive: 04:00:00
-  interactive_singlenode: 04:00:00
-  cpu: 04:00:00
 
 containers:
-  nemo-rl: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-nemo-rl-latest.sqsh
-  nemo-skills: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-latest.sqsh
-  sandbox: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sandbox-latest.sqsh
+  nemo-rl: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-nemo-rl-{{ ns_nemo_rl_version | d("latest")  }}.sqsh
+  nemo-skills: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-{{ ns_version | d("latest")  }}.sqsh
+  sandbox: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sandbox-{{ ns_sandbox_version | d("latest")  }}.sqsh
   sglang: /home/{{ ssh_user }}/store/images/sglang-{{ sglang_version | d("latest")  }}.sqsh
   vllm: /home/{{ ssh_user }}/store/images/vllm-openai-{{ vllm_version | d("latest")  }}.sqsh
   edison:

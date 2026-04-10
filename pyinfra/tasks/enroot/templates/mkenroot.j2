@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 
 #SBATCH --account={{ sbatch_account }}
-{% if inventory_hostname == "eos" %}
-#SBATCH --partition=interactive
-{% elif inventory_hostname == "hsg" %}
-#SBATCH --partition=cpu
-{% else %}
-#SBATCH --partition=cpu_interactive
+#SBATCH --partition={{ sbatch_partitions.cpu_interactive.partition }}
+{% if "qos" in sbatch_partitions.cpu_interactive %}
+#SBATCH --qos={{ sbatch_partitions.cpu_interactive.qos }}
 {% endif %}
 #SBATCH --job-name={{ sbatch_account }}-enroot.import
 #SBATCH --time=02:00:00
