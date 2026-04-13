@@ -14,8 +14,6 @@ alias watch='watch '
 
 alias fastrm='rsync -av --delete $(mktemp -d)/'
 
-alias jq='yq -p json -o json'
-
 ## docker.
 alias cst='colima start'
 alias cstop='colima stop'
@@ -37,11 +35,6 @@ alias rsync='rsync -avzhEP --stats'
 ## setfacl.
 alias setfaclnogo='setfacl -m g::-,o::-'
 alias setfaclrx='setfacl -m g::rx,o::rx'
-
-## tmux.
-alias ta='tmux attach -t'
-alias tls='tmux ls'
-alias tn='tmux new -s'
 
 ## torch/jax.
 function ddprun {
