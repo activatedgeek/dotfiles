@@ -38,7 +38,7 @@ if [[ "${usage_refresh}" == "true" ]]; then
     rm -rf .pyinfra_cache/
 fi
 
-pyinfra_cmd=(pyinfra -y)
+pyinfra_cmd=(pyinfra -y --diff --fail-percent 0)
 
 # shellcheck disable=SC2154
 if [[ "${usage_teardown}" == "true" ]]; then

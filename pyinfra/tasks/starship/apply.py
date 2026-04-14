@@ -6,7 +6,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew
+from pyinfra.operations import brew, files
 
 from pyinfra import host
 
@@ -32,10 +32,20 @@ class Starship(Binary):
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    files.directory(
+        name="Config Dir.",
+        path=f"{remote_home}/.config",
+        mode=700,
+        present=True,
+        recursive=True,
+    )
+
     myfiles.copy(
         name="Settings",
         src="tasks/starship/files/starship.toml",
-        dest=f"{host.get_fact(server_facts.Home)}/.config/starship.toml",
+        dest=f"{remote_home}/.config/starship.toml",
         present=not teardown,
         mode=600,
         create_remote_dir=False,

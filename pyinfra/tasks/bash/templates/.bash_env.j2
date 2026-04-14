@@ -12,9 +12,6 @@ export DEEP_GEMM_CACHE_DIR=${XDG_CACHE_HOME}/deep_gemm
 export DG_JIT_CACHE_DIR=${DEEP_GEMM_CACHE_DIR}
 export HF_HOME=${XDG_CACHE_HOME}/huggingface
 export WANDB_DIR=${XDG_CACHE_HOME}/wandb
-if [[ ! -d  "${WANDB_DIR}" ]]; then
-    mkdir -p "${WANDB_DIR}"
-fi
 
 export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 
