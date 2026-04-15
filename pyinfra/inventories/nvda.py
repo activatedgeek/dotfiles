@@ -237,6 +237,7 @@ slurm = (
                 ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",
+                    "/scratch/fsw/portfolios/llmservice",
                 ],
             ),
         ),
