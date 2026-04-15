@@ -190,23 +190,6 @@ slurm = (
             ),
         ),
         (
-            "@ssh/nsvg",
-            dict(
-                ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
-                sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="batch", qos="interactive"),
-                    cpu=dict(partition="cpu", qos="cpu-short"),
-                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
-                ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
-            ),
-        ),
-        (
             "@ssh/ord",
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
@@ -234,6 +217,23 @@ slurm = (
                     gpu_interactive=dict(partition="interactive"),
                     cpu=dict(partition="cpu_short"),
                     cpu_interactive=dict(partition="cpu_interactive"),
+                ),
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+            ),
+        ),
+        (
+            "@ssh/svg",
+            dict(
+                ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch"),
+                    gpu_interactive=dict(partition="batch", qos="interactive"),
+                    cpu=dict(partition="cpu", qos="cpu-short"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
                 ),
                 enroot_mounts=[
                     "/lustre/fsw/portfolios/llmservice",

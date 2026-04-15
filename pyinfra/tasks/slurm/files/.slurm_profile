@@ -7,7 +7,7 @@ export SBATCH_ERROR="${SLURM_LOGDIR}/%j.log"
 export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.log"
 
 alias si='sinfo -lNe'
-alias sacct='sacct --format=JobName%24,JobIDRaw,State%8,ExitCode%4,Partition,AllocTRES%56,NodeList'
+alias sacct='sacct --format=JobName%24,JobIDRaw,State%8,ExitCode%4,AllocTRES%56,NodeList'
 alias sshare='sshare -u $USER'
 
 function slog {
@@ -60,6 +60,7 @@ function sjob {
         id: .job_id,
         account: .account,
         partition: .partition,
+        qos: .qos,
         name: .name,
         workdir: .working_directory,
         cmd: .submit_line,

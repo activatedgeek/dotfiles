@@ -61,17 +61,6 @@ def apply_nemo_skills(teardown=False):
             ## Jinja2 Variables.
             **values,
         )
-        myfiles.template(
-            name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config (nightly)",
-            src="tasks/nemo/templates/cluster_configs/slurm.yaml.j2",
-            dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}-nightly.yaml",
-            mode=600,
-            create_remote_dir=False,
-            present=not teardown,
-            ## Jinja2 Variables.
-            **values,
-            vllm_version="nightly",
-        )
 
 
 @deploy("NVDA")
