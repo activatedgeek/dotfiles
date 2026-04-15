@@ -232,7 +232,7 @@ slurm = (
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
                     gpu_interactive=dict(partition="batch", qos="interactive"),
-                    cpu=dict(partition="cpu", qos="cpu-short"),
+                    cpu=dict(partition="cpu"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
                 ),
                 enroot_mounts=[
