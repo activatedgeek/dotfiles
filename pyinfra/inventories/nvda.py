@@ -112,6 +112,7 @@ slurm = (
                 ),
                 enroot_mounts=[
                     "/lustre/fsw/llmservice_nemo_reasoning",
+                    "/lustre/fsw/llmservice_nemo_robustness",
                 ],
             ),
         ),
