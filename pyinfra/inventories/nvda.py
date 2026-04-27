@@ -12,18 +12,18 @@ mac = ([("@local", dict())], dict())
 desktop = (
     [
         (
-            "@ssh/desk",
-            dict(
-                ssh_hostname="aiapps-070225.dyn.nvidia.com",
-                store_home="/home/${USER}/store",
-            ),
-        ),
-        (
-            "@ssh/bigdesk",
+            "bigdesk",
             dict(
                 ssh_hostname="aiapps-110221.dyn.nvidia.com",
                 store_home="/mnt/ssd/home/${USER}",
                 skip_host=True,
+            ),
+        ),
+        (
+            "desk",
+            dict(
+                ssh_hostname="aiapps-070225.dyn.nvidia.com",
+                store_home="/home/${USER}/store",
             ),
         ),
     ],
@@ -42,9 +42,28 @@ desktop = (
 slurm = (
     [
         (
-            "@ssh/adfw",
+            "aws-cmh",
+            dict(
+                ssh_hostname="aws-cmh-slurm-1-dc-01.nvidia.com",
+                ssh_aliases=["cmh"],
+                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
+                sbatch_account="nemotron_reason_science",
+                sbatch_partitions=dict(
+                    gpu=dict(partition="pool0"),
+                    gpu_interactive=dict(partition="interactive"),
+                    cpu=dict(partition="cpu_short"),
+                    cpu_interactive=dict(partition="cpu_interactive"),
+                ),
+                enroot_mounts=[
+                    "/lustre/fsw/portfolios/llmservice",
+                ],
+            ),
+        ),
+        (
+            "aws-dfw",
             dict(
                 ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
+                ssh_aliases=["adfw"],
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="llmservice_nemo_reasoning",
                 sbatch_partitions=dict(
@@ -62,9 +81,10 @@ slurm = (
             ),
         ),
         (
-            "@ssh/aiad",
+            "aws-iad",
             dict(
                 ssh_hostname="aws-iad-cs-002-dc-03.nvidia.com",
+                ssh_aliases=["aiad"],
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
@@ -79,7 +99,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/dfw",
+            "dfw",
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -96,7 +116,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/eos",
+            "eos",
             dict(
                 ssh_hostname="login-eos02.eos.clusters.nvidia.com",
                 store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}",
@@ -117,7 +137,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/hel",
+            "hel",
             dict(
                 ssh_hostname="nb-hel-cs-001-dc-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -134,9 +154,10 @@ slurm = (
             ),
         ),
         (
-            "@ssh/gnrt",
+            "gcp-nrt",
             dict(
                 ssh_hostname="gcp-nrt-cs-001-dc-001.nvidia.com",
+                ssh_aliases=["gnrt"],
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
@@ -154,7 +175,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/hsg",
+            "hsg",
             dict(
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -174,7 +195,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/iad",
+            "iad",
             dict(
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -191,7 +212,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/ord",
+            "ord",
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -208,7 +229,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/pdx",
+            "pdx",
             dict(
                 ssh_hostname="cw-pdx-cs-001-dc-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
@@ -225,7 +246,7 @@ slurm = (
             ),
         ),
         (
-            "@ssh/svg",
+            "svg",
             dict(
                 ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",

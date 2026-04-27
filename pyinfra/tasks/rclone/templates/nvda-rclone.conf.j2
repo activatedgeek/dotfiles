@@ -1,10 +1,19 @@
 {% include "tasks/rclone/templates/rclone.conf.j2" %}
 
-{% for host, attrs in hosts.items() +%}
+{% for host, attrs in hosts.items() %}
 [{{ host }}]
 type = sftp
-host = {{ attrs["hostname"] }}
-port = {{ attrs["port"] }}
+host = {{ attrs.hostname }}
+port = {{ attrs.port }}
 key_use_agent = true
 shell_type = unix
+
+{% if attrs.aliases %}
+{% for alias in attrs.aliases %}
+[{{ alias }}]
+type = alias
+remote = {{ host }}:
+
+{% endfor %}
+{% endif %}
 {% endfor %}

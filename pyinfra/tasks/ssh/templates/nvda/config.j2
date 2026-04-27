@@ -21,7 +21,7 @@ Host *.aim *.lab
 {% endif %}
 
 {% for host, attrs in hosts.items() +%}
-Host {{ host }}
+Host {{ ([host] + (attrs.aliases | d([], boolean=True))) | join(' ') }}
     HostName {{ attrs.hostname }}
     Port {{ attrs.port }}
 {% endfor %}

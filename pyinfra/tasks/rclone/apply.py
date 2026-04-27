@@ -62,6 +62,7 @@ def apply_nvda(teardown=False):
     linux_hosts = {
         f"{ihost.name.split('/')[-1]}": {
             "hostname": ihost.data.ssh_hostname,
+            "aliases": ihost.data.get("ssh_aliases"),
             "port": ihost.data.get("ssh_port", 22),
         }
         for ihost in inventory.get_group("linux")
