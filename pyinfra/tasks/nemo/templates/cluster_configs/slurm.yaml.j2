@@ -27,7 +27,7 @@ disable_gpus_per_node: True
 {% endif %}
 
 containers:
-  nemo-rl: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-nemo-rl-{{ ns_nemo_rl_version | d("latest")  }}.sqsh
+  nemo-rl: /home/{{ ssh_user }}/store/images/nemo-rl-{{ nemo_rl_version | d("latest") }}.sqsh
   nemo-skills: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-{{ ns_version | d("latest")  }}.sqsh
   sandbox: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sandbox-{{ ns_sandbox_version | d("latest")  }}.sqsh
   sglang: /home/{{ ssh_user }}/store/images/sglang-{{ sglang_version | d("latest")  }}.sqsh
