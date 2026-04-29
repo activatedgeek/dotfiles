@@ -80,6 +80,8 @@ def apply_nvda(teardown=False):
         hosts=linux_hosts,
         dagshub_username=host.data.get("dagshub_username"),
         dagshub_user_token=host.data.get("dagshub_user_token"),
+        s8k_access_key_id=host.data.get("s8k_access_key_id"),
+        s8k_secret_access_key=host.data.get("s8k_secret_access_key"),
     )
 
 

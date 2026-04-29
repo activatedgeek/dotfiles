@@ -17,3 +17,13 @@ remote = {{ host }}:
 {% endfor %}
 {% endif %}
 {% endfor %}
+{% if s8k_secret_access_key is defined %}
+[s8k]
+type = s3
+provider = AWS
+endpoint = https://pdx.s8k.io
+region = us-east-1
+env_auth = false
+access_key_id = {{ s8k_access_key_id }}
+secret_access_key = {{ s8k_secret_access_key }}
+{% endif %}
