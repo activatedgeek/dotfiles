@@ -1,0 +1,61 @@
+---
+
+services:
+  ##
+  # Required for multi-platform docker builds.
+  # IMPORTANT: Run on every reboot once.
+  # See https://docs.docker.com/build/building/multi-platform/#install-qemu-manually.
+  #
+  binfmt:
+    image: tonistiigi/binfmt
+    privileged: true
+    command:
+      - --install
+      - all
+
+  glab-register:
+    restart: "no"
+    image: gitlab/gitlab-runner:latest
+    volumes:
+      - glab-config:/etc/gitlab-runner
+      - ./config/template.toml:/config.template.toml:ro
+    command:
+      - register
+      - --non-interactive
+      - --url
+      - ${GITLAB_URL?Missing Gitlab URL}
+      - --token
+      - ${GITLAB_RUNNER_TOKEN?Missing Gitlab runner token}
+      - --template-config
+      - /config.template.toml
+
+  glab-configure:
+    depends_on:
+      glab-register:
+        condition: service_completed_successfully
+    restart: "no"
+    image: gitlab/gitlab-runner:latest
+    entrypoint: ["/bin/bash", "-lc"]
+    volumes:
+      - glab-config:/etc/gitlab-runner
+      - ./scripts:/scripts:ro
+    environment:
+      GLOBAL_CONCURRENT: 4
+    command: /scripts/configure.sh
+
+  glab-runner:
+    depends_on:
+      binfmt:
+        condition: service_completed_successfully
+      glab-register:
+        condition: service_completed_successfully
+      glab-configure:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    image: gitlab/gitlab-runner:latest
+    volumes:
+      - glab-config:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  glab-config:
