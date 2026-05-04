@@ -14,18 +14,18 @@ from pyinfra import host
 @dataclass
 class Starship(Binary):
     gh_repo: ClassVar[str] = "starship/starship"
-    version: ClassVar[str] = "v1.24.2"
+    version: ClassVar[str] = "v1.25.1"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "starship-x86_64-unknown-linux-musl.tar.gz",
-                "sha256sum": "e41335e5a6ae8939139cf8fb02cb50eae4c500ef25d45da090bb7f26e8e2ecdc",
+                "sha256sum": "7692a9b84200e65b62670212e0f05eee00bdb77a39271ef60a3837f65bc00c3e",
             },
             "arm64": {
                 "name": "starship-aarch64-unknown-linux-musl.tar.gz",
-                "sha256sum": "559701ab549aad99c5f62ca74a65b7a5258f9c8371d5a7a6af6ef905b632ec48",
+                "sha256sum": "a8dcb8c0caa6dd4e914ce511f5cd33cf52c38b1435146acf855e1f4d8aebdc9b",
             },
         }
 

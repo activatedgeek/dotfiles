@@ -15,19 +15,19 @@ from pyinfra import host
 @dataclass
 class Difftastic(Binary):
     gh_repo: ClassVar[str] = "Wilfred/difftastic"
-    version: ClassVar[str] = "0.68.0"
+    version: ClassVar[str] = "0.69.0"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "difft-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "e2113dfc71cb67c99b567a0c66ba67cfcc46261a762e5909539e0c5d21411b24",
+                "sha256sum": "3b6c8643482d87de91a17b19630464d2cb818cf88ae42606ad75cb2fcb0dfab3",
             },
             ## FIXME(activatedgeek): <jemalloc>: Unsupported system page size
             "arm64": {
                 "name": "difft-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "65c8dc5cf294f74d7292dc2e7b247ea3864bfcdef85e0260f2d06cba90da2a16",
+                "sha256sum": "df268682478201e0b25ff8e0587a70d1a11353d7de6dcd7026c8a28e444d721e",
             },
         }
 
