@@ -18,3 +18,16 @@ class BuildX(FactBase):
         aliases = config.get("aliases", {})
         builder = aliases.get("builder", None)
         return builder == "buildx"
+
+
+class DockerBinary(FactBase):
+    def requires_command(self, *_, **__):
+        return "command"
+
+    def command(self, path: str | None = None):
+        if path:
+            return f'test -x {path} && echo "{path}" || true'
+        return "command -v docker || true"
+
+    def process(self, output):
+        return "".join(output).strip()

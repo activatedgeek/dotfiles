@@ -37,7 +37,7 @@ def apply_config(teardown=False):
         create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
-        docker_hub_username=host.data.get("docker_hub_username"),
+        dockerhub_username=host.data.get("docker_hub_username"),
     )
 
     myfiles.template(

@@ -3,7 +3,7 @@ from myinfra.facts import docker as docker_facts
 from myinfra.facts import mac as mac_facts
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files, server
+from pyinfra.operations import brew, docker, files, server
 
 from pyinfra import host
 
@@ -28,6 +28,8 @@ def apply_config(teardown=False):
             path=f"{remote_home}/.config/colima",
             present=False,
         )
+
+        docker.logout(name="Logout")
 
 
 @deploy("MacOS")
@@ -77,8 +79,9 @@ def apply():
     kernel = host.get_fact(server_facts.Kernel)
     if kernel == "Darwin":
         apply_macos(teardown=teardown)
-        apply_config(teardown=teardown)
+
+    apply_config(teardown=teardown)
 
 
 def pre_check():
-    return not host.get_fact(mac_facts.MacOSVM)
+    return not host.get_fact(mac_facts.MacOSVM) and host.get_fact(docker_facts.DockerBinary)
