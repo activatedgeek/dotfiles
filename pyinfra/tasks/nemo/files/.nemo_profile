@@ -71,12 +71,12 @@ function nrlog {
     done
 
     if [[ -z "${slurm_job_id}" ]]; then
-        echo "[ERROR] Missing slurm job id argument -j"
+        echo "[ERROR] Missing slurm job id -j"
         return 1
     fi
 
     if [[ -z "${group_name}" ]]; then
-        echo "[ERROR] Missing job name argument -n"
+        echo "[ERROR] Missing job group name -g"
         return 1
     fi
 

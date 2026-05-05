@@ -57,9 +57,7 @@ slurm = (
                 sbatch_params=dict(
                     gpus_per_node=4,
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/nemotron",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
@@ -67,8 +65,8 @@ slurm = (
             dict(
                 ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
                 ssh_aliases=["adfw"],
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
                     gpu_interactive=dict(partition="batch", qos="interactive"),
@@ -78,9 +76,7 @@ slurm = (
                 sbatch_params=dict(
                     gpus_per_node=4,
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
@@ -96,34 +92,30 @@ slurm = (
                     cpu=dict(partition="cpu"),
                     cpu_interactive=dict(partition="cpu_interactive"),
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/nemotron",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
             "dfw",
             dict(
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
                     gpu_interactive=dict(partition="interactive"),
                     cpu=dict(partition="cpu_short"),
                     cpu_interactive=dict(partition="cpu_interactive"),
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
             "eos",
             dict(
                 ssh_hostname="login-eos02.eos.clusters.nvidia.com",
-                store_home="/lustre/fsw/llmservice_nemo_robustness/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                store_home="/lustre/fsw/nemotron_reason_science/users/${USER}",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
                     gpu_interactive=dict(partition="interactive"),
@@ -133,18 +125,15 @@ slurm = (
                 sbatch_params=dict(
                     gpus_per_node=-1,
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/llmservice_nemo_reasoning",
-                    "/lustre/fsw/llmservice_nemo_robustness",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
             "hsg",
             dict(
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
                     gpu_interactive=dict(partition="batch", qos="interactive"),
@@ -154,9 +143,7 @@ slurm = (
                 sbatch_params=dict(
                     gpus_per_node=4,
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
@@ -164,33 +151,29 @@ slurm = (
             dict(
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch_block1,batch_block3,batch_block4"),
                     gpu_interactive=dict(partition="interactive"),
                     cpu=dict(partition="cpu_short"),
                     cpu_interactive=dict(partition="cpu_interactive"),
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
             "nrt",
             dict(
                 ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemotron_nano",
+                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch_block1"),
                     gpu_interactive=dict(partition="interactive"),
                     cpu=dict(partition="cpu_short"),
                     cpu_interactive=dict(partition="cpu_interactive"),
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
@@ -198,34 +181,29 @@ slurm = (
             dict(
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="polar,polar3,polar4"),
                     gpu_interactive=dict(partition="interactive"),
                     cpu=dict(partition="cpu_short"),
                     cpu_interactive=dict(partition="cpu_interactive"),
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw"],
             ),
         ),
         (
             "svg",
             dict(
                 ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
-                store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
-                sbatch_account="llmservice_nemo_reasoning",
+                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
                     gpu_interactive=dict(partition="batch", qos="interactive"),
                     cpu=dict(partition="cpu"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
                 ),
-                enroot_mounts=[
-                    "/lustre/fsw/portfolios/llmservice",
-                    "/scratch/fsw/portfolios/llmservice",
-                ],
+                enroot_mounts=["/lustre/fsw", "/scratch/fsw"],
             ),
         ),
     ],

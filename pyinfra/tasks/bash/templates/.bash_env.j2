@@ -1,18 +1,21 @@
 ## Directories.
 export STORE_HOME=${STORE_HOME:-"${HOME}/store"}
-export PROJECT_HOME=${STORE_HOME}/projects
+export PROJECT_HOME="${STORE_HOME}/projects"
 
-export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_CONFIG_HOME="${HOME}/.config"
 
-export IPYTHONDIR=${XDG_CONFIG_HOME}/ipython
+export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
 
-export XDG_CACHE_HOME=${STORE_HOME}/.cache
+export XDG_CACHE_HOME="${STORE_HOME}/.cache"
 
-export DEEP_GEMM_CACHE_DIR=${XDG_CACHE_HOME}/deep_gemm
-export TRITON_CACHE_DIR=${XDG_CACHE_HOME}/triton
-export DG_JIT_CACHE_DIR=${DEEP_GEMM_CACHE_DIR}
-export HF_HOME=${XDG_CACHE_HOME}/huggingface
-export WANDB_DIR=${XDG_CACHE_HOME}/wandb
+export DEEP_GEMM_CACHE_DIR="${XDG_CACHE_HOME}/deep_gemm"
+export TRITON_HOME="${XDG_CACHE_HOME}/triton"
+export DG_JIT_CACHE_DIR="${DEEP_GEMM_CACHE_DIR}"
+export HF_HOME="${XDG_CACHE_HOME}/huggingface"
+export TRITON_CACHE_DIR="${XDG_CACHE_HOME}/triton"
+export TRITON_HOME="${TRITON_CACHE_DIR}"
+
+export WANDB_DIR="${XDG_CACHE_HOME}/wandb"
 
 export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
 
