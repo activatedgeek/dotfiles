@@ -1,23 +1,23 @@
 ## Directories.
 export STORE_HOME=${STORE_HOME:-"${HOME}/store"}
-export PROJECT_HOME="${STORE_HOME}/projects"
 
-export XDG_CONFIG_HOME="${HOME}/.config"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${STORE_HOME}/.cache"}"
 
-export IPYTHONDIR="${XDG_CONFIG_HOME}/ipython"
+export IPYTHONDIR="${IPYTHONDIR:-"${XDG_CONFIG_HOME}/ipython"}"
 
-export XDG_CACHE_HOME="${STORE_HOME}/.cache"
-
-export DEEP_GEMM_CACHE_DIR="${XDG_CACHE_HOME}/deep_gemm"
-export TRITON_HOME="${XDG_CACHE_HOME}/triton"
+export DEEP_GEMM_CACHE_DIR="${DEEP_GEMM_CACHE_DIR:-"${XDG_CACHE_HOME}/deep_gemm"}"
 export DG_JIT_CACHE_DIR="${DEEP_GEMM_CACHE_DIR}"
-export HF_HOME="${XDG_CACHE_HOME}/huggingface"
-export TRITON_CACHE_DIR="${XDG_CACHE_HOME}/triton"
+export HF_HOME="${HF_HOME:-"${XDG_CACHE_HOME}/huggingface"}"
+export PYTORCH_KERNEL_CACHE_PATH="${PYTORCH_KERNEL_CACHE_PATH:-"${XDG_CACHE_HOME}/torch"}"
+export TORCHINDUCTOR_CACHE_DIR="${TORCHINDUCTOR_CACHE_DIR:-"${XDG_CACHE_HOME}/torchinductor"}"
 export TRITON_HOME="${TRITON_CACHE_DIR}"
 
-export WANDB_DIR="${XDG_CACHE_HOME}/wandb"
+export WANDB_DIR="${WANDB_DIR:-"${XDG_CACHE_HOME}/wandb"}"
 
-export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
+if [[ -d "$(dirname ${__src_dir})/bin" ]]; then
+    export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
+fi
 
 ## Config Vars.
 

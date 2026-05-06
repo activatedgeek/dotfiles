@@ -6,20 +6,6 @@ from pyinfra.facts import server as server_facts
 from pyinfra import host
 
 
-@deploy("NVDA")
-def apply_nvda(teardown=False):
-    is_slurm_host = bool(host.get_fact(slurm_facts.SbatchBinary))
-
-    myfiles.copy(
-        name=f"{'Remove ' if teardown else ''}srun-docker",
-        src="tasks/slurm/files/srun-docker",
-        dest=f"{host.get_fact(server_facts.Home)}/.local/bin/srun-docker",
-        mode=755,
-        create_remote_dir=False,
-        present=is_slurm_host and not teardown,
-    )
-
-
 @deploy("Config")
 def apply_config(teardown=False):
     sbatch_bin = host.get_fact(slurm_facts.SbatchBinary)
@@ -58,9 +44,6 @@ def apply_config(teardown=False):
         ## Jinja2 Variables.
         sbatch_bin=sbatch_bin,
     )
-
-    # if "nvda" in host.groups:
-    #     apply_nvda(teardown=teardown)
 
 
 @deploy("Slurm")
