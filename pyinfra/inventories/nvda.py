@@ -194,7 +194,7 @@ slurm = (
         (
             "svg",
             dict(
-                ssh_hostname="nsc-svg-slurm-1-login-02.nvidia.com",
+                ssh_hostname="nsc-svg-slurm-1-dc-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
