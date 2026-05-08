@@ -7,6 +7,8 @@ host = {{ attrs.hostname }}
 port = {{ attrs.port }}
 key_use_agent = true
 shell_type = unix
+md5sum_command = md5sum
+sha1sum_command = sha1sum
 
 {% if attrs.aliases %}
 {% for alias in attrs.aliases %}

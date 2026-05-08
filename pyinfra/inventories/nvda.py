@@ -65,7 +65,7 @@ slurm = (
             dict(
                 ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
                 ssh_aliases=["adfw"],
-                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),
@@ -76,7 +76,7 @@ slurm = (
                 sbatch_params=dict(
                     gpus_per_node=4,
                 ),
-                enroot_mounts=["/lustre/fsw"],
+                enroot_mounts=["/lustre/fsw", "/scratch/fsw"],
             ),
         ),
         (
@@ -195,7 +195,7 @@ slurm = (
             "svg",
             dict(
                 ssh_hostname="nsc-svg-slurm-1-dc-02.nvidia.com",
-                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch"),

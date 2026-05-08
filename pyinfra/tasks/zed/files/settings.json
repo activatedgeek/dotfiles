@@ -33,6 +33,7 @@
   ],
   "buffer_font_family": "Inconsolata Nerd Font",
   "buffer_font_size": 18.0,
+  "cli_default_open_behavior": "new_window",
   "diagnostics_max_severity": "off",
   "diff_view_style": "unified",
   "file_types": {},
