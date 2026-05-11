@@ -113,7 +113,7 @@ slurm = (
         (
             "eos",
             dict(
-                ssh_hostname="login-eos02.eos.clusters.nvidia.com",
+                ssh_hostname="login-eos.nvidia.com",
                 store_home="/lustre/fsw/nemotron_reason_science/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
