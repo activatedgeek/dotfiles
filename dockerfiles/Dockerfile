@@ -10,5 +10,5 @@ ENV UV_LINK_MODE=copy UV_PROJECT_ENVIRONMENT=/opt/venv/xfiles
 ARG PY_VERSION
 RUN uv venv --python ${PY_VERSION} ${UV_PROJECT_ENVIRONMENT}
 
-RUN --mount=type=bind,source=packages/xfiles,target=/code/xfiles,rw \
+RUN --mount=type=bind,source=pkgs/xfiles,target=/code/xfiles,rw \
     uv sync --no-install-project --all-extras -p ${UV_PROJECT_ENVIRONMENT}/bin/python --directory /code/xfiles

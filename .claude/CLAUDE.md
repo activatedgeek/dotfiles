@@ -64,12 +64,12 @@ Hosts can set `skip_host=True` to be excluded from deploys by default.
 
 ### Custom Packages
 
-**`packages/myinfra/`** — extends pyinfra:
+**`pkgs/myinfra/`** — extends pyinfra:
 - `facts/` — custom system introspection (Homebrew prefix, Debian arch, SLURM, SSH state, etc.)
 - `operations/` — `files.template()`, `files.download()` (with SHA256 verify), `archive.tar/unzip`, and tool-specific ops
 - `utils/Binary` — base class for managing pre-compiled binaries: GitHub release fetching, arch-specific asset maps, SHA256 validation
 
-**`packages/xfiles/`** — ML experiment file utilities (Aim/MLflow optional).
+**`pkgs/xfiles/`** — ML experiment file utilities (Aim/MLflow optional).
 
 ### Secret & Cache Management (`pyinfra/config.py`)
 
