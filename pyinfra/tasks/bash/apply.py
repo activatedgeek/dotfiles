@@ -30,28 +30,11 @@ def apply_macos(teardown=False):
 def apply_config(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    files.directory(
-        name="Profile Dir.",
-        path=f"{remote_home}/.local/profile",
-        mode=700,
-        present=True,
-        recursive=True,
-    )
-
-    files.directory(
-        name="Bin Dir.",
-        path=f"{remote_home}/.local/bin",
-        mode=755,
-        present=True,
-        recursive=True,
-    )
-
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
         src="tasks/bash/files/.bash_profile",
         dest=f"{remote_home}/.local/profile/.bash_profile",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 
@@ -60,7 +43,6 @@ def apply_config(teardown=False):
         src="tasks/bash/templates/.bash_env.j2",
         dest=f"{remote_home}/.local/profile/.bash_env",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         inventory_hostname=host.name.split("/")[-1],
@@ -83,7 +65,6 @@ def apply_config(teardown=False):
         src="tasks/bash/templates/.secrets_env.j2",
         dest=f"{remote_home}/.local/profile/.secrets_env",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         use_export=True,
@@ -101,7 +82,6 @@ def apply_config(teardown=False):
         src="tasks/bash/templates/.ml_secrets_env.j2",
         dest=f"{remote_home}/.local/profile/.ml_secrets_env",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         use_export=True,
@@ -125,7 +105,6 @@ def apply_config(teardown=False):
         src="tasks/bash/files/.bash_aliases",
         dest=f"{remote_home}/.local/profile/.bash_aliases",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 

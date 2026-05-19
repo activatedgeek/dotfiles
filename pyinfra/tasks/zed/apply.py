@@ -24,7 +24,6 @@ def apply_config(teardown=False):
         src="tasks/zed/files/settings.json",
         dest=f"{remote_home}/.config/zed/settings.json",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 

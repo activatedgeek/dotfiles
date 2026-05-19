@@ -12,14 +12,6 @@ from pyinfra import host
 def apply_config(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    files.directory(
-        name=f"{'Remove ' if teardown else ''}Directory",
-        path=f"{remote_home}/.config/enroot",
-        mode=700,
-        present=not teardown,
-        recursive=True,
-    )
-
     for d in ["mounts.d", "environ.d"]:
         files.directory(
             name=f"{'Remove ' if teardown else ''}{d}",
@@ -34,7 +26,6 @@ def apply_config(teardown=False):
         src="tasks/enroot/templates/.credentials.j2",
         dest=f"{remote_home}/.config/enroot/.credentials",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         dockerhub_username=host.data.get("dockerhub_username"),
@@ -45,7 +36,6 @@ def apply_config(teardown=False):
         src="tasks/enroot/templates/mkenroot.j2",
         dest=f"{remote_home}/.local/bin/mkenroot",
         mode=755,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         inventory_hostname=host.name.split("/")[-1],
@@ -59,7 +49,6 @@ def apply_config(teardown=False):
         src="tasks/enroot/templates/mounts.d/default.fstab.j2",
         dest=f"{remote_home}/.config/enroot/mounts.d/default.fstab",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         extra_mounts=host.data.get("enroot_mounts", []),
@@ -70,7 +59,6 @@ def apply_config(teardown=False):
         src="tasks/enroot/templates/environ.d/default.env.j2",
         dest=f"{remote_home}/.config/enroot/environ.d/default.env",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         extra_env=host.data.get("enroot_env", {}),
@@ -81,7 +69,6 @@ def apply_config(teardown=False):
         src="tasks/bash/templates/.ml_secrets_env.j2",
         dest=f"{remote_home}/.config/enroot/environ.d/ml_secrets.env",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         use_export=False,

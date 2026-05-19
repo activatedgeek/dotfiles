@@ -65,18 +65,18 @@ def apply_linux(arch, teardown=False):
 def apply_config(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    files.directory(
-        name="Remove",
-        path=f"{remote_home}/.mamba",
-        present=not teardown,
-    )
+    if teardown:
+        files.directory(
+            name="Remove",
+            path=f"{remote_home}/.mamba",
+            present=not teardown,
+        )
 
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Profile",
         src="tasks/micromamba/files/.mm_profile",
         dest=f"{remote_home}/.local/profile/.mm_profile",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 

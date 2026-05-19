@@ -17,7 +17,6 @@ def apply_config(teardown=False):
         src="tasks/slurm/files/.slurm_profile",
         dest=f"{remote_home}/.local/profile/.slurm_profile",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 
@@ -26,7 +25,6 @@ def apply_config(teardown=False):
         src="tasks/slurm/templates/.slurm_aliases.j2",
         dest=f"{remote_home}/.local/profile/.slurm_aliases",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         sbatch_account=host.data.sbatch_account,
@@ -39,7 +37,6 @@ def apply_config(teardown=False):
         src="tasks/slurm/templates/sbatch.j2",
         dest=f"{remote_home}/.local/bin/sbatch",
         mode=755,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         sbatch_bin=sbatch_bin,

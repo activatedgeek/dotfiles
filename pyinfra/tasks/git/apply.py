@@ -73,7 +73,6 @@ def apply_config(teardown=False):
         src="tasks/git/templates/.gitconfig.j2",
         dest=f"{remote_home}/.gitconfig",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         git_name=host.get_fact(myserver_facts.UserFullName),
@@ -87,7 +86,6 @@ def apply_config(teardown=False):
         dest=f"{remote_home}/.gitignore_global",
         present=not teardown,
         mode=600,
-        create_remote_dir=False,
     )
 
 

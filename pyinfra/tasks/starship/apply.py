@@ -48,7 +48,6 @@ def apply_config(teardown=False):
         dest=f"{remote_home}/.config/starship.toml",
         present=not teardown,
         mode=600,
-        create_remote_dir=False,
     )
 
 

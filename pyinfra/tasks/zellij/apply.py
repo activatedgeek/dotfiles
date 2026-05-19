@@ -53,6 +53,19 @@ def apply_linux(arch, teardown=False):
     )
 
 
+@deploy("Config")
+def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}Settings",
+        src="tasks/zellij/files/config.kdl",
+        dest=f"{remote_home}/.config/zellij/config.kdl",
+        mode=600,
+        present=not teardown,
+    )
+
+
 @deploy("Zellij")
 def apply():
     teardown = host.data.get("teardown", False)
@@ -62,3 +75,5 @@ def apply():
     elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
+
+    apply_config(teardown=teardown)

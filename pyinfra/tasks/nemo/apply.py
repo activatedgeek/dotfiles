@@ -1,7 +1,6 @@
 from myinfra.operations import files as myfiles
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import files
 
 from pyinfra import host, inventory
 
@@ -9,14 +8,6 @@ from pyinfra import host, inventory
 @deploy("NeMo-Skills")
 def apply_nemo_skills(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
-
-    files.directory(
-        name="Config Dir.",
-        path=f"{remote_home}/.config/nemo-skills/cluster_configs",
-        mode=700,
-        present=not teardown,
-        recursive=True,
-    )
 
     local_cluster_hosts = {
         f"{ihost.name.split('/')[-1]}": {
@@ -31,7 +22,6 @@ def apply_nemo_skills(teardown=False):
             src="tasks/nemo/templates/cluster_configs/local.yaml.j2",
             dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
-            create_remote_dir=False,
             present=not teardown,
             ## Jinja2 Variables.
             **values,
@@ -56,7 +46,6 @@ def apply_nemo_skills(teardown=False):
             src="tasks/nemo/templates/cluster_configs/slurm.yaml.j2",
             dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}.yaml",
             mode=600,
-            create_remote_dir=False,
             present=not teardown,
             ## Jinja2 Variables.
             **values,
@@ -73,7 +62,6 @@ def apply_nvda(teardown=False):
             src="tasks/nemo/files/.nemo_profile",
             dest=f"{remote_home}/.local/profile/.nemo_profile",
             mode=600,
-            create_remote_dir=False,
             present=not teardown,
         )
 

@@ -72,7 +72,6 @@ def apply_config_nvda(teardown=False):
         src="tasks/ssh/templates/nvda/config.j2",
         dest=f"{remote_home}/.ssh/config.d/nvda/config",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         hosts=ssh_config_hosts,

@@ -91,7 +91,6 @@ def apply_config(teardown=False):
         src="tasks/pueue/files/.pueue_aliases",
         dest=f"{remote_home}/.local/profile/.pueue_aliases",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 
@@ -100,7 +99,6 @@ def apply_config(teardown=False):
         src="tasks/pueue/files/prun",
         dest=f"{remote_home}/.local/bin/prun",
         mode=755,
-        create_remote_dir=False,
         present=not teardown,
     )
 

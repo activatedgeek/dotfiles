@@ -74,7 +74,6 @@ def apply_nvda(teardown=False):
         src="tasks/rclone/templates/nvda-rclone.conf.j2",
         dest=f"{remote_home}/.config/rclone/rclone.conf",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
         ## Jinja2 Variables.
         hosts=linux_hosts,

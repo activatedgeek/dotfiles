@@ -1,7 +1,7 @@
 from myinfra.operations import files as myfiles
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew, files
+from pyinfra.operations import brew
 
 from pyinfra import host
 
@@ -19,19 +19,11 @@ def apply_macos(teardown=False):
 def apply_config(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    files.directory(
-        name=f"{'Remove ' if teardown else ''}Directory",
-        path=f"{remote_home}/.config/ghostty",
-        present=not teardown,
-        mode=700,
-    )
-
     myfiles.copy(
         name=f"{'Remove ' if teardown else ''}Options",
         src="tasks/ghostty/files/config",
         dest=f"{remote_home}/.config/ghostty/config",
         mode=600,
-        create_remote_dir=False,
         present=not teardown,
     )
 
