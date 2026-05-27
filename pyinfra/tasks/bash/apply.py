@@ -10,7 +10,7 @@ from pyinfra import host
 def apply_macos(teardown=False):
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        packages=["bash", "bash-completion"],
+        packages=["bash", "bash-completion@2"],
         present=not teardown,
     )
 

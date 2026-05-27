@@ -20,9 +20,9 @@ done
 if [[ -f /opt/homebrew/bin/brew ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    if [[ -f "$(brew --prefix)"/etc/bash_completion ]]; then
+    if [[ -r "$(brew --prefix)"/etc/profile.d/bash_completion.sh ]]; then
         # shellcheck disable=SC1091
-        source "$(brew --prefix)"/etc/bash_completion
+        source "$(brew --prefix)"/etc/profile.d/bash_completion.sh
     fi
 fi
 

@@ -1,12 +1,24 @@
-## Files
+## Mise
+mise.local.toml
+.mise.local.toml
+.mise/config.local.toml
+.mise/tasks.local
+
+## Python
+.venv
+
+## Misc.
 *~
 *.DS_Store
 *.out
 *.err
 *.env
 
-## Folders
+## VScode
 .vscode
+
+## Idea
 .idea
+
+## W&B
 wandb
-.venv

@@ -1,6 +1,11 @@
 [env]
 _.python.venv = { path = ".venv" }
 
+DOTFILES_ROOT = "{{ config_root }}"
+
+[task_config]
+includes = [".mise/tasks", ".mise/tasks.local"]
+
 [tools]
 bitwarden-secrets-manager = { version = "latest", version_prefix = "bws-v" }
 hadolint = { version = "latest" }
