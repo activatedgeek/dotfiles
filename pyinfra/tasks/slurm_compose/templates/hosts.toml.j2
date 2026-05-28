@@ -1,0 +1,12 @@
+{% for host, attrs in hosts.items() %}
+[{{ host }}]
+home_dir = "/home/{{ attrs.ssh_user }}/store/.slurm-compose"
+
+{% if attrs.aliases %}
+{% for alias in attrs.aliases %}
+[{{ alias }}]
+home_dir = "/home/{{ attrs.ssh_user }}/store/.slurm-compose"
+
+{% endfor %}
+{% endif %}
+{% endfor %}
