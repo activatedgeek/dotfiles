@@ -13,6 +13,8 @@ def apply_nvda(teardown=False):
         f"{ihost.name.split('/')[-1]}": {
             "aliases": ihost.data.get("ssh_aliases"),
             "ssh_user": ihost.data.ssh_user,
+            "sbatch_account": ihost.data.sbatch_account,
+            "sbatch_partitions": ihost.data.sbatch_partitions,
         }
         for ihost in inventory.get_group("slurm")
         if not ihost.data.get("skip_host", False)

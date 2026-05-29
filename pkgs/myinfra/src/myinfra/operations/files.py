@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from jinja2.ext import Extension
 from pyinfra.api import exceptions, operation
 from pyinfra.api.command import QuoteString, StringCommand
 from pyinfra.facts import files as file_facts
@@ -9,6 +10,23 @@ from pyinfra import host
 
 from ..facts import checksum as checksum_facts
 from . import archive
+
+
+class JinjaFiltersExtension(Extension):
+    def __init__(self, environment):
+        super().__init__(environment)
+
+        def totoml(value: str | dict) -> str:
+            if isinstance(value, str):
+                return '"' + value + '"'
+            elif isinstance(value, (int, float)):
+                return value
+            elif isinstance(value, dict):
+                return "{" + ", ".join([f"{k} = {totoml(v)}" for k, v in value.items()]) + "}"
+            else:
+                raise NotImplementedError
+
+        environment.filters["totoml"] = totoml
 
 
 @operation()
@@ -55,7 +73,13 @@ def template(
     jinja_env_kwargs=None,
     **data,
 ):
-    jinja_env_kwargs = {"trim_blocks": True, "lstrip_blocks": True, **(jinja_env_kwargs or {})}
+    jinja_env_kwargs = jinja_env_kwargs or {}
+    jinja_env_kwargs = {
+        "trim_blocks": True,
+        "lstrip_blocks": True,
+        "extensions": [JinjaFiltersExtension, *jinja_env_kwargs.pop("extensions", [])],
+        **jinja_env_kwargs,
+    }
 
     if present:
         yield from files.template._inner(

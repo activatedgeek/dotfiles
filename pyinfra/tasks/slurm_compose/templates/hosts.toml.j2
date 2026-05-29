@@ -1,11 +1,19 @@
 {% for host, attrs in hosts.items() %}
 [{{ host }}]
+type = "ssh"
 home_dir = "/home/{{ attrs.ssh_user }}/store/.slurm-compose"
+[{{ host }}.sbatch]
+bin = "/home/{{ attrs.ssh_user }}/.local/bin/sbatch"
+account = "{{ attrs.sbatch_account }}"
+{% for k, v in attrs.sbatch_partitions.items() %}
+partitions.{{ k }} = {{ v | totoml }}
+{% endfor %}
 
 {% if attrs.aliases %}
 {% for alias in attrs.aliases %}
 [{{ alias }}]
-home_dir = "/home/{{ attrs.ssh_user }}/store/.slurm-compose"
+type = "alias"
+remote = "{{ host }}"
 
 {% endfor %}
 {% endif %}

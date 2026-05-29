@@ -49,11 +49,14 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="batch", qos="interactive"),
-                    cpu=dict(partition="cpu"),
-                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
+                    gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
+                    gpu_interactive=dict(
+                        partition="batch", qos="interactive", time="04:00:00", overrides=dict(gpus_per_node=4)
+                    ),
+                    cpu=dict(partition="cpu", time="1-00:00:00"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
                 ),
+                ## FIXME: remove
                 sbatch_params=dict(
                     gpus_per_node=4,
                 ),
@@ -68,11 +71,14 @@ slurm = (
                 store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="batch", qos="interactive"),
-                    cpu=dict(partition="cpu", qos="cpu-short"),
-                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
+                    gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
+                    gpu_interactive=dict(
+                        partition="batch", qos="interactive", time="04:00:00", overrides=dict(gpus_per_node=4)
+                    ),
+                    cpu=dict(partition="cpu", time="1-00:00:00"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
                 ),
+                ## FIXME: remove
                 sbatch_params=dict(
                     gpus_per_node=4,
                 ),
@@ -87,10 +93,10 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="pool0"),
-                    gpu_interactive=dict(partition="interactive"),
-                    cpu=dict(partition="cpu"),
-                    cpu_interactive=dict(partition="cpu_interactive"),
+                    gpu=dict(partition="pool0", time="04:00:00"),
+                    gpu_interactive=dict(partition="interactive", time="09:00:00"),
+                    cpu=dict(partition="cpu", time="1-00:00:00"),
+                    cpu_interactive=dict(partition="cpu_interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
             ),
@@ -102,10 +108,10 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="interactive"),
-                    cpu=dict(partition="cpu_short"),
-                    cpu_interactive=dict(partition="cpu_interactive"),
+                    gpu=dict(partition="batch", time="04:00:00"),
+                    gpu_interactive=dict(partition="interactive", time="04:00:00"),
+                    cpu=dict(partition="cpu", time="1-00:00:00"),
+                    cpu_interactive=dict(partition="cpu_interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
             ),
@@ -117,10 +123,8 @@ slurm = (
                 store_home="/lustre/fsw/nemotron_reason_science/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="interactive"),
-                    cpu=dict(partition="batch"),
-                    cpu_interactive=dict(partition="interactive"),
+                    gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=-1)),
+                    gpu_interactive=dict(partition="interactive", time="04:00:00", overrides=dict(gpus_per_node=-1)),
                 ),
                 sbatch_params=dict(
                     gpus_per_node=-1,
@@ -135,10 +139,12 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="batch", qos="interactive"),
-                    cpu=dict(partition="cpu", qos="cpu-short"),
-                    cpu_interactive=dict(partition="cpu", qos="cpu-short"),
+                    gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
+                    gpu_interactive=dict(
+                        partition="batch", qos="interactive", time="04:00:00", overrides=dict(gpus_per_node=4)
+                    ),
+                    cpu=dict(partition="cpu", time="04:00:00"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-short", time="02:00:00"),
                 ),
                 sbatch_params=dict(
                     gpus_per_node=4,
@@ -153,10 +159,10 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch_block1,batch_block3,batch_block4"),
-                    gpu_interactive=dict(partition="interactive"),
-                    cpu=dict(partition="cpu_short"),
-                    cpu_interactive=dict(partition="cpu_interactive"),
+                    gpu=dict(partition="batch_block1,batch_block3,batch_block4", time="04:00:00"),
+                    gpu_interactive=dict(partition="interactive", time="04:00:00"),
+                    cpu=dict(partition="cpu", time="04:00:00"),
+                    cpu_interactive=dict(partition="cpu_interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
             ),
@@ -168,10 +174,10 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch_block1"),
-                    gpu_interactive=dict(partition="interactive"),
-                    cpu=dict(partition="cpu_short"),
-                    cpu_interactive=dict(partition="cpu_interactive"),
+                    gpu=dict(partition="batch_block1", time="04:00:00"),
+                    gpu_interactive=dict(partition="interactive", time="04:00:00"),
+                    cpu=dict(partition="cpu", time="04:00:00"),
+                    cpu_interactive=dict(partition="cpu_interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
             ),
@@ -183,10 +189,10 @@ slurm = (
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="polar,polar3,polar4"),
-                    gpu_interactive=dict(partition="interactive"),
-                    cpu=dict(partition="cpu_short"),
-                    cpu_interactive=dict(partition="cpu_interactive"),
+                    gpu=dict(partition="polar,polar3,polar4", time="04:00:00"),
+                    gpu_interactive=dict(partition="interactive", time="04:00:00"),
+                    cpu=dict(partition="cpu", time="04:00:00"),
+                    cpu_interactive=dict(partition="cpu_interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
             ),
@@ -198,10 +204,10 @@ slurm = (
                 store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_partitions=dict(
-                    gpu=dict(partition="batch"),
-                    gpu_interactive=dict(partition="batch", qos="interactive"),
-                    cpu=dict(partition="cpu"),
-                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive"),
+                    gpu=dict(partition="batch", time="04:00:00"),
+                    gpu_interactive=dict(partition="batch", qos="interactive", time="04:00:00"),
+                    cpu=dict(partition="cpu", time="7-00:00:00"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw", "/scratch/fsw"],
             ),
