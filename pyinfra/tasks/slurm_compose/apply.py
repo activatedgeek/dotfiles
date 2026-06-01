@@ -9,33 +9,42 @@ from pyinfra import host, inventory
 def apply_nvda(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    slurm_hosts = {
-        f"{ihost.name.split('/')[-1]}": {
-            "aliases": ihost.data.get("ssh_aliases"),
-            "ssh_user": ihost.data.ssh_user,
-            "sbatch_account": ihost.data.sbatch_account,
-            "sbatch_partitions": ihost.data.sbatch_partitions,
+    if any(k in host.groups for k in ["mac", "desktop"]):
+        slurm_hosts = {
+            f"{ihost.name.split('/')[-1]}": {
+                "aliases": ihost.data.get("ssh_aliases"),
+                "ssh_user": ihost.data.ssh_user,
+                "sbatch_account": ihost.data.sbatch_account,
+                "sbatch_partitions": ihost.data.sbatch_partitions,
+            }
+            for ihost in inventory.get_group("slurm")
+            if not ihost.data.get("skip_host", False)
         }
-        for ihost in inventory.get_group("slurm")
-        if not ihost.data.get("skip_host", False)
-    }
 
-    myfiles.template(
-        name=f"{'Remove ' if teardown else ''}Hosts Conf",
-        src="tasks/slurm_compose/templates/hosts.toml.j2",
-        dest=f"{remote_home}/.config/slurm-compose/hosts.toml",
-        mode=600,
-        present=not teardown,
-        ## Jinja2 Variables.
-        hosts=slurm_hosts,
-    )
+        myfiles.template(
+            name=f"{'Remove ' if teardown else ''}Hosts Conf",
+            src="tasks/slurm_compose/templates/hosts.toml.j2",
+            dest=f"{remote_home}/.config/slurm-compose/hosts.toml",
+            mode=600,
+            present=not teardown,
+            ## Jinja2 Variables.
+            hosts=slurm_hosts,
+        )
+
+    if "linux" in host.groups:
+        myfiles.copy(
+            name=f"{'Remove ' if teardown else ''}Profile",
+            src="tasks/slurm_compose/files/.sc_profile",
+            dest=f"{remote_home}/.local/profile/.sc_profile",
+            mode=600,
+            present=not teardown,
+        )
 
 
 @deploy("Config")
 def apply_config(teardown=False):
     if "nvda" in host.groups:
-        if any(k in host.groups for k in ["mac", "desktop"]):
-            apply_nvda(teardown=teardown)
+        apply_nvda(teardown=teardown)
 
 
 @deploy("Slurm Compose")

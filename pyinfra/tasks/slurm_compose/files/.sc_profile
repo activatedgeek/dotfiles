@@ -1,0 +1,56 @@
+function sclog {
+    local slurm_job_id step_name use_less=0
+
+    tail_cmd=(tail -n 500)
+    less_cmd=(less)
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -j|--job)
+                slurm_job_id="${2}"
+                shift 2
+            ;;
+            -s|--step)
+                step_name="${2}"
+                shift 2
+            ;;
+            -l|--less)
+                use_less=1
+                shift 1
+            ;;
+            *)
+                tail_cmd+=(${1})
+                less_cmd+=(${1})
+                shift 1
+            ;;
+        esac
+    done
+
+    if [[ -z "${slurm_job_id}" ]]; then
+        echo "[ERROR] Missing slurm job id -j"
+        return 1
+    fi
+
+    if [[ -z "${step_name}" ]]; then
+        echo "[ERROR] Missing step name -s"
+        return 1
+    fi
+
+    exp_id=$(sjob ${slurm_job_id})
+    if [[ $? -ne 0 ]]; then
+        echo "[ERROR] Error getting experiment ID."
+        return 1
+    else
+        exp_id=$(echo "${exp_id}" | jq -r '.name')
+    fi
+
+    exp_dir="$HOME/store/.slurm-compose/exports/${exp_id}"
+
+    tail_cmd+=(-f ${exp_dir}/logs/${slurm_job_id}*-${step_name}.log)
+    less_cmd+=(${exp_dir}/logs/${slurm_job_id}*-${step_name}.log)
+
+    if [[ $use_less -eq 1 ]]; then
+        "${less_cmd[@]}"
+    else
+        "${tail_cmd[@]}"
+    fi
+}

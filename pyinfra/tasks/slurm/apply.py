@@ -29,7 +29,6 @@ def apply_config(teardown=False):
         ## Jinja2 Variables.
         sbatch_account=host.data.sbatch_account,
         sbatch_partitions=host.data.sbatch_partitions,
-        sbatch_params=host.data.get("sbatch_params", {}),
     )
 
     myfiles.template(

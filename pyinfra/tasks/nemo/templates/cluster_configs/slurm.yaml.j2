@@ -9,20 +9,13 @@ executor: slurm
 account: {{ sbatch_account }}
 mail_type: FAIL
 partition: {{ sbatch_partitions.gpu.partition }}
-cpu_partition: {{ sbatch_partitions.cpu.partition }}
+cpu_partition: {{ sbatch_partitions.cpu.partition if sbatch_partitions.cpu is defined else sbatch_partitions.gpu.partition }}
 timeouts:
-  {{ sbatch_partitions.gpu.partition }}: 04:00:00
-  {%  if sbatch_partitions.gpu_interactive.partition != sbatch_partitions.gpu.partition %}
-  {{ sbatch_partitions.gpu_interactive.partition }}: 02:00:00
-  {% endif %}
-  {%  if sbatch_partitions.cpu.partition != sbatch_partitions.gpu.partition %}
-  {{ sbatch_partitions.cpu.partition }}: 04:00:00
-  {% endif %}
-  {%  if sbatch_partitions.cpu_interactive.partition not in [sbatch_partitions.cpu.partition, sbatch_partitions.gpu_interactive.partition] %}
-  {{ sbatch_partitions.cpu_interactive.partition }}: 02:00:00
-  {% endif %}
+  {% for _, partition in sbatch_partitions.items() %}
+  {{ partition.partition }}: {{ partition.time }}
+  {% endfor %}
 
-{% if "gpus_per_node" in sbatch_params and sbatch_params.gpus_per_node == -1 %}
+{% if sbatch_partitions.gpu.overrides is defined and sbatch_partitions.gpu.overrides.gpus_per_node == -1 %}
 disable_gpus_per_node: True
 {% endif %}
 

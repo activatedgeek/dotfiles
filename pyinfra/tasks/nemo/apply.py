@@ -34,7 +34,6 @@ def apply_nemo_skills(teardown=False):
             "ssh_tunnel_port": ihost.data.get("ssh_port", 22),
             "sbatch_account": ihost.data.sbatch_account,
             "sbatch_partitions": ihost.data.sbatch_partitions,
-            "sbatch_params": ihost.data.get("sbatch_params", {}),
         }
         for ihost in inventory.get_group("slurm")
         if not ihost.data.get("skip_host", False)

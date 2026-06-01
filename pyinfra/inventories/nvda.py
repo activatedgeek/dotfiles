@@ -12,14 +12,6 @@ mac = ([("@local", dict())], dict())
 desktop = (
     [
         (
-            "bigdesk",
-            dict(
-                ssh_hostname="aiapps-110221.dyn.nvidia.com",
-                store_home="/mnt/ssd/home/${USER}",
-                skip_host=True,
-            ),
-        ),
-        (
             "desk",
             dict(
                 ssh_hostname="aiapps-070225.dyn.nvidia.com",
@@ -56,10 +48,6 @@ slurm = (
                     cpu=dict(partition="cpu", time="1-00:00:00"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
                 ),
-                ## FIXME: remove
-                sbatch_params=dict(
-                    gpus_per_node=4,
-                ),
                 enroot_mounts=["/lustre/fsw"],
             ),
         ),
@@ -77,10 +65,6 @@ slurm = (
                     ),
                     cpu=dict(partition="cpu", time="1-00:00:00"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
-                ),
-                ## FIXME: remove
-                sbatch_params=dict(
-                    gpus_per_node=4,
                 ),
                 enroot_mounts=["/lustre/fsw", "/scratch/fsw"],
             ),
@@ -126,9 +110,6 @@ slurm = (
                     gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=-1)),
                     gpu_interactive=dict(partition="interactive", time="04:00:00", overrides=dict(gpus_per_node=-1)),
                 ),
-                sbatch_params=dict(
-                    gpus_per_node=-1,
-                ),
                 enroot_mounts=["/lustre/fsw"],
             ),
         ),
@@ -145,9 +126,6 @@ slurm = (
                     ),
                     cpu=dict(partition="cpu", time="04:00:00"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-short", time="02:00:00"),
-                ),
-                sbatch_params=dict(
-                    gpus_per_node=4,
                 ),
                 enroot_mounts=["/lustre/fsw"],
             ),

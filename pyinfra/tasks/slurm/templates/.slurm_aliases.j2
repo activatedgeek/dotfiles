@@ -6,13 +6,16 @@ function __sbatch {
         -A {{ sbatch_account }}
     )
 
+    {% set gpu_partition = sbatch_partitions.gpu %}
+    {% set cpu_partition = sbatch_partitions.cpu if sbatch_partitions.cpu is defined else gpu_partition %}
+
     while [[ $# -gt 0 ]]; do
         case "${1}" in
             --gpus-per-node)
                 kind="gpu"
-                {% if "gpus_per_node" in sbatch_params %}
-                {% if sbatch_params.gpus_per_node > 0 %}
-                sbatch_args+=("${1}" {{ sbatch_params.gpus_per_node }})
+                {% if gpu_partition.overrides is defined %}
+                {% if gpu_partition.overrides.gpus_per_node is defined and gpu_partition.overrides.gpus_per_node > 0 %}
+                sbatch_args+=("${1}" {{ gpu_partition.overrides.gpus_per_node }})
                 {% endif %}
                 {% else %}
                 sbatch_args+=("${1}" "${2}")
@@ -25,16 +28,16 @@ function __sbatch {
 
     if [[ "${kind}" == "gpu" ]]; then
         sbatch_cmd+=(
-            -p {{ sbatch_partitions.gpu.partition }}
-            {% if "qos" in sbatch_partitions.gpu %}
-            -q {{ sbatch_partitions.gpu.qos }}
+            -p {{ gpu_partition.partition }}
+            {% if gpu_partition.qos is defined %}
+            -q {{ gpu_partition.qos }}
             {% endif %}
         )
     else
         sbatch_cmd+=(
-            -p {{ sbatch_partitions.cpu.partition }}
-            {% if "qos" in sbatch_partitions.cpu %}
-            -q {{ sbatch_partitions.cpu.qos }}
+            -p {{ cpu_partition.partition }}
+            {% if cpu_partition.qos is defined %}
+            -q {{ cpu_partition.qos }}
             {% endif %}
         )
     fi
@@ -58,13 +61,16 @@ function __srun {
         -A {{ sbatch_account }}
     )
 
+    {% set gpu_partition = sbatch_partitions.gpu_interactive %}
+    {% set cpu_partition = sbatch_partitions.cpu_interactive if sbatch_partitions.cpu_interactive is defined else gpu_partition %}
+
     while [[ $# -gt 0 ]]; do
         case "${1}" in
             --gpus-per-node)
                 kind="gpu"
-                {% if "gpus_per_node" in sbatch_params %}
-                {% if sbatch_params.gpus_per_node > 0 %}
-                srun_args+=("${1}" {{ sbatch_params.gpus_per_node }})
+                {% if gpu_partition.overrides is defined %}
+                {% if gpu_partition.overrides.gpus_per_node is defined and gpu_partition.overrides.gpus_per_node > 0 %}
+                sbatch_args+=("${1}" {{ gpu_partition.overrides.gpus_per_node }})
                 {% endif %}
                 {% else %}
                 srun_args+=("${1}" "${2}")
@@ -77,16 +83,16 @@ function __srun {
 
     if [[ "${kind}" == "gpu" ]]; then
         srun_cmd+=(
-            -p {{ sbatch_partitions.gpu_interactive.partition }}
-            {% if "qos" in sbatch_partitions.gpu_interactive %}
-            -q {{ sbatch_partitions.gpu_interactive.qos }}
+            -p {{ gpu_partition.partition }}
+            {% if gpu_partition.qos is defined %}
+            -q {{ gpu_partition.qos }}
             {% endif %}
         )
     else
         srun_cmd+=(
-            -p {{ sbatch_partitions.cpu_interactive.partition }}
-            {% if "qos" in sbatch_partitions.cpu_interactive %}
-            -q {{ sbatch_partitions.cpu_interactive.qos }}
+            -p {{ cpu_partition.partition }}
+            {% if cpu_partition.qos is defined %}
+            -q {{ cpu_partition.qos }}
             {% endif %}
         )
     fi

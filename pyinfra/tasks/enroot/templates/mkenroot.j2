@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 #SBATCH --account={{ sbatch_account }}
-#SBATCH --partition={{ sbatch_partitions.cpu_interactive.partition }}
-{% if "qos" in sbatch_partitions.cpu_interactive %}
-#SBATCH --qos={{ sbatch_partitions.cpu_interactive.qos }}
+{% set partition = sbatch_partitions.cpu_interactive if sbatch_partitions.cpu_interactive is defined else sbatch_partitions.gpu_interactive %}
+#SBATCH --partition={{ partition.partition }}
+{% if partition.qos is defined %}
+#SBATCH --qos={{ partition.qos }}
 {% endif %}
 #SBATCH --job-name={{ sbatch_account }}-enroot.import
 #SBATCH --time=02:00:00
