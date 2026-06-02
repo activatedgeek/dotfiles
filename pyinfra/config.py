@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 
+import requests
 from bitwarden_sdk import BitwardenClient, DeviceType, client_settings_from_dict
 from diskcache import Cache
 from myinfra.utils import Binary, load_task_module
@@ -80,4 +81,8 @@ config.CACHE_HOME = Path(os.getenv("PYINFRA_CACHE_HOME", Path(__file__).parent /
 config.CACHE_TTL = int(os.getenv("PYINFRA_CACHE_TTL", 24 * 60 * 60))
 config.SHELL = "bash"
 config.SECRETS = get_secrets()
-config.BINARY_VERSIONS = get_latest_binary_versions()
+try:
+    config.BINARY_VERSIONS = get_latest_binary_versions()
+except requests.exceptions.HTTPError as e:
+    logger.exception(e)
+    config.BINARY_VERSIONS = {}
