@@ -5,6 +5,7 @@ home_dir = "/home/{{ attrs.ssh_user }}/store/.slurm-compose"
 [{{ host }}.sbatch]
 bin = "/home/{{ attrs.ssh_user }}/.local/bin/sbatch"
 account = "{{ attrs.sbatch_account }}"
+gpus_per_node = {{ attrs.sbatch_gpus_per_node }}
 {% for k, v in attrs.sbatch_partitions.items() %}
 partitions.{{ k }} = {{ v | totoml }}
 {% endfor %}

@@ -40,6 +40,7 @@ slurm = (
                 ssh_aliases=["cmh"],
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=4,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
                     gpu_interactive=dict(
@@ -58,6 +59,7 @@ slurm = (
                 ssh_aliases=["adfw"],
                 store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=4,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
                     gpu_interactive=dict(
@@ -76,6 +78,7 @@ slurm = (
                 ssh_aliases=["aiad"],
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="pool0", time="04:00:00"),
                     gpu_interactive=dict(partition="interactive", time="09:00:00"),
@@ -91,6 +94,7 @@ slurm = (
                 ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch", time="04:00:00"),
                     gpu_interactive=dict(partition="interactive", time="04:00:00"),
@@ -106,6 +110,7 @@ slurm = (
                 ssh_hostname="login-eos.nvidia.com",
                 store_home="/lustre/fsw/nemotron_reason_science/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=-1)),
                     gpu_interactive=dict(partition="interactive", time="04:00:00", overrides=dict(gpus_per_node=-1)),
@@ -119,6 +124,7 @@ slurm = (
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=4,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
                     gpu_interactive=dict(
@@ -136,6 +142,7 @@ slurm = (
                 ssh_hostname="draco-oci-dc-03.draco-oci-iad.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch_block1,batch_block3,batch_block4", time="04:00:00"),
                     gpu_interactive=dict(partition="interactive", time="04:00:00"),
@@ -151,6 +158,7 @@ slurm = (
                 ssh_hostname="oci-nrt-cs-001-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch_block1", time="04:00:00"),
                     gpu_interactive=dict(partition="interactive", time="04:00:00"),
@@ -166,6 +174,7 @@ slurm = (
                 ssh_hostname="cs-oci-ord-dc-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/llmservice/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="polar,polar3,polar4", time="04:00:00"),
                     gpu_interactive=dict(partition="interactive", time="04:00:00"),
@@ -181,6 +190,7 @@ slurm = (
                 ssh_hostname="nsc-svg-slurm-1-dc-02.nvidia.com",
                 store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
+                sbatch_gpus_per_node=8,
                 sbatch_partitions=dict(
                     gpu=dict(partition="batch", time="04:00:00"),
                     gpu_interactive=dict(partition="batch", qos="interactive", time="04:00:00"),

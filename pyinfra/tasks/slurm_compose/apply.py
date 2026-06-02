@@ -15,6 +15,7 @@ def apply_nvda(teardown=False):
                 "aliases": ihost.data.get("ssh_aliases"),
                 "ssh_user": ihost.data.ssh_user,
                 "sbatch_account": ihost.data.sbatch_account,
+                "sbatch_gpus_per_node": ihost.data.sbatch_gpus_per_node,
                 "sbatch_partitions": ihost.data.sbatch_partitions,
             }
             for ihost in inventory.get_group("slurm")
