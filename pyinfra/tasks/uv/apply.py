@@ -15,18 +15,18 @@ from pyinfra import host
 @dataclass
 class Uv(Binary):
     gh_repo: ClassVar[str] = "astral-sh/uv"
-    version: ClassVar[str] = "0.11.2"
+    version: ClassVar[str] = "0.11.18"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "5c339318bf969cb34848d7616a0c9e6ab27478a8b5cb46dd3ae94d182ea5aa8d",
+                "sha256sum": "8efd13c4b649d3fbd264853c2d05419f18e2dc0816f02bb408a79525e50c062d",
             },
             "arm64": {
                 "name": "uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "6df7e4d21f3bba10f46a202d0bd04e2c59408b0a7c8e71c352384f28a4f050f2",
+                "sha256sum": "426d165a6298218e82ec1dace9e2dda5617e7cb2ce31a7d65be8dfa08f3d0bc7",
             },
         }
 
@@ -38,11 +38,11 @@ class Uvx(Uv):
         return {
             "amd64": {
                 "name": "uv-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "27383ce65cdcc5cf4957ccbc191a2f9b045aeb8ff767940039b86da8b08844ed",
+                "sha256sum": "dd7b049114909eefa6aa7f523584bdf84547b33f1cea00d2ee88c64bbc17ac5c",
             },
             "arm64": {
                 "name": "uv-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "6750fd480ecae148d56c7879d8323432f13a218ea3829279d72fc8d62fc84206",
+                "sha256sum": "166dfdd2f94dae0ad8e6355ab979565c1268e0d7b607a4a386d6eb4d79bb8ef5",
             },
         }
 
