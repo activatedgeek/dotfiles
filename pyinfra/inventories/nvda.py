@@ -133,7 +133,7 @@ slurm = (
                     cpu=dict(partition="cpu", time="04:00:00"),
                     cpu_interactive=dict(partition="cpu", qos="cpu-short", time="02:00:00"),
                 ),
-                enroot_mounts=["/lustre/fsw"],
+                enroot_mounts=["/lustre/fsw", "/lustre/fs1"],
             ),
         ),
         (

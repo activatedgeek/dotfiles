@@ -70,7 +70,7 @@ function __srun {
                 kind="gpu"
                 {% if gpu_partition.overrides is defined %}
                 {% if gpu_partition.overrides.gpus_per_node is defined and gpu_partition.overrides.gpus_per_node > 0 %}
-                sbatch_args+=("${1}" {{ gpu_partition.overrides.gpus_per_node }})
+                srun_args+=("${1}" {{ gpu_partition.overrides.gpus_per_node }})
                 {% endif %}
                 {% else %}
                 srun_args+=("${1}" "${2}")
