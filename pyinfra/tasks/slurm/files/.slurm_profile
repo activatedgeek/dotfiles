@@ -3,8 +3,8 @@ export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}
 export SINGULARITY_CACHEDIR=${XDG_CACHE_HOME}
 
 export SLURM_LOGDIR="${STORE_HOME}/.slurm/logs"
-export SBATCH_ERROR="${SLURM_LOGDIR}/%j.log"
-export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.log"
+# export SBATCH_ERROR="${SLURM_LOGDIR}/%j.log"
+# export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.log"
 
 alias si='sinfo -lNe'
 alias sacct='sacct --format=JobName%24,JobIDRaw,State%8,ExitCode%4,AllocTRES%56,NodeList'
@@ -138,7 +138,7 @@ function sbatch_install_traps {
         fi
 
         function on_signal {
-            trap - EXIT ERR HUP SIGQUIT TERM USR1
+            trap - EXIT HUP SIGQUIT TERM USR1
 
             if [[ $SLURM_PROCID -eq 0 ]]; then
                 snotify ${SLURM_JOB_ID}
@@ -147,7 +147,7 @@ function sbatch_install_traps {
             exit ${SLURM_EXIT_CODE}
         }
 
-      trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") on_signal' EXIT ERR
+      trap 'SLURM_EXIT_CODE=${SLURM_EXIT_CODE:-$?} SLURM_STATUS=$([[ $SLURM_EXIT_CODE -eq 0 ]] && echo "COMPLETED" || echo "FAILED") on_signal' EXIT
       trap 'SLURM_EXIT_CODE=129 SLURM_STATUS=CANCELLED on_signal' HUP
       trap 'SLURM_EXIT_CODE=131 SLURM_STATUS=CANCELLED on_signal' SIGQUIT
       trap 'SLURM_EXIT_CODE=143 SLURM_STATUS=CANCELLED on_signal' TERM

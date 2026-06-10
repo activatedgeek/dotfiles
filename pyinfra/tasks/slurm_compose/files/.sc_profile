@@ -30,11 +30,6 @@ function sclog {
         return 1
     fi
 
-    if [[ -z "${step_name}" ]]; then
-        echo "[ERROR] Missing step name -s"
-        return 1
-    fi
-
     exp_id=$(sjob ${slurm_job_id})
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Error getting experiment ID."
@@ -43,7 +38,13 @@ function sclog {
         exp_id=$(echo "${exp_id}" | jq -r '.name')
     fi
 
+    if [[ -z "${step_name}" ]]; then
+        step_name="${exp_id}"
+    fi
+
     exp_dir="$HOME/store/.slurm-compose/exports/${exp_id}"
+
+    echo "[INFO] Reading ${exp_dir}/logs/${slurm_job_id}*-${step_name}.log"
 
     tail_cmd+=(-f ${exp_dir}/logs/${slurm_job_id}*-${step_name}.log)
     less_cmd+=(${exp_dir}/logs/${slurm_job_id}*-${step_name}.log)
