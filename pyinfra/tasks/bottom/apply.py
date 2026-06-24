@@ -14,18 +14,18 @@ from pyinfra import host
 @dataclass
 class Btm(Binary):
     gh_repo: ClassVar[str] = "ClementTsang/bottom"
-    version: ClassVar[str] = "0.12.3"
+    version: ClassVar[str] = "0.14.1"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "bottom_x86_64-unknown-linux-musl.tar.gz",
-                "sha256sum": "815da63fa6ef651fb4841bf0bf5efb54a2cbd6e3fdce80a139ed0bc7d4d27a6a",
+                "sha256sum": "31614bd39ad541b1c6096ba02fff6491bead2e45958e78b2fab343146d2e3635",
             },
             "arm64": {
                 "name": "bottom_aarch64-unknown-linux-musl.tar.gz",
-                "sha256sum": "822490a5f44d5f8f370c2a2036f51866ff17a53baee488f573e738a1be647524",
+                "sha256sum": "b77f5977c1a63de6fe657feab9d03d761375735ece5e7aba53a794d6631752e8",
             },
         }
 

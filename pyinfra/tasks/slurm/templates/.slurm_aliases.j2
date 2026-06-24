@@ -22,7 +22,7 @@ function __sbatch {
                 {% endif %}
                 shift 2
             ;;
-            *) srun_args+=("${1}"); shift ;;
+            *) sbatch_args+=("${1}"); shift ;;
       esac
     done
 

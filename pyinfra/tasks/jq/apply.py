@@ -13,18 +13,18 @@ from pyinfra import host
 @dataclass
 class Jq(Binary):
     gh_repo: ClassVar[str] = "jqlang/jq"
-    version: ClassVar[str] = "jq-1.8.1"
+    version: ClassVar[str] = "jq-1.8.2"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "jq-linux64",
-                "sha256sum": "020468de7539ce70ef1bceaf7cde2e8c4f2ca6c3afb84642aabc5c97d9fc2a0d",
+                "sha256sum": "b1c22172dd303f3be49e935aa56aa48a8b7a46e0bc838b4997d3bb451495870f",
             },
             "arm64": {
                 "name": "jq-linux-arm64",
-                "sha256sum": "6bc62f25981328edd3cfcfe6fe51b073f2d7e7710d7ef7fcdac28d4e384fc3d4",
+                "sha256sum": "8b85c817833814ddca00a144c33705546355afccf0cf39b188f3cdb48b852309",
             },
         }
 

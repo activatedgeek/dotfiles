@@ -122,6 +122,7 @@ slurm = (
             "hsg",
             dict(
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
+                ssh_code_hostname="oci-hsg-cs-001-vscode-03.nvidia.com",
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_science",
                 sbatch_gpus_per_node=4,

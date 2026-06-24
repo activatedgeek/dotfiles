@@ -61,6 +61,7 @@ def apply_config_nvda(teardown=False):
     ssh_config_hosts = {
         f"{ihost.name.split('/')[-1]}": {
             "hostname": ihost.data.ssh_hostname,
+            "code_hostname": ihost.data.get("ssh_code_hostname"),
             "aliases": ihost.data.get("ssh_aliases"),
             "port": ihost.data.get("ssh_port", 22),
         }

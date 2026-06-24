@@ -13,18 +13,18 @@ from pyinfra import host
 @dataclass
 class Yq(Binary):
     gh_repo: ClassVar[str] = "mikefarah/yq"
-    version: ClassVar[str] = "v4.53.2"
+    version: ClassVar[str] = "v4.53.3"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "yq_linux_amd64",
-                "sha256sum": "d56bf5c6819e8e696340c312bd70f849dc1678a7cda9c2ad63eebd906371d56b",
+                "sha256sum": "fa52a4e758c63d38299163fbdd1edfb4c4963247918bf9c1c5d31d84789eded4",
             },
             "arm64": {
                 "name": "yq_linux_arm64",
-                "sha256sum": "03061b2a50c7a498de2bbb92d7cb078ce433011f085a4994117c2726be4106ea",
+                "sha256sum": "578648e463a11c1b6db6010cbf41eafed6bee79466fcffa1bb446672cf7945ea",
             },
         }
 

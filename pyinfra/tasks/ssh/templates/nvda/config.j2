@@ -24,6 +24,12 @@ Host *.aim *.lab
 Host {{ ([host] + (attrs.aliases | d([], boolean=True))) | join(' ') }}
     HostName {{ attrs.hostname }}
     Port {{ attrs.port }}
+
+{% if attrs.code_hostname %}
+Host {{ host }}-code
+    HostName {{ attrs.code_hostname }}
+    Port {{ attrs.port }}
+{% endif %}
 {% endfor %}
 
 {% if extended is defined and extended %}
