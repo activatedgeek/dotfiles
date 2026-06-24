@@ -1,108 +1,69 @@
-function __sbatch {
-    local kind="cpu" sbatch_args=()
-    local sbatch_cmd=(
-        sbatch
-        --signal=B:USR1@10
-        -A {{ sbatch_account }}
+function __make_slurm_args {
+    {% set gpu_part = sbatch_partitions.gpu %}
+    {% set igpu_part = sbatch_partitions.gpu_interactive %}
+    {% set cpu_part = sbatch_partitions.cpu if sbatch_partitions.cpu is defined else gpu_part %}
+    {% set icpu_part = sbatch_partitions.cpu_interactive if sbatch_partitions.cpu_interactive is defined else cpu_part %}
+    local -A partition_map=(
+        ["gpu"]="-p {{ gpu_part.partition }}{% if gpu_part.qos is defined %} -q {{ gpu_part.qos }}{% endif %}"
+        ["igpu"]="-p {{ igpu_part.partition }}{% if igpu_part.qos is defined %} -q {{ igpu_part.qos }}{% endif %}"
+        ["cpu"]="-p {{ cpu_part.partition }}{% if cpu_part.qos is defined %} -q {{ cpu_part.qos }}{% endif %}"
+        ["icpu"]="-p {{ icpu_part.partition }}{% if icpu_part.qos is defined %} -q {{ icpu_part.qos }}{% endif %}"
     )
-
-    {% set gpu_partition = sbatch_partitions.gpu %}
-    {% set cpu_partition = sbatch_partitions.cpu if sbatch_partitions.cpu is defined else gpu_partition %}
+    local kind=cpu interactive=0
+    local job_name={{ sbatch_account }}.$(basename $(pwd)) account={{ sbatch_account }} time=4:00:00 gpus_per_node pass_args=()
+    local -n slurm_args=$1
+    shift
 
     while [[ $# -gt 0 ]]; do
         case "${1}" in
+            --job-name|-J) job_name="${2}"; shift 2 ;;
+            --account|-A) account="${2}"; shift 2 ;;
+            --time|-t) time="${2}"; shift 2 ;;
             --gpus-per-node)
-                kind="gpu"
-                {% if gpu_partition.overrides is defined %}
-                {% if gpu_partition.overrides.gpus_per_node is defined and gpu_partition.overrides.gpus_per_node > 0 %}
-                sbatch_args+=("${1}" {{ gpu_partition.overrides.gpus_per_node }})
+                kind=gpu
+                {% if gpu_part.overrides is defined %}
+                {% if gpu_part.overrides.gpus_per_node is defined and gpu_part.overrides.gpus_per_node > 0 %}
+                gpus_per_node="{{ gpu_part.overrides.gpus_per_node }}"
                 {% endif %}
                 {% else %}
-                sbatch_args+=("${1}" "${2}")
+                gpus_per_node="${2}"
                 {% endif %}
                 shift 2
             ;;
-            *) sbatch_args+=("${1}"); shift ;;
+            --interactive) interactive=1; shift ;;
+            *) pass_args+=("${1}"); shift ;;
       esac
     done
 
-    if [[ "${kind}" == "gpu" ]]; then
-        sbatch_cmd+=(
-            -p {{ gpu_partition.partition }}
-            {% if gpu_partition.qos is defined %}
-            -q {{ gpu_partition.qos }}
-            {% endif %}
-        )
-    else
-        sbatch_cmd+=(
-            -p {{ cpu_partition.partition }}
-            {% if cpu_partition.qos is defined %}
-            -q {{ cpu_partition.qos }}
-            {% endif %}
-        )
-    fi
+    local partition_args=()
+    read -ra partition_args <<< "${partition_map["$([[ $interactive -eq 1 ]] && echo "i" || echo "")${kind}"]}"
 
-    sbatch_cmd+=(
-        -t 4:00:00
-        -J {{ sbatch_account }}-sbatch.$(basename $(pwd))
-        "${sbatch_args[@]}"
+    slurm_args+=(
+        -J "${job_name}"
+        -A "${account}"
+        "${partition_args[@]}"
+        -t "${time}"
     )
-
-    echo "${sbatch_cmd[*]}"
-    "${sbatch_cmd[@]}"
+    if [[ -n "${gpus_per_node}" ]]; then
+        slurm_args+=(--gpus-per-node "${gpus_per_node}")
+    fi
+    slurm_args+=("${pass_args[@]}")
 }
 
-function __srun {
-    local kind="cpu" srun_args=()
-    local srun_cmd=(
-        srun
-        --pty
-        --no-container-mount-home
-        -A {{ sbatch_account }}
-    )
+function autosbatch {
+    local sbatch_args=()
 
-    {% set gpu_partition = sbatch_partitions.gpu_interactive %}
-    {% set cpu_partition = sbatch_partitions.cpu_interactive if sbatch_partitions.cpu_interactive is defined else gpu_partition %}
+    __make_slurm_args sbatch_args --signal B:USR1@10 "${@}"
 
-    while [[ $# -gt 0 ]]; do
-        case "${1}" in
-            --gpus-per-node)
-                kind="gpu"
-                {% if gpu_partition.overrides is defined %}
-                {% if gpu_partition.overrides.gpus_per_node is defined and gpu_partition.overrides.gpus_per_node > 0 %}
-                srun_args+=("${1}" {{ gpu_partition.overrides.gpus_per_node }})
-                {% endif %}
-                {% else %}
-                srun_args+=("${1}" "${2}")
-                {% endif %}
-                shift 2
-            ;;
-            *) srun_args+=("${1}"); shift ;;
-      esac
-    done
+    echo "sbatch "${sbatch_args[*]}""
+    sbatch "${sbatch_args[@]}"
+}
 
-    if [[ "${kind}" == "gpu" ]]; then
-        srun_cmd+=(
-            -p {{ gpu_partition.partition }}
-            {% if gpu_partition.qos is defined %}
-            -q {{ gpu_partition.qos }}
-            {% endif %}
-        )
-    else
-        srun_cmd+=(
-            -p {{ cpu_partition.partition }}
-            {% if cpu_partition.qos is defined %}
-            -q {{ cpu_partition.qos }}
-            {% endif %}
-        )
-    fi
+function autosrun {
+    local srun_args=()
 
-    srun_cmd+=(
-        -t 2:00:00
-        -J {{ sbatch_account }}-srun.$(basename $(pwd))
-        "${srun_args[@]}"
-    )
+    __make_slurm_args srun_args --interactive --pty --no-container-mount-home -t 2:00:00 "${@}"
 
-    echo "${srun_cmd[*]}"
-    "${srun_cmd[@]}"
+    echo "srun "${srun_args[*]}""
+    srun "${srun_args[@]}"
 }
