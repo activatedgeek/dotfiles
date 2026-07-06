@@ -2,7 +2,7 @@ function sclog {
     local slurm_job_id step_name use_less=0
 
     tail_cmd=(tail -n 500)
-    less_cmd=(less)
+    less_cmd=(less -r)
     while [[ $# -gt 0 ]]; do
         case $1 in
             -j|--job)

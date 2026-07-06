@@ -58,4 +58,4 @@ if [[ -n "${__sbatch_file}" ]]; then
     patch_submission "${__sbatch_file}"
 fi
 
-{{ sbatch_bin }} --signal=B:USR1@15 "${@}"
+{{ sbatch_bin }} "${@}"

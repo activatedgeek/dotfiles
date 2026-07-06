@@ -53,7 +53,7 @@ function __make_slurm_args {
 function autosbatch {
     local sbatch_args=()
 
-    __make_slurm_args sbatch_args --signal B:USR1@10 "${@}"
+    __make_slurm_args sbatch_args "${@}"
 
     echo "sbatch "${sbatch_args[*]}""
     sbatch "${sbatch_args[@]}"
