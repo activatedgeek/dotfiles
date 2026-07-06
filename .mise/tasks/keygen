@@ -5,7 +5,7 @@
 #MISE dir="pyinfra"
 
 #USAGE arg "<inventory>" help="Name of inventory" {
-#USAGE  choices "home" "nvda"
+#USAGE  choices "git" "home" "nvda"
 #USAGE }
 #USAGE flag "-t --type <type>" help="Type of key to create for SSH/GPG." default="ed25519"
 #USAGE flag "-A --auth-host <auth_host>" help="Target host to copy the key."

@@ -55,7 +55,7 @@ def apply_config_nvda(teardown=False):
             dir_mode=700,
             mode=600,
             delete=False,
-            exclude=["*git*"],
+            exclude=[".gitkeep"],
         )
 
     ssh_config_hosts = {
@@ -90,13 +90,26 @@ def apply_config_nvda(teardown=False):
 
 @deploy("Config")
 def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
     files.directory(
         name="Config Dir.",
-        path=f"{host.get_fact(server_facts.Home)}/.ssh/config.d",
+        path=f"{remote_home}/.ssh/config.d/git",
         mode=700,
         present=not teardown,
         recursive=True,
     )
+
+    if host.name == "@local" and not teardown:
+        files.sync(
+            name="Sync",
+            src="tasks/ssh/files/git",
+            dest=f"{remote_home}/.ssh/config.d/git",
+            dir_mode=700,
+            mode=600,
+            delete=False,
+            exclude=[".gitkeep"],
+        )
 
     if "home" in host.groups:
         apply_config_home(teardown=teardown)
