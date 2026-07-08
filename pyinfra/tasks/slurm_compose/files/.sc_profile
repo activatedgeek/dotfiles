@@ -1,48 +1,35 @@
 function sclog {
-    local slurm_job_id step_name use_less=0
+    local slurm_job_id step_name
+    local tail_cmd=(tail -n 500)
+    local use_less=0 less_cmd=(less -r)
 
-    tail_cmd=(tail -n 500)
-    less_cmd=(less -r)
     while [[ $# -gt 0 ]]; do
         case $1 in
-            -j|--job)
-                slurm_job_id="${2}"
-                shift 2
-            ;;
-            -s|--step)
-                step_name="${2}"
-                shift 2
-            ;;
-            -l|--less)
-                use_less=1
-                shift 1
-            ;;
-            *)
-                tail_cmd+=(${1})
-                less_cmd+=(${1})
-                shift 1
-            ;;
+            -j|--job) slurm_job_id="${2}"; shift 2 ;;
+            -s|--step) step_name="${2}"; shift 2 ;;
+            -l|--less) use_less=1; shift 1 ;;
+            *) tail_cmd+=(${1}); less_cmd+=(${1}); shift 1 ;;
         esac
     done
 
     if [[ -z "${slurm_job_id}" ]]; then
-        echo "[ERROR] Missing slurm job id -j"
+        echo "[ERROR] Missing slurm job id -j/--job"
         return 1
     fi
 
-    exp_id=$(sjob ${slurm_job_id})
+    local exp_id=$(sjob ${slurm_job_id})
     if [[ $? -ne 0 ]]; then
         echo "[ERROR] Error getting experiment ID."
         return 1
     else
-        exp_id=$(echo "${exp_id}" | jq -r '.name')
+        exp_id=$(echo "${exp_id}" | jq -r .name)
     fi
 
     if [[ -z "${step_name}" ]]; then
         step_name="${exp_id}"
     fi
 
-    exp_dir="$HOME/store/.slurm-compose/exports/${exp_id}"
+    local exp_dir="$HOME/store/.slurm-compose/exports/${exp_id}"
 
     echo "[INFO] Reading ${exp_dir}/logs/${slurm_job_id}*-${step_name}.log"
 

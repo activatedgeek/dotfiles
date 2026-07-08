@@ -2,47 +2,47 @@
 export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}
 export SINGULARITY_CACHEDIR=${XDG_CACHE_HOME}
 
-export SLURM_LOGDIR="${STORE_HOME}/.slurm/logs"
-# export SBATCH_ERROR="${SLURM_LOGDIR}/%j.log"
-# export SBATCH_OUTPUT="${SLURM_LOGDIR}/%j.log"
-
 alias si='sinfo -lNe'
 alias sacct='sacct --format=JobName%24,JobIDRaw,State%8,ExitCode%4,AllocTRES%56,NodeList'
 alias sshare='sshare -u $USER'
 
 function slog {
-    tail_cmd=(tail -n 500)
-    less_cmd=(less)
+    local slurm_job_id job_info
+    local tail_cmd=(tail -n 500)
+    local use_less=0 less_cmd=(less -r)
+    local log_file
+
     while [[ $# -gt 0 ]]; do
         case $1 in
-            -j|--job)
-                slurm_job_id="${2}"
-                shift 2
-            ;;
-            -l|--less)
-                use_less=1
-                shift 1
-            ;;
-            *)
-                tail_cmd+=(${1})
-                less_cmd+=(${1})
-                shift 1
-            ;;
+            -j|--job) slurm_job_id="${2}"; shift 2 ;;
+            -l|--less) use_less=1; shift 1 ;;
+            *) tail_cmd+=(${1}); less_cmd+=(${1}); shift 1 ;;
         esac
     done
 
     if [[ -z "${slurm_job_id}" ]]; then
-        echo "[ERROR] Missing slurm job id argument -j"
+        echo "[ERROR] Missing slurm job id argument -j/--job"
         return 1
     fi
 
-    tail_cmd+=(-f "${SLURM_LOGDIR}/${slurm_job_id}.log")
-    less_cmd+=("${SLURM_LOGDIR}/${slurm_job_id}.log")
+    job_info=$(scontrol show job -o "${slurm_job_id}")
+    if [[ $? -eq 0 ]]; then
+        log_file=$(echo "${job_info}" | tr ' ' '\n' | grep -E '^StdOut=' | cut -d= -f2)
+    else
+        job_info=$(sacct -j "${slurm_job_id}" --noheader -P --format=StdOut)
+        if [[ $? -eq 0 ]]; then
+            log_file=$(echo "${job_info}" | head -1 | rev | cut -d'|' -f1 | rev)
+            echo "[WARNING] scontrol show job failed. stdout template path: ${log_file}" >&2
+        else
+            echo "[ERROR] sacct failed. Is it a valid job id?" >&2
+        fi
+        return 1
+    fi
 
-    unset slurm_job_id
+    tail_cmd+=(-f "${log_file}")
+    less_cmd+=("${log_file}")
 
     if [[ $use_less -eq 1 ]]; then
-        unset use_less
         "${less_cmd[@]}"
     else
         "${tail_cmd[@]}"
