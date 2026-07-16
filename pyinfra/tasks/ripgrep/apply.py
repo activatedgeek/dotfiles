@@ -15,18 +15,18 @@ from pyinfra import host
 @dataclass
 class RipGrep(Binary):
     gh_repo: ClassVar[str] = "BurntSushi/ripgrep"
-    version: ClassVar[str] = "15.1.0"
+    version: ClassVar[str] = "15.2.0"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": f"ripgrep-{self.version}-x86_64-unknown-linux-musl.tar.gz",
-                "sha256sum": "ebeaf56f8a25e102e9419933423738b3a2a613a444fd749d695e15eba53f71f2",
+                "sha256sum": "e62198eb19b136b88c330af83647b5a962cb99b6b1f066758568f12de1974849",
             },
             "arm64": {
                 "name": f"ripgrep-{self.version}-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "968cabe8efed72fd8fd482cb76b6084fcb695fc5293af7fb62296b02f487fb69",
+                "sha256sum": "e36d0eb52e70696bdf1781392722e05a21bb91d3b7b762ef5ec20e5df2ec687b",
             },
         }
 

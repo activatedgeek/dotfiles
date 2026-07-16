@@ -37,6 +37,7 @@ slurm = (
             "aws-cmh",
             dict(
                 ssh_hostname="aws-cmh-slurm-1-dc-01.nvidia.com",
+                ssh_code_hostname="aws-cmh-slurm-2-vscode-02.nvidia.com",
                 ssh_aliases=["cmh"],
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_math",
@@ -122,7 +123,7 @@ slurm = (
             "hsg",
             dict(
                 ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
-                ssh_code_hostname="oci-hsg-cs-001-vscode-03.nvidia.com",
+                ssh_code_hostname="oci-hsg-cs-001-vscode-02.nvidia.com",
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_math",
                 sbatch_gpus_per_node=4,
