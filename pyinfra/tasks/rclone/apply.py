@@ -66,7 +66,6 @@ def apply_nvda(teardown=False):
             "port": ihost.data.get("ssh_port", 22),
         }
         for ihost in inventory.get_group("linux")
-        if not ihost.data.get("skip_host", False)
     }
 
     myfiles.template(

@@ -36,7 +36,6 @@ def apply_nemo_skills(teardown=False):
             "sbatch_partitions": ihost.data.sbatch_partitions,
         }
         for ihost in inventory.get_group("slurm")
-        if not ihost.data.get("skip_host", False)
     }
 
     for cluster_name, values in slurm_cluster_hosts.items():

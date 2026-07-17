@@ -19,7 +19,6 @@ def apply_nvda(teardown=False):
                 "sbatch_partitions": ihost.data.sbatch_partitions,
             }
             for ihost in inventory.get_group("slurm")
-            if not ihost.data.get("skip_host", False)
         }
 
         myfiles.template(

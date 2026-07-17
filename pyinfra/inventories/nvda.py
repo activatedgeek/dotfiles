@@ -37,7 +37,7 @@ slurm = (
             "aws-cmh",
             dict(
                 ssh_hostname="aws-cmh-slurm-1-dc-01.nvidia.com",
-                ssh_code_hostname="aws-cmh-slurm-2-vscode-02.nvidia.com",
+                ssh_code_hostname="aws-cmh-slurm-1-vscode-02.nvidia.com",
                 ssh_aliases=["cmh"],
                 store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
                 sbatch_account="nemotron_reason_math",
@@ -51,6 +51,28 @@ slurm = (
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
+            ),
+        ),
+        (
+            "aws-cmh-2",
+            dict(
+                ssh_hostname="aws-cmh-slurm-2-dc-03.nvidia.com",
+                ssh_code_hostname="aws-cmh-slurm-2-vscode-02.nvidia.com",
+                ssh_aliases=["cmh2"],
+                store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+                sbatch_account="nemotron_reason_math",
+                sbatch_gpus_per_node=4,
+                sbatch_partitions=dict(
+                    gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
+                    gpu_interactive=dict(
+                        partition="batch", qos="interactive", time="04:00:00", overrides=dict(gpus_per_node=4)
+                    ),
+                    cpu=dict(partition="cpu", time="1-00:00:00"),
+                    cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
+                ),
+                enroot_mounts=["/lustre/fsw"],
+                ## NOTE: Skip fully because shares fs with aws-cmh.
+                skip_host=True,
             ),
         ),
         (
