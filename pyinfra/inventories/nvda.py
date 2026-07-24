@@ -232,6 +232,14 @@ linux = (
     [*[h for h, _ in desktop[0]], *[h for h, _ in slurm[0]]],
     dict(
         term="xterm-256color",
+        ## Secrets.
+        ngc_api_key=config.SECRETS.get("NGC_API_KEY"),
+        nvinf_api_key=config.SECRETS.get("NVINF_API_KEY"),
+        openai_api_key=config.SECRETS.get("OPENAI_API_KEY"),
+        hf_token=config.SECRETS.get("HF_TOKEN"),
+        wandb_api_key=config.SECRETS.get("WANDB_API_KEY"),
+        wandb_username=config.SECRETS.get("WANDB_USERNAME"),
+        wandb_entity=config.SECRETS.get("WANDB_ENTITY"),
     ),
 )
 
@@ -253,25 +261,13 @@ all = (
         ## Latest binary versions
         binary_versions=config.BINARY_VERSIONS,
         ## Secrets.
-        azure_openai_api_key=config.SECRETS.get("AZURE_OPENAI_API_KEY"),
-        brave_api_key=config.SECRETS.get("BRAVE_API_KEY"),
         dagshub_username=config.SECRETS.get("DAGSHUB_USERNAME"),
         dagshub_user_token=config.SECRETS.get("DAGSHUB_USER_TOKEN"),
         discord_webhook_token=config.SECRETS.get("DISCORD_WEBHOOK_TOKEN"),
         dockerhub_username=config.SECRETS.get("DOCKERHUB_USERNAME"),
         dockerhub_password=config.SECRETS.get("DOCKERHUB_PASSWORD"),
-        exa_api_key=config.SECRETS.get("EXA_API_KEY"),
         gitlab_token=config.SECRETS.get("GITLAB_TOKEN"),
-        hf_token=config.SECRETS.get("HF_TOKEN"),
-        ngc_api_key=config.SECRETS.get("NGC_API_KEY"),
-        nvinf_api_key=config.SECRETS.get("NVINF_API_KEY"),
-        ollama_api_key=config.SECRETS.get("OLLAMA_API_KEY"),
-        openai_api_key=config.SECRETS.get("OPENAI_API_KEY"),
         s8k_access_key_id=config.SECRETS.get("S8K_ACCESS_KEY_ID"),
         s8k_secret_access_key=config.SECRETS.get("S8K_SECRET_ACCESS_KEY"),
-        tavily_api_key=config.SECRETS.get("TAVILY_API_KEY"),
-        wandb_api_key=config.SECRETS.get("WANDB_API_KEY"),
-        wandb_username=config.SECRETS.get("WANDB_USERNAME"),
-        wandb_entity=config.SECRETS.get("WANDB_ENTITY"),
     ),
 )
