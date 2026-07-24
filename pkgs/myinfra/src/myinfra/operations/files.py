@@ -1,4 +1,5 @@
 from pathlib import Path
+from uuid import uuid4
 
 from jinja2.ext import Extension
 from pyinfra.api import exceptions, operation
@@ -111,7 +112,9 @@ def download(src, dest, src_dir=None, sha256sum=None, present=True, mode=None):
                 info = host.get_fact(file_facts.File, path=dest)
 
         if info is None:
-            temp_dir = Path(host._get_temp_directory())
+            temp_dir = Path(host._get_temp_directory()) / f"myinfra-download-{uuid4().hex}"
+
+            yield from files.directory._inner(path=str(temp_dir), present=True)
 
             yield from files.download._inner(
                 src=src,
@@ -139,5 +142,7 @@ def download(src, dest, src_dir=None, sha256sum=None, present=True, mode=None):
 
             if src_dir:
                 yield from files.directory._inner(path=str(temp_dir / src_dir), present=False)
+
+            yield from files.directory._inner(path=str(temp_dir), present=False)
 
     yield from files.file._inner(path=dest, present=present, mode=mode)
