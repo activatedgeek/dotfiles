@@ -558,7 +558,7 @@ wheels = [
 
 [[package]]
 name = "pyinfra"
-version = "3.9.2"
+version = "3.10.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -572,9 +572,9 @@ dependencies = [
     { name = "typeguard" },
     { name = "types-paramiko" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c6/02/6ba292a33b6fbd342b031880e618281566c985ad73908127b56c02520495/pyinfra-3.9.2.tar.gz", hash = "sha256:035a94c7d0a78059c86279f9292242ddf8b883959296e033aa0033db7f14e517", size = 619478, upload-time = "2026-06-07T21:05:48.181Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c5/af/fc92d96ebfe7f5235977ada99fd5a294e666d771993f2be4ec5eae884920/pyinfra-3.10.0.tar.gz", hash = "sha256:802d22046eb84937ffd2aadb7dd192a3cc2b830b026f9878617349614076810f", size = 650567, upload-time = "2026-07-27T19:50:55.076Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/d1/530b126c4bf5fa5017039b15982043b2cdeba83eb2234bd0500699a6482c/pyinfra-3.9.2-py3-none-any.whl", hash = "sha256:098190febb48ba9cdf07c24efbd0308da9ca2ad40e08d676f21a374cc38532ba", size = 311346, upload-time = "2026-06-07T21:05:46.425Z" },
+    { url = "https://files.pythonhosted.org/packages/17/e3/c2a679d1a951ca4fbd0d3812acaeec17795303c24154a8133e3456c88cda/pyinfra-3.10.0-py3-none-any.whl", hash = "sha256:668268db8df54c23a1e684d260121a6e23330c942f60048138597303227e48fb", size = 325488, upload-time = "2026-07-27T19:50:53.625Z" },
 ]
 
 [[package]]
@@ -647,26 +647,26 @@ wheels = [
 
 [[package]]
 name = "tqdm"
-version = "4.69.1"
+version = "4.70.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/dd/84/da0e5038228fa34dfd77c5026b173ed035d2a3ba31f1077590c013de2bff/tqdm-4.69.1.tar.gz", hash = "sha256:2be21080a0ce17e902c2f1baeb6a74bf551b67bbdfa4bc0109fad471d0b4cb0d", size = 793046, upload-time = "2026-07-24T14:22:02.08Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/21/3b/6c24bec5be5e743ffd99576daa5cc077722fc7d5bbc00bd133fa0c698dc6/tqdm-4.70.0.tar.gz", hash = "sha256:55b0b0dbd97462d06ebee91e4dac24ed4d4702be82b24f07e6c1d27e08cea220", size = 795438, upload-time = "2026-07-27T11:33:15.271Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/01/50/5817619a0fca56aff06383dbfde7ae017b3ca383915b3f1e4713164273cf/tqdm-4.69.1-py3-none-any.whl", hash = "sha256:0a654b96f7a2660cceb615b56f307ec2bef96c515409014a429a561981ab52b4", size = 675452, upload-time = "2026-07-24T14:22:00.048Z" },
+    { url = "https://files.pythonhosted.org/packages/f9/1c/01bfd571a64e7f270e6bab5e33777debe0edc56759233ce84f27dec92d14/tqdm-4.70.0-py3-none-any.whl", hash = "sha256:7f585706bfddbdebf89daac705b2dfcc16890130727d3197ca62c732b4310953", size = 80184, upload-time = "2026-07-27T11:33:13.167Z" },
 ]
 
 [[package]]
 name = "typeguard"
-version = "4.5.2"
+version = "4.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/67/1c/dfba5c4633cafc4c701f237d2ba63b416805047fd6d96aab4cfc40969f98/typeguard-4.5.2.tar.gz", hash = "sha256:5a16dcac23502039299c97c8941651bc33d7ea8cc4b2f7d6bbb1b528f6eea423", size = 80240, upload-time = "2026-05-14T12:59:40.857Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b4/de/4420db493fa8fc0856d5e5c1b159c63a323d2de2317babe36b01568928e8/typeguard-4.6.0.tar.gz", hash = "sha256:e7414f09111317de3e335de92cd397c5c0ca00b1cc1676de12e1d444a79b3f21", size = 82330, upload-time = "2026-07-26T08:40:23.207Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/5b/29/74eeb4d3f3ae61ca096b018ad486b3b3c74b17bec09ab4edab721cbefec3/typeguard-4.5.2-py3-none-any.whl", hash = "sha256:fcf9de18bd945cdb4c7b996e12b4c51ce83f92f191314a6d7cf1739586ec98cf", size = 36748, upload-time = "2026-05-14T12:59:39.473Z" },
+    { url = "https://files.pythonhosted.org/packages/8f/eb/461d5f167b6f5c7d97696f397c82f82e3480e003fce3f0a1cd1dd26e2eb2/typeguard-4.6.0-py3-none-any.whl", hash = "sha256:79878165bb86f2cf5d41d159a0ff1792a796cf496882d2fe1b1c6c7049b9cdd7", size = 36884, upload-time = "2026-07-26T08:40:21.868Z" },
 ]
 
 [[package]]
