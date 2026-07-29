@@ -58,6 +58,12 @@ binary implicitly. Resolve each requested name to the corresponding
    cache merely to force a refresh; the helper's configured cache is the source
    of truth for the project's normal pyinfra environment.
 
+If every selected class already has the version returned by the helper, report
+that no version bumps are needed and stop immediately. Do not download assets,
+recalculate checksums, patch task files, or run post-edit validation in that
+case. Only continue with the checksum, editing, and validation workflows when
+at least one selected class has a version bump.
+
 Do not use a release's latest version blindly when the helper returns a value.
 Use the exact version returned for the selected class. If the helper cannot be
 run, report the missing prerequisite instead of guessing a version.
