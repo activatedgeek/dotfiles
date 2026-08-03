@@ -233,21 +233,21 @@ linux = (
     dict(
         term="xterm-256color",
         ## Secrets.
-        ngc_api_key=config.SECRETS.get("NGC_API_KEY"),
-        nvinf_api_key=config.SECRETS.get("NVINF_API_KEY"),
-        openai_api_key=config.SECRETS.get("OPENAI_API_KEY"),
-        hf_token=config.SECRETS.get("HF_TOKEN"),
-        wandb_api_key=config.SECRETS.get("WANDB_API_KEY"),
-        wandb_username=config.SECRETS.get("WANDB_USERNAME"),
-        wandb_entity=config.SECRETS.get("WANDB_ENTITY"),
+        ngc_api_key=os.environ.get("NGC_API_KEY"),
+        nvinf_api_key=os.environ.get("NVINF_API_KEY"),
+        openai_api_key=os.environ.get("OPENAI_API_KEY"),
+        hf_token=os.environ.get("HF_TOKEN"),
+        wandb_api_key=os.environ.get("WANDB_API_KEY"),
+        wandb_username=os.environ.get("WANDB_USERNAME"),
+        wandb_entity=os.environ.get("WANDB_ENTITY"),
     ),
 )
 
 all = (
     [*[h for h, _ in mac[0]], *linux[0]],
     dict(
-        email=config.SECRETS["NVIDIA_EMAIL"],
-        ssh_user=config.SECRETS["NVIDIA_EMAIL"].split("@")[0],
+        email=os.environ["NVIDIA_EMAIL"],
+        ssh_user=os.environ["NVIDIA_EMAIL"].split("@")[0],
         ssh_key="tasks/ssh/files/nvda/id_ed25519",
         ssh_config_file="/dev/null",
         skip_tasks={
@@ -261,13 +261,13 @@ all = (
         ## Latest binary versions
         binary_versions=config.BINARY_VERSIONS,
         ## Secrets.
-        dagshub_username=config.SECRETS.get("DAGSHUB_USERNAME"),
-        dagshub_user_token=config.SECRETS.get("DAGSHUB_USER_TOKEN"),
-        discord_webhook_token=config.SECRETS.get("DISCORD_WEBHOOK_TOKEN"),
-        dockerhub_username=config.SECRETS.get("DOCKERHUB_USERNAME"),
-        dockerhub_password=config.SECRETS.get("DOCKERHUB_PASSWORD"),
-        gitlab_token=config.SECRETS.get("GITLAB_TOKEN"),
-        s8k_access_key_id=config.SECRETS.get("S8K_ACCESS_KEY_ID"),
-        s8k_secret_access_key=config.SECRETS.get("S8K_SECRET_ACCESS_KEY"),
+        dagshub_username=os.environ.get("DAGSHUB_USERNAME"),
+        dagshub_user_token=os.environ.get("DAGSHUB_USER_TOKEN"),
+        discord_webhook_token=os.environ.get("DISCORD_WEBHOOK_TOKEN"),
+        dockerhub_username=os.environ.get("DOCKERHUB_USERNAME"),
+        dockerhub_password=os.environ.get("DOCKERHUB_PASSWORD"),
+        gitlab_token=os.environ.get("GITLAB_TOKEN"),
+        s8k_access_key_id=os.environ.get("S8K_ACCESS_KEY_ID"),
+        s8k_secret_access_key=os.environ.get("S8K_SECRET_ACCESS_KEY"),
     ),
 )
