@@ -1,8 +1,10 @@
-from myinfra.facts import brew as brew_facts
 from myinfra.facts import cloudflare as cf_facts
 from myinfra.operations import cloudflare
+from myinfra.operations import files as myfiles
 from pyinfra.api import deploy
-from pyinfra.operations import server
+from pyinfra.facts import launchd as launchd_facts
+from pyinfra.facts import server as server_facts
+from pyinfra.operations import files, server
 
 from pyinfra import host
 
@@ -122,17 +124,52 @@ def apply_txt_records(zone_id):
 
 @deploy("Backup")
 def apply_backup(zone_id, teardown=False):
-    ## Backup everyday at 6pm.
-    server.crontab(
-        name="Zone File",
-        command=f'export SHELL={host.get_fact(brew_facts.BrewPrefix)}/bin/bash; source ~/.local/profile/.bash_env; curl --request GET --url https://api.cloudflare.com/client/v4/zones/{zone_id}/dns_records/export --header "Content-Type: application/json" --header "X-Auth-Email: {host.data.cloudflare_email}" --header "X-Auth-Key: ${{CLOUDFLARE_API_KEY}}" -o {host.data.backup_dir}/sanyamkapoor.com.zone >>/tmp/zone-export.cf.log 2>&1',
-        minute="0",
-        hour="*/18",
-        month="*",
-        day_of_week="*",
-        day_of_month="*",
+    remote_home = host.get_fact(server_facts.Home)
+
+    service_label = "com.sanyamkapoor.cloudflare"
+    plist_path = f"{remote_home}/Library/LaunchAgents/{service_label}.plist"
+    backup_dir = host.data.backup_dir.replace("~/", f"{remote_home}/", 1).replace("\\ ", " ")
+
+    service_loaded = service_label in host.get_fact(launchd_facts.LaunchdStatus)
+    if teardown and service_loaded:
+        server.shell(
+            name="Bootout LaunchAgent",
+            commands=f'launchctl bootout "gui/$(id -u)/{service_label}"',
+        )
+
+    if not teardown:
+        files.directory(name="LaunchAgents Directory", path=f"{remote_home}/Library/LaunchAgents", mode=700)
+
+    files.directory(
+        name=f"{'Remove ' if teardown else ''}Log Directory",
+        path=f"{remote_home}/Library/Logs/Cloudflare",
+        mode=700,
         present=not teardown,
     )
+
+    launch_agent = myfiles.template(
+        name=f"{'Remove ' if teardown else ''}LaunchAgent",
+        src="tasks/cloudflare/templates/com.sanyamkapoor.cloudflare.plist.j2",
+        dest=plist_path,
+        mode=600,
+        present=not teardown,
+        stdout_path=f"{remote_home}/Library/Logs/Cloudflare/launchctl-export.log",
+        cloudflare_api_key=host.data.cloudflare_api_key,
+        zone_id=zone_id,
+        cloudflare_email=host.data.cloudflare_email,
+        backup_path=f"{backup_dir}/sanyamkapoor.com.zone",
+    )
+
+    if not teardown:
+        server.shell(
+            name="Bootstrap LaunchAgent",
+            commands=[
+                f'plutil -lint "{plist_path}"',
+                f'launchctl bootout "gui/$(id -u)/{service_label}" >/dev/null 2>&1 || true',
+                f'launchctl bootstrap "gui/$(id -u)" "{plist_path}"',
+            ],
+            _if=lambda: launch_agent.did_change() or not service_loaded,
+        )
 
 
 @deploy("Cloudflare")
@@ -150,8 +187,9 @@ def apply(teardown=False):
 
         apply_txt_records(zone_id)
 
-    apply_backup(zone_id, teardown=teardown)
+    if "home" in host.groups:
+        apply_backup(zone_id, teardown=teardown)
 
 
 def pre_check():
-    return "home" in host.groups and all([host.data.get(k, "") for k in ["cloudflare_email", "cloudflare_api_key"]])
+    return all([host.data.get(k, "") for k in ["cloudflare_email", "cloudflare_api_key"]])

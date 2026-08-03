@@ -7,7 +7,7 @@ mac = (
         (
             "@local",
             dict(
-                backup_dir="~/Cloud\ Drive/Credentials",
+                backup_dir="~/MegaDrive/Credentials",
                 cloudflare_email=os.environ["EMAIL"],
                 cloudflare_api_key=os.environ["CLOUDFLARE_API_KEY"],
                 discord_webhook_token=os.environ.get("DISCORD_WEBHOOK_TOKEN"),

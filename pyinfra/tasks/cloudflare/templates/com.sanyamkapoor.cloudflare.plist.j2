@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.sanyamkapoor.cloudflare</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>exec /usr/bin/curl --fail --silent --show-error --request GET --url "https://api.cloudflare.com/client/v4/zones/{{ zone_id | e }}/dns_records/export" --header "Content-Type: application/json" --header "X-Auth-Email: {{ cloudflare_email | e }}" --header "X-Auth-Key: ${CLOUDFLARE_API_KEY:?CLOUDFLARE_API_KEY is required}" --output "{{ backup_path | e }}"</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>CLOUDFLARE_API_KEY</key>
+        <string>{{ cloudflare_api_key | e }}</string>
+    </dict>
+
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Hour</key>
+            <integer>0</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <dict>
+            <key>Hour</key>
+            <integer>12</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+    </array>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <key>StandardOutPath</key>
+    <string>{{ stdout_path }}</string>
+    <key>StandardErrorPath</key>
+    <string>{{ stdout_path }}</string>
+
+    <key>Umask</key>
+    <string>077</string>
+</dict>
+</plist>
