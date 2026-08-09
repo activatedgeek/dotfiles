@@ -14,18 +14,18 @@ from pyinfra import host
 @dataclass
 class Micromamba(Binary):
     gh_repo: ClassVar[str] = "mamba-org/micromamba-releases"
-    version: ClassVar[str] = "2.8.1-1"
+    version: ClassVar[str] = "2.9.0-0"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "micromamba-linux-64",
-                "sha256sum": "77b7790ec97f64581118f103585b175df4306f95829b0fa6bfe4a19cc88a1182",
+                "sha256sum": "366cd9cd8be14df1ab8ed50352a82111082a36686b2d389fdb79a92c3fafb3e3",
             },
             "arm64": {
                 "name": "micromamba-linux-aarch64",
-                "sha256sum": "49aa29008cafa6cd6027ebd643fc43ca32c20740e60b0a05378c4e5bb837c217",
+                "sha256sum": "9f93b974adcb4d166996af969b6cd371287d1a3e52733704727884d9b74cb7a7",
             },
         }
 
