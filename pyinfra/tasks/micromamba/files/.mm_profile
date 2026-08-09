@@ -10,6 +10,8 @@ if [[ -f "${MAMBA_EXE}" ]]; then
     unset __mamba_setup
 fi
 
+export PATH="${PATH}:${MAMBA_ROOT_PREFIX}/bin"
+
 alias conda='micromamba'
 
 function mm {

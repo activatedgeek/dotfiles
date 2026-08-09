@@ -1,24 +1,3 @@
-## Directories.
-export STORE_HOME=${STORE_HOME:-"${HOME}/store"}
-
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${STORE_HOME}/.cache"}"
-
-export IPYTHONDIR="${IPYTHONDIR:-"${XDG_CONFIG_HOME}/ipython"}"
-
-export DEEP_GEMM_CACHE_DIR="${DEEP_GEMM_CACHE_DIR:-"${XDG_CACHE_HOME}/deep_gemm"}"
-export DG_JIT_CACHE_DIR="${DEEP_GEMM_CACHE_DIR}"
-export HF_HOME="${HF_HOME:-"${XDG_CACHE_HOME}/huggingface"}"
-export PYTORCH_KERNEL_CACHE_PATH="${PYTORCH_KERNEL_CACHE_PATH:-"${XDG_CACHE_HOME}/torch"}"
-export TORCHINDUCTOR_CACHE_DIR="${TORCHINDUCTOR_CACHE_DIR:-"${XDG_CACHE_HOME}/torchinductor"}"
-export TRITON_HOME="${TRITON_CACHE_DIR}"
-
-export WANDB_DIR="${WANDB_DIR:-"${XDG_CACHE_HOME}/wandb"}"
-
-if [[ -d "$(dirname ${__src_dir})/bin" ]]; then
-    export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
-fi
-
 ## Config Vars.
 
 if [[ -z "${HEADLESS}" ]]; then
@@ -28,13 +7,42 @@ if [[ -z "${HEADLESS}" ]]; then
     export GPG_TTY=$(tty)
 fi
 
+if [[ -d "$(dirname ${__src_dir})/bin" ]]; then
+    export PATH="$(dirname ${__src_dir})/bin":"${PATH}"
+fi
+
 export INVENTORY_HOSTNAME={{ inventory_hostname | d('unknown') }}
 
 export DISABLE_OPENCOLLECTIVE=1
 export ADBLOCK=1
 export NPM_CONFIG_AUDIT=false
 
-export XLA_PYTHON_CLIENT_PREALLOCATE=false
-export TF_CPP_MIN_LOG_LEVEL=${TF_CPP_MIN_LOG_LEVEL:-3}
-
 export WANDB_DISABLE_CODE=true
+
+## Directories.
+export STORE_HOME=${STORE_HOME:-"${HOME}/store"}
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-"${HOME}/.config"}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-"${STORE_HOME}/.cache"}"
+
+export STARSHIP_CACHE="${XDG_CACHE_HOME}/starship"
+
+export IPYTHONDIR="${IPYTHONDIR:-"${XDG_CONFIG_HOME}/ipython"}"
+
+export APPTAINER_CONFIGDIR="${XDG_CONFIG_HOME}/apptainer"
+export APPTAINER_CACHEDIR="${XDG_CACHE_HOME}/apptainer"
+export APPTAINER_TMPDIR="${XDG_CACHE_HOME}/apptainer/tmp"
+export SINGULARITY_CONFIGDIR="${APPTAINER_CONFIGDIR}"
+export SINGULARITY_CACHEDIR="${APPTAINER_CACHEDIR}"
+export SINGULARITY_TMPDIR="${APPTAINER_TMPDIR}"
+
+export DEEP_GEMM_CACHE_DIR="${DEEP_GEMM_CACHE_DIR:-"${XDG_CACHE_HOME}/deep_gemm"}"
+export DG_JIT_CACHE_DIR="${DEEP_GEMM_CACHE_DIR}"
+
+export PYTORCH_KERNEL_CACHE_PATH="${PYTORCH_KERNEL_CACHE_PATH:-"${XDG_CACHE_HOME}/torch"}"
+export TORCHINDUCTOR_CACHE_DIR="${TORCHINDUCTOR_CACHE_DIR:-"${XDG_CACHE_HOME}/torchinductor"}"
+export TRITON_HOME="${TRITON_CACHE_DIR}"
+
+export HF_HOME="${HF_HOME:-"${XDG_CACHE_HOME}/huggingface"}"
+
+export WANDB_DIR="${WANDB_DIR:-"${XDG_CACHE_HOME}/wandb"}"

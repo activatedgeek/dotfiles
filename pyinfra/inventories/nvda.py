@@ -52,7 +52,7 @@ slurm = (
                 ),
                 enroot_mounts=["/lustre/fsw"],
                 ## NOTE: Shares fs with aws-cmh-2.
-                skip_host=True,
+                # skip_host=True,
             ),
         ),
         (
@@ -73,6 +73,8 @@ slurm = (
                     cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
                 ),
                 enroot_mounts=["/lustre/fsw"],
+                ## NOTE: Shares fs with aws-cmh.
+                skip_host=True,
             ),
         ),
         (

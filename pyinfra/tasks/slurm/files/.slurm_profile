@@ -1,7 +1,4 @@
 ## Slurm.
-export APPTAINER_CACHEDIR=${XDG_CACHE_HOME}
-export SINGULARITY_CACHEDIR=${XDG_CACHE_HOME}
-
 alias si='sinfo -lNe'
 alias sacct='sacct --format=JobName%24,JobIDRaw,State%8,ExitCode%4,AllocTRES%56,NodeList'
 alias sshare='sshare -u $USER'
