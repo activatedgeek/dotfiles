@@ -8,6 +8,7 @@
 #USAGE  choices "home" "nvda" "dns"
 #USAGE }
 #USAGE flag "-r --refresh" help="Refresh deployment by cleaning cache."
+#USAGE flag "-d --diff" help="Show file diffs."
 #USAGE flag "-t --task <task>" help="Optionally deploy only task."
 #USAGE flag "-l --limit <limit>" help="Limit hosts." default="*"
 #USAGE flag "--teardown" help="Teardown deployment"
@@ -35,7 +36,12 @@ if [[ "${usage_refresh}" == "true" ]]; then
     rm -rf .pyinfra_cache/
 fi
 
-pyinfra_cmd=(pyinfra -y --diff --fail-percent 100)
+pyinfra_cmd=(pyinfra -y --fail-percent 100)
+
+# shellcheck disable=SC2154
+if [[ "${usage_diff}" == "true" ]]; then
+    pyinfra_cmd+=(--diff)
+fi
 
 # shellcheck disable=SC2154
 if [[ "${usage_teardown}" == "true" ]]; then

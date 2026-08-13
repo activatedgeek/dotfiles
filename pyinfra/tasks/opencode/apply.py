@@ -61,6 +61,19 @@ def apply_linux(arch, teardown=False):
     )
 
 
+@deploy("Config")
+def apply_config(teardown=False):
+    remote_home = host.get_fact(server_facts.Home)
+
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}Config",
+        src="tasks/opencode/files/opencode.json",
+        dest=f"{remote_home}/.config/opencode/opencode.json",
+        mode=600,
+        present=not teardown,
+    )
+
+
 @deploy("OpenCode")
 def apply():
     teardown = host.data.get("teardown", False)
@@ -70,3 +83,5 @@ def apply():
     elif kernel == "Linux":
         arch = host.get_fact(myserver_facts.DpkgArch)
         apply_linux(arch, teardown=teardown)
+
+    apply_config(teardown=teardown)

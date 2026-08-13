@@ -9,7 +9,7 @@ from ..facts import uv as uv_facts
 
 
 @operation()
-def venv(path, python_version="3.11", requirements=None, binary_path=None, present=True):
+def venv(path, python_version="3.12", requirements=None, binary_path=None, present=True):
     binary_path = binary_path or "uv"
     venv_path = path + "/.venv"
 
