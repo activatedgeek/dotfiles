@@ -11,7 +11,6 @@ mac = (
                 cloudflare_email=os.environ["EMAIL"],
                 cloudflare_global_api_key=os.environ["CLOUDFLARE_GLOBAL_API_KEY"],
                 discord_webhook_token=os.environ.get("DISCORD_WEBHOOK_TOKEN"),
-                goatcounter_site=os.environ.get("GOATCOUNTER_SITE"),
                 hcloud_token=os.environ.get("HCLOUD_TOKEN"),
                 mapbox_access_token=os.environ.get("MAPBOX_ACCESS_TOKEN"),
                 vault_pass=os.environ["VAULT_PASS"],

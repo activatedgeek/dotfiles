@@ -71,7 +71,6 @@ def apply_config(teardown=False):
         cloudflare_global_api_key=host.data.get("cloudflare_global_api_key"),
         discord_webhook_token=host.data.get("discord_webhook_token"),
         dockerhub_password=host.data.get("dockerhub_password"),
-        goatcounter_site=host.data.get("goatcounter_site"),
         gitlab_token=host.data.get("gitlab_token"),
         hcloud_token=host.data.get("hcloud_token"),
         mapbox_access_token=host.data.get("mapbox_access_token"),
