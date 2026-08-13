@@ -9,7 +9,7 @@ mac = (
             dict(
                 backup_dir="~/MegaDrive/Credentials",
                 cloudflare_email=os.environ["EMAIL"],
-                cloudflare_api_key=os.environ["CLOUDFLARE_API_KEY"],
+                cloudflare_global_api_key=os.environ["CLOUDFLARE_GLOBAL_API_KEY"],
                 discord_webhook_token=os.environ.get("DISCORD_WEBHOOK_TOKEN"),
                 goatcounter_site=os.environ.get("GOATCOUNTER_SITE"),
                 hcloud_token=os.environ.get("HCLOUD_TOKEN"),

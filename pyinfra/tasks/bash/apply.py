@@ -68,7 +68,7 @@ def apply_config(teardown=False):
         present=not teardown,
         ## Jinja2 Variables.
         use_export=True,
-        cloudflare_api_key=host.data.get("cloudflare_api_key"),
+        cloudflare_global_api_key=host.data.get("cloudflare_global_api_key"),
         discord_webhook_token=host.data.get("discord_webhook_token"),
         dockerhub_password=host.data.get("dockerhub_password"),
         goatcounter_site=host.data.get("goatcounter_site"),

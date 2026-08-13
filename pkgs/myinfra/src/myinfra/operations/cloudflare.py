@@ -30,7 +30,7 @@ def dns(
 
     client = Cloudflare(
         api_email=host.data.cloudflare_email,
-        api_key=host.data.cloudflare_api_key,
+        api_key=host.data.cloudflare_global_api_key,
     )
 
     if dns_record_id:

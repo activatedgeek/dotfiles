@@ -9,13 +9,13 @@
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>exec /usr/bin/curl --fail --silent --show-error --request GET --url "https://api.cloudflare.com/client/v4/zones/{{ zone_id | e }}/dns_records/export" --header "Content-Type: application/json" --header "X-Auth-Email: {{ cloudflare_email | e }}" --header "X-Auth-Key: ${CLOUDFLARE_API_KEY:?CLOUDFLARE_API_KEY is required}" --output "{{ backup_path | e }}"</string>
+        <string>exec /usr/bin/curl --fail --silent --show-error --request GET --url "https://api.cloudflare.com/client/v4/zones/{{ zone_id | e }}/dns_records/export" --header "Content-Type: application/json" --header "X-Auth-Email: {{ cloudflare_email | e }}" --header "X-Auth-Key: ${CLOUDFLARE_GLOBAL_API_KEY:?CLOUDFLARE_GLOBAL_API_KEY is required}" --output "{{ backup_path | e }}"</string>
     </array>
 
     <key>EnvironmentVariables</key>
     <dict>
-        <key>CLOUDFLARE_API_KEY</key>
-        <string>{{ cloudflare_api_key | e }}</string>
+        <key>CLOUDFLARE_GLOBAL_API_KEY</key>
+        <string>{{ cloudflare_global_api_key | e }}</string>
     </dict>
 
     <key>StartCalendarInterval</key>
