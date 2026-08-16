@@ -1,12 +1,14 @@
 import os
 
+from myinfra.inventory import Inventory, InventoryGroup, InventoryHost
 from pyinfra.api import config
 
-mac = (
-    [
-        (
-            "@local",
-            dict(
+mac = InventoryGroup(
+    name="mac",
+    hosts=[
+        InventoryHost(
+            name="@local",
+            vars=dict(
                 backup_dir="~/MegaDrive/Credentials",
                 cloudflare_email=os.environ["EMAIL"],
                 cloudflare_global_api_key=os.environ["CLOUDFLARE_GLOBAL_API_KEY"],
@@ -20,15 +22,14 @@ mac = (
             ),
         )
     ],
-    dict(),
 )
 
-all = (
-    [h for h, _ in mac[0]],
-    dict(
+inventory = Inventory(
+    groups=[mac],
+    vars=dict(
         email=os.environ["EMAIL"],
-        skip_tasks={},
-        ## Latest binary versions
-        binary_versions=config.BINARY_VERSIONS,
     ),
+    binary_versions=config.BINARY_VERSIONS,
 )
+
+globals().update(inventory.resolve())
