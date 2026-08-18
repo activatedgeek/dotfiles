@@ -6,7 +6,7 @@ from myinfra.operations import files as myfiles
 from myinfra.utils import Binary
 from pyinfra.api import deploy
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import brew
+from pyinfra.operations import brew, files
 
 from pyinfra import host
 
@@ -57,6 +57,21 @@ def apply_linux(arch, teardown=False):
         dest=f"{remote_home}/.local/bin/opencode",
         sha256sum=binary.sha256sum,
         mode=755,
+        present=not teardown,
+    )
+
+    files.directory(
+        name="systemd User Units",
+        path=f"{remote_home}/.config/systemd/user",
+        mode=700,
+        recursive=True,
+    )
+
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}OpenChamber Service",
+        src="tasks/opencode/files/openchamber.service",
+        dest=f"{remote_home}/.config/systemd/user/openchamber.service",
+        mode=600,
         present=not teardown,
     )
 

@@ -66,7 +66,3 @@ def apply():
     # elif kernel == "Linux":
     #     arch = host.get_fact(myserver_facts.DpkgArch)
     #     apply_linux(arch, teardown=teardown)
-
-
-def pre_check():
-    return "slurm" not in host.groups

@@ -1,0 +1,17 @@
+[Unit]
+Description=OpenChamber
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+Environment=OPENCODE_ENABLE_EXA=1
+Environment=OPENCODE_BINARY=%h/.local/bin/opencode
+ExecStart=/bin/sh -c 'exec npx -y @openchamber/web@latest --no-daemon --api-only --lan --port 42424 --ui-password "$(cat %h/.local/share/opencode/oc.pass)"'
+KillMode=control-group
+TimeoutStopSec=30
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

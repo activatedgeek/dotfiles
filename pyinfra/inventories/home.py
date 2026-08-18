@@ -1,35 +1,40 @@
-import os
+from pathlib import Path
 
-from myinfra.inventory import Inventory, InventoryGroup, InventoryHost
-from pyinfra.api import config
+from dotenv import dotenv_values
+from myinfra.inventory import Inventory
+from pyinfra.api import config, exceptions
 
-mac = InventoryGroup(
-    name="mac",
-    hosts=[
-        InventoryHost(
-            name="@local",
-            vars=dict(
-                backup_dir="~/MegaDrive/Credentials",
-                cloudflare_email=os.environ["EMAIL"],
-                cloudflare_global_api_key=os.environ["CLOUDFLARE_GLOBAL_API_KEY"],
-                discord_webhook_token=os.environ.get("DISCORD_WEBHOOK_TOKEN"),
-                hcloud_token=os.environ.get("HCLOUD_TOKEN"),
-                mapbox_access_token=os.environ.get("MAPBOX_ACCESS_TOKEN"),
-                vault_pass=os.environ["VAULT_PASS"],
-                wandb_api_key=os.environ.get("WANDB_API_KEY"),
-                wandb_username=os.environ.get("WANDB_USERNAME"),
-                wandb_entity=os.environ.get("WANDB_ENTITY"),
-            ),
-        )
-    ],
-)
+for f in ["tasks/ssh/files/home/id_ed25519", "tasks/ssh/files/home/id_ed25519.pub", "inventories/home.env"]:
+    if not Path(f).is_file():
+        raise exceptions.InventoryError(f"File {f} not found.")
+
+inventory_env = dotenv_values(Path(__file__).with_suffix(".env"))
 
 inventory = Inventory(
-    groups=[mac],
     vars=dict(
-        email=os.environ["EMAIL"],
+        email=inventory_env["EMAIL"],
     ),
     binary_versions=config.BINARY_VERSIONS,
 )
+
+inventory.hosts = [
+    Inventory.Host(
+        name="@local",
+        vars=dict(
+            backup_dir="~/MegaDrive/Credentials",
+            cloudflare_email=inventory_env["EMAIL"],
+            cloudflare_global_api_key=inventory_env["CLOUDFLARE_GLOBAL_API_KEY"],
+            discord_webhook_token=inventory_env.get("DISCORD_WEBHOOK_TOKEN"),
+            hcloud_token=inventory_env.get("HCLOUD_TOKEN"),
+            mapbox_access_token=inventory_env.get("MAPBOX_ACCESS_TOKEN"),
+            vault_pass=inventory_env["VAULT_PASS"],
+            wandb_api_key=inventory_env.get("WANDB_API_KEY"),
+            wandb_username=inventory_env.get("WANDB_USERNAME"),
+            wandb_entity=inventory_env.get("WANDB_ENTITY"),
+        ),
+    ),
+]
+
+inventory.groups = [Inventory.Group(name="mac", hosts={"@local"})]
 
 globals().update(inventory.resolve())
