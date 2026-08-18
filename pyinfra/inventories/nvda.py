@@ -271,6 +271,7 @@ inventory = Inventory(
     skip_tasks={
         "bitwarden",
         "cloudflare",
+        "codex",
         "mega",
         "netnewswire",
         "obsidian",
