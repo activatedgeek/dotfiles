@@ -1,6 +1,6 @@
 # dotfiles
 
-[![Prek](https://github.com/activatedgeek/dotfiles/actions/workflows/prek.yml/badge.svg)](https://github.com/activatedgeek/dotfiles/actions/workflows/prek.yml)
+[![Prek](https://github.com/activatedgeek/dotfiles/actions/workflows/prek.yml/badge.svg)](https://github.com/activatedgeek/dotfiles/actions/workflows/prek.yml) [![Pyinfra](https://github.com/activatedgeek/dotfiles/actions/workflows/pyinfra.yml/badge.svg)](https://github.com/activatedgeek/dotfiles/actions/workflows/pyinfra.yml)
 
 ## Setup
 

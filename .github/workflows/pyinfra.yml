@@ -1,11 +1,11 @@
-name: Prek
+name: Pyinfra
 on:
   push:
     branches:
       - '*'
   pull_request:
 jobs:
-  check:
+  dry-run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -16,19 +16,16 @@ jobs:
         uses: jdx/mise-action@v4
         with:
           cache: true
-      - name: Run prek
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.0.1
+        with:
+          save-cache: true
+      - name: Install
         shell: bash
-        run: |
-          prek_cmd=(mise x -- prek run --show-diff-on-failure)
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            prek_cmd+=(
-              --from-ref "origin/${{ github.base_ref }}"
-              --to-ref "${{ github.sha }}"
-            )
-          else
-            prek_cmd+=(--all-files)
-          fi
-          "${prek_cmd[@]}"
+        run: uv sync --locked
+      - name: Test pyinfra
+        shell: bash
+        run: mise deploy test -- --dry --debug-operations
       - name: Discord Notify
         uses: sarisia/actions-status-discord@v1
         if: always()
