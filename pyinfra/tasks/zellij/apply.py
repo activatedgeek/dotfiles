@@ -14,18 +14,18 @@ from pyinfra import host
 @dataclass
 class Zellij(Binary):
     gh_repo: ClassVar[str] = "zellij-org/zellij"
-    version: ClassVar[str] = "v0.44.3"
+    version: ClassVar[str] = "v0.45.0"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "zellij-no-web-x86_64-unknown-linux-musl.tar.gz",
-                "sha256sum": "a675b0106263113b9cb8f028649bad05c5d2283331fa62b2b36dd275aeaaa4d3",
+                "sha256sum": "a9331a7ac3e62833e599e3bedd3bbad053437d66bcb447466f21c079c3d5c002",
             },
             "arm64": {
                 "name": "zellij-no-web-aarch64-unknown-linux-musl.tar.gz",
-                "sha256sum": "6c06fd6139c2e38c6a07e0471b0662d08123ce35b436800d0c7017125f8ce4af",
+                "sha256sum": "d2da64ca3bbd9f15b33ce91bf706b05d23e6d1865bdabc3b4aecab3391c683ab",
             },
         }
 

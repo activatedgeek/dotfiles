@@ -68,6 +68,14 @@ def apply_linux(arch, teardown=False):
 def apply_config(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
+    myfiles.copy(
+        name=f"{'Remove ' if teardown else ''}.gitignore_global",
+        src="tasks/git/files/.gitignore_global",
+        dest=f"{remote_home}/.gitignore_global",
+        present=not teardown,
+        mode=600,
+    )
+
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}.gitconfig",
         src="tasks/git/templates/.gitconfig.j2",
@@ -78,14 +86,6 @@ def apply_config(teardown=False):
         git_name=host.get_fact(myserver_facts.UserFullName),
         git_email=host.data.email,
         git_xet=bool(host.get_fact(git_facts.GitXetBinary, path=f"{remote_home}/.local/bin/git-xet")),
-    )
-
-    myfiles.copy(
-        name=f"{'Remove ' if teardown else ''}.gitignore_global",
-        src="tasks/git/files/.gitignore_global",
-        dest=f"{remote_home}/.gitignore_global",
-        present=not teardown,
-        mode=600,
     )
 
 

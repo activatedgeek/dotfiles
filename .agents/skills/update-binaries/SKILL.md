@@ -88,11 +88,13 @@ For each selected binary and each architecture:
    extracted files, or checksum intermediates in the repository or temporary
    directory after the operation.
 4. If the asset is an archive (`.tar.gz`, `.tar.bz2`, `.tar.zst`, or `.zip`),
-   inspect its contents and extract it into the temporary directory. Hash the
-   exact executable installed by the task, such as `uv`, `uvx`, `btm`, or
-   `opencode`, using `shasum -a 256` or an equivalent tool. If an archive
-   contains multiple executables, hash only the one corresponding to the task's
-   destination.
+   inspect its contents and extract it into a separate per-asset, per-architecture
+   subdirectory within the temporary directory. Do not extract architecture
+   archives into one shared directory, because identical internal executable
+   paths can overwrite one another. Hash the exact executable installed by the
+   task, such as `uv`, `uvx`, `btm`, or `opencode`, using `shasum -a 256` or an
+   equivalent tool. If an archive contains multiple executables, hash only the
+   one corresponding to the task's destination.
 5. If the asset is a raw executable, hash the downloaded file itself. This is
    the case for task definitions such as `mise` that use `files.download`
    without an archive.

@@ -13,18 +13,18 @@ from pyinfra import host
 @dataclass
 class Codex(Binary):
     gh_repo: ClassVar[str] = "openai/codex"
-    version: ClassVar[str] = "rust-v0.147.0"
+    version: ClassVar[str] = "rust-v0.149.1"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "codex-package-x86_64-unknown-linux-musl.tar.gz",
-                "sha256sum": "cb0a15567e9a60a5820d54b0f6ae86d504dc3805c1eab21a47f70e3eb7b73a40",
+                "sha256sum": "73dc5888888f411c1f0fa7b81d866e721dcc86b527ce8e3b2cf4708661e823ba",
             },
             "arm64": {
                 "name": "codex-package-aarch64-unknown-linux-musl.tar.gz",
-                "sha256sum": "e23d0be344d2496986c985cd3db61e6f649b1ddd900e6afc1b5aaabbffcbb4e2",
+                "sha256sum": "2447e3fef519401ff6d6e90759ab1bf66082da48966fc6e4fe9a77108f9c20d8",
             },
         }
 
