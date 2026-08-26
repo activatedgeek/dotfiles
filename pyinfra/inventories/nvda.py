@@ -33,7 +33,7 @@ inventory = Inventory(
 inventory.hosts = [
     Inventory.Host(
         name="@local",
-        skip_tasks={"bitwarden", "codex", "mega", "netnewswire", "tailscale"},
+        skip_tasks={"bitwarden", "codex", "mega", "tailscale"},
     ),
     Inventory.Host(
         name="desk",
@@ -54,7 +54,7 @@ inventory.hosts = [
     Inventory.Host(
         name="aws-cmh",
         vars=dict(
-            ssh_hostname="aws-cmh-slurm-1-dc-01.nvidia.com",
+            ssh_hostname="aws-cmh-slurm-1-dc-03.nvidia.com",
             ssh_code_hostname="aws-cmh-slurm-1-vscode-02.nvidia.com",
             ssh_aliases=["cmh"],
             store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
@@ -93,25 +93,6 @@ inventory.hosts = [
             enroot_mounts=["/lustre/fsw"],
             ## NOTE: Shares fs with aws-cmh.
             skip_host=True,
-        ),
-    ),
-    Inventory.Host(
-        name="aws-dfw",
-        vars=dict(
-            ssh_hostname="aws-dfw-cs-001-dc-01.nvidia.com",
-            ssh_aliases=["adfw"],
-            store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
-            sbatch_account="nemotron_reason_math",
-            sbatch_gpus_per_node=4,
-            sbatch_partitions=dict(
-                gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
-                gpu_interactive=dict(
-                    partition="batch", qos="interactive", time="04:00:00", overrides=dict(gpus_per_node=4)
-                ),
-                cpu=dict(partition="cpu", time="1-00:00:00"),
-                cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
-            ),
-            enroot_mounts=["/lustre/fsw", "/scratch/fsw"],
         ),
     ),
     Inventory.Host(
@@ -249,7 +230,7 @@ inventory.hosts = [
 desktop_group = Inventory.Group(name="desktop", hosts={"desk"})
 slurm_group = Inventory.Group(
     name="slurm",
-    hosts={"aws-cmh", "aws-cmh-2", "aws-dfw", "aws-iad", "dfw", "eos", "hsg", "iad", "nrt", "ord", "svg"},
+    hosts={"aws-cmh", "aws-cmh-2", "aws-iad", "dfw", "eos", "hsg", "iad", "nrt", "ord", "svg"},
     skip_tasks={"opencode"},
 )
 

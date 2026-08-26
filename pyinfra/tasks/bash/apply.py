@@ -60,6 +60,13 @@ def apply_config(teardown=False):
                 present=not teardown,
             )
 
+            files.link(
+                name=f"{'Remove ' if teardown else ''}Cache Symlink",
+                path=f"{remote_home}/.cache",
+                target=f"{store_home}/.cache",
+                present=not teardown,
+            )
+
     myfiles.template(
         name=f"{'Remove ' if teardown else ''}Secrets Env",
         src="tasks/bash/templates/.secrets_env.j2",
