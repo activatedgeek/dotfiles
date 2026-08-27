@@ -143,6 +143,23 @@ inventory.hosts = [
         ),
     ),
     Inventory.Host(
+        name="hel",
+        vars=dict(
+            ssh_hostname="nb-hel-cs-001-dc-02.nvidia.com",
+            ssh_code_hostname="nb-hel-cs-001-vscode-02.nvidia.com",
+            store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
+            sbatch_account="nemotron_reason_math",
+            sbatch_gpus_per_node=4,
+            sbatch_partitions=dict(
+                gpu=dict(partition="batch", time="04:00:00"),
+                gpu_interactive=dict(partition="interactive", qos="interactive", time="04:00:00"),
+                cpu=dict(partition="cpu", time="04:00:00"),
+                cpu_interactive=dict(partition="cpu_interactive", time="02:00:00"),
+            ),
+            enroot_mounts=["/lustre/fsw", "/scratch/fsw"],
+        ),
+    ),
+    Inventory.Host(
         name="hsg",
         vars=dict(
             ssh_hostname="oci-hsg-cs-001-dc-03.nvidia.com",
@@ -230,7 +247,7 @@ inventory.hosts = [
 desktop_group = Inventory.Group(name="desktop", hosts={"desk"})
 slurm_group = Inventory.Group(
     name="slurm",
-    hosts={"aws-cmh", "aws-cmh-2", "aws-iad", "dfw", "eos", "hsg", "iad", "nrt", "ord", "svg"},
+    hosts={"aws-cmh", "aws-cmh-2", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "nrt", "ord", "svg"},
     skip_tasks={"opencode"},
 )
 
