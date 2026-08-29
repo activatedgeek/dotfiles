@@ -2,7 +2,13 @@
   "$schema": "https://paseo.sh/schemas/paseo.config.v1.json",
   "version": 1,
   "daemon": {
-    "listen": "0.0.0.0:6767"
+    "listen": "0.0.0.0:6767",
+    "hostnames": [
+      ".ts.net"
+    ],
+    "relay": {
+      "enabled": false
+    }
   },
   "agents": {
     "providers": {
