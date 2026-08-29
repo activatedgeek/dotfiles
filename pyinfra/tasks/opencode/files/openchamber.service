@@ -6,9 +6,9 @@ Wants=network-online.target
 [Service]
 Type=simple
 WorkingDirectory=%h
-Environment=OPENCODE_ENABLE_EXA=1
+Environment=OPENCODE_ENABLE_PARALLEL=1
 Environment=OPENCODE_BINARY=%h/.local/bin/opencode
-ExecStart=/bin/sh -c 'exec npx -y @openchamber/web@latest --no-daemon --api-only --lan --port 42424 --ui-password "$(cat %h/.local/share/opencode/oc.pass)"'
+ExecStart=/bin/sh -c 'export OPENCODE_SERVER_USERNAME="$USER" OPENCODE_SERVER_PASSWORD="$(cat %h/.local/share/opencode/oc.pass)" OPENCHAMBER_UI_PASSWORD="$(cat %h/.local/share/opencode/oc.pass)" OPENCODE_HOST=http://127.0.0.1:4095 OPENCODE_SKIP_START=true; %h/.local/bin/opencode serve --hostname 0.0.0.0 --port 4095 --cors "*" & exec npx -y @openchamber/web@latest --no-daemon --api-only --lan --port 42424'
 KillMode=control-group
 TimeoutStopSec=30
 Restart=on-failure

@@ -1,0 +1,15 @@
+[Unit]
+Description=Paseo Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/bin/sh -c 'export PASEO_PASSWORD="$(cat %h/.local/share/opencode/oc.pass)"; exec npx -y @getpaseo/cli daemon start --foreground --listen 0.0.0.0:6767 --hostnames true'
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target
