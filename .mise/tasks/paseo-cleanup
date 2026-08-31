@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#MISE description="Delete OpenCode sessions for archived Paseo agents"
+#MISE description="Delete OpenCode sessions and stale archived Paseo agents"
 #MISE quiet=true
 
 #USAGE flag "--dry-run" help="Print sessions without deleting them."
@@ -21,7 +21,13 @@ fi
 
 shopt -s nullglob
 deleted_count=0
+deleted_agent_count=0
 failed_count=0
+
+if ! opencode_sessions="$(opencode session list --format json)"; then
+    echo "[ERROR] Could not list OpenCode sessions." >&2
+    exit 1
+fi
 
 while IFS= read -r agent_id; do
     [[ -z "${agent_id}" ]] && continue
@@ -47,6 +53,19 @@ while IFS= read -r agent_id; do
         continue
     fi
 
+    if ! jq -e --arg session_id "${session_id}" 'any(.[]; .id == $session_id)' <<<"${opencode_sessions}" >/dev/null; then
+        if [[ "${usage_dry_run:-false}" == "true" ]]; then
+            echo "[DRY RUN] Delete Paseo agent ${agent_id}; OpenCode session ${session_id} does not exist."
+        elif paseo agent delete "${agent_id}" >/dev/null; then
+            echo "[DELETED] Paseo agent ${agent_id}; OpenCode session ${session_id} did not exist."
+            deleted_agent_count=$((deleted_agent_count + 1))
+        else
+            echo "[ERROR] Failed to delete Paseo agent ${agent_id} with missing OpenCode session ${session_id}." >&2
+            failed_count=$((failed_count + 1))
+        fi
+        continue
+    fi
+
     if [[ "${usage_dry_run:-false}" == "true" ]]; then
         echo "[DRY RUN] ${agent_id} -> ${session_id}"
         continue
@@ -67,6 +86,7 @@ done < <(
 
 if [[ "${usage_dry_run:-false}" != "true" ]]; then
     echo "Deleted ${deleted_count} OpenCode session(s)."
+    echo "Deleted ${deleted_agent_count} stale Paseo agent(s)."
 fi
 
 if [[ ${failed_count} -gt 0 ]]; then

@@ -74,28 +74,6 @@ inventory.hosts = [
         ),
     ),
     Inventory.Host(
-        name="aws-cmh-2",
-        vars=dict(
-            ssh_hostname="aws-cmh-slurm-2-dc-03.nvidia.com",
-            ssh_code_hostname="aws-cmh-slurm-2-vscode-02.nvidia.com",
-            ssh_aliases=["cmh2"],
-            store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
-            sbatch_account="nemotron_reason_math",
-            sbatch_gpus_per_node=4,
-            sbatch_partitions=dict(
-                gpu=dict(partition="batch", time="04:00:00", overrides=dict(gpus_per_node=4)),
-                gpu_interactive=dict(
-                    partition="batch", qos="interactive", time="04:00:00", overrides=dict(gpus_per_node=4)
-                ),
-                cpu=dict(partition="cpu", time="1-00:00:00"),
-                cpu_interactive=dict(partition="cpu", qos="cpu-interactive", time="1-00:00:00"),
-            ),
-            enroot_mounts=["/lustre/fsw"],
-            ## NOTE: Shares fs with aws-cmh.
-            skip_host=True,
-        ),
-    ),
-    Inventory.Host(
         name="aws-iad",
         vars=dict(
             ssh_hostname="aws-iad-cs-002-dc-03.nvidia.com",
@@ -247,7 +225,7 @@ inventory.hosts = [
 desktop_group = Inventory.Group(name="desktop", hosts={"desk"})
 slurm_group = Inventory.Group(
     name="slurm",
-    hosts={"aws-cmh", "aws-cmh-2", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "nrt", "ord", "svg"},
+    hosts={"aws-cmh", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "nrt", "ord", "svg"},
     skip_tasks={"opencode", "paseo"},
 )
 

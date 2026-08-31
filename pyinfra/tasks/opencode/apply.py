@@ -14,18 +14,18 @@ from pyinfra import host
 @dataclass
 class OpenCode(Binary):
     gh_repo: ClassVar[str] = "anomalyco/opencode"
-    version: ClassVar[str] = "v1.18.22"
+    version: ClassVar[str] = "v1.18.25"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "opencode-linux-x64.tar.gz",
-                "sha256sum": "168f763fad45b30b8e508bb6fadf152c2888c0235dc4759fcb60a778c16ef768",
+                "sha256sum": "d91e0d33676d0839f7cde87924cd4127ea88c9d6784eea9f009a7d08bdc60eeb",
             },
             "arm64": {
                 "name": "opencode-linux-arm64.tar.gz",
-                "sha256sum": "6524b1049446812609dd67104e0eb1431672ccedc4a54d7b0a59135a09f746c7",
+                "sha256sum": "896c9c9b1942d4d74576868af24bbcbfa3f267d7eeb17aa6b8dff70810800084",
             },
         }
 
