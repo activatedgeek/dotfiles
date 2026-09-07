@@ -67,15 +67,22 @@ while IFS= read -r agent_id; do
     fi
 
     if [[ "${usage_dry_run:-false}" == "true" ]]; then
-        echo "[DRY RUN] ${agent_id} -> ${session_id}"
+        echo "[DRY RUN] Delete OpenCode session ${session_id} and Paseo agent ${agent_id}."
         continue
     fi
 
-    if opencode session delete "${session_id}"; then
-        echo "[DELETED] ${agent_id} -> ${session_id}"
-        deleted_count=$((deleted_count + 1))
-    else
+    if ! opencode session delete "${session_id}"; then
         echo "[ERROR] Failed to delete OpenCode session ${session_id} for Paseo agent ${agent_id}." >&2
+        failed_count=$((failed_count + 1))
+        continue
+    fi
+
+    deleted_count=$((deleted_count + 1))
+    if paseo agent delete "${agent_id}" >/dev/null; then
+        echo "[DELETED] OpenCode session ${session_id} and Paseo agent ${agent_id}."
+        deleted_agent_count=$((deleted_agent_count + 1))
+    else
+        echo "[ERROR] Deleted OpenCode session ${session_id}, but failed to delete Paseo agent ${agent_id}." >&2
         failed_count=$((failed_count + 1))
     fi
 done < <(
