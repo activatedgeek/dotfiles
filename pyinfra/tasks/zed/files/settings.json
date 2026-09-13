@@ -29,6 +29,9 @@
     "diagnostics": true,
     "metrics": false
   },
+  "terminal": {
+    "detect_venv": "off"
+  },
   "theme": "Catppuccin Frappé",
   "ui_font_size": 16
 }
