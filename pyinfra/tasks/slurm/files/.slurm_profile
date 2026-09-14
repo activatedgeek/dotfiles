@@ -131,14 +131,14 @@ function sbatch_install_traps {
     if [[ -n "${SLURM_JOB_ID}" ]]; then
         sleep 5  ## Wait for scontrol.
         if [[ $SLURM_PROCID -eq 0 ]]; then
-            SLURM_STATUS=STARTED snotify ${SLURM_JOB_ID}
+            SLURM_STATUS=STARTED snotify ${SLURM_JOB_ID} || true
         fi
 
         function on_signal {
             trap - EXIT HUP SIGQUIT TERM #USR1
 
             if [[ $SLURM_PROCID -eq 0 ]]; then
-                snotify ${SLURM_JOB_ID}
+                snotify ${SLURM_JOB_ID} || true
             fi
 
             exit ${SLURM_EXIT_CODE}
