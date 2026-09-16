@@ -47,7 +47,7 @@ def apply_config_nvda(teardown=False):
         present=not teardown,
     )
 
-    if host.name == "@local" and not teardown:
+    if not teardown and any(g in host.groups for g in ["mac", "desktop"]):
         files.sync(
             name="Sync",
             src="tasks/ssh/files/nvda",

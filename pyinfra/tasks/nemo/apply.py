@@ -9,24 +9,6 @@ from pyinfra import host, inventory
 def apply_nemo_skills(teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    local_cluster_hosts = {
-        f"{ihost.name.split('/')[-1]}": {
-            "ssh_user": ihost.data.ssh_user,
-        }
-        for ihost in inventory.get_group("desktop")
-    }
-
-    for cluster_name, values in local_cluster_hosts.items():
-        myfiles.template(
-            name=f"{'Remove ' if teardown else ''}{cluster_name} Cluster Config",
-            src="tasks/nemo/templates/cluster_configs/local.yaml.j2",
-            dest=f"{remote_home}/.config/nemo-skills/cluster_configs/{cluster_name}.yaml",
-            mode=600,
-            present=not teardown,
-            ## Jinja2 Variables.
-            **values,
-        )
-
     slurm_cluster_hosts = {
         f"{ihost.name.split('/')[-1]}": {
             "ssh_user": ihost.data.ssh_user,
@@ -63,7 +45,7 @@ def apply_nvda(teardown=False):
             present=not teardown,
         )
 
-    if any([g in host.groups for g in ["desktop", "mac"]]):
+    if any(g in host.groups for g in ["desktop"]):
         apply_nemo_skills(teardown=teardown)
 
 

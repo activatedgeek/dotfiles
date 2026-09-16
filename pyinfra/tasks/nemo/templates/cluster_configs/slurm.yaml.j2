@@ -2,8 +2,12 @@ ssh_tunnel:
   host: {{ ssh_tunnel_host }}
   port: {{ ssh_tunnel_port }}
   user: {{ ssh_user }}
+  identity: /home/{{ ssh_user }}/.ssh/config.d/nvda/id_ed25519
   job_dir: /home/{{ ssh_user }}/store/.nemo_run
   pre_command: HEADLESS=1 source ~/.bash_profile
+
+nmux:
+  transport: direct
 
 executor: slurm
 account: {{ sbatch_account }}
