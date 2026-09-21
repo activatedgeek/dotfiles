@@ -13,18 +13,18 @@ from pyinfra import host
 @dataclass
 class Mise(Binary):
     gh_repo: ClassVar[str] = "jdx/mise"
-    version: ClassVar[str] = "v2026.9.7"
+    version: ClassVar[str] = "v2026.9.12"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": f"mise-{self.version}-linux-x64",
-                "sha256sum": "d479d7c0df37652ddfd6d1887ef92a67a17effc7ec4ac612f46845099f814c6f",
+                "sha256sum": "e79ae57945034903aee8aa2ea66b4c7ca9cd4f4edd5a8a78a589cbae6d0f428a",
             },
             "arm64": {
                 "name": f"mise-{self.version}-linux-arm64",
-                "sha256sum": "1227565aeff505b0b0735d91b63109e1e1e44a237c06dc9aa274f2f3bf732af7",
+                "sha256sum": "f344c6961190ed2f68e595ed7cb4f03c36c17812bd608886bec799a3082180ff",
             },
         }
 
