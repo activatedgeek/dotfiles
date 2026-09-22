@@ -20,12 +20,12 @@ class OpenCode(Binary):
     def asset_map(self):
         return {
             "amd64": {
-                "name": "opencode-linux-x64-musl.tar.gz",
-                "sha256sum": "b4a7415a1f8410c58e099d3bed7c2d78fbc06d2fef3bd7a4ba39fec7f40af48f",
+                "name": "opencode-linux-x64.tar.gz",
+                "sha256sum": "f9dab32248695e9ebd56b16a1921798fd85112cf5a69c7dfd0cabc1e17be4a11",
             },
             "arm64": {
-                "name": "opencode-linux-arm64-musl.tar.gz",
-                "sha256sum": "3fdbfb2a3efe078661d530a20a0a49b533a2b59653a268453d867e80526b8f0b",
+                "name": "opencode-linux-arm64.tar.gz",
+                "sha256sum": "82ab43b7e8b7d931c26ba170c90de6082a2e2af8fc84a9ce9a506357b91160d7",
             },
         }
 
