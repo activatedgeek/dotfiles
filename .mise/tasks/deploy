@@ -19,11 +19,6 @@ if [[ -z "${usage_inventory}" ]]; then
     exit 1
 fi
 
-# shellcheck disable=SC2154
-if [[ "${usage_refresh}" == "true" ]]; then
-    rm -rf .pyinfra_cache/
-fi
-
 pyinfra_cmd=(pyinfra -y --fail-percent 100)
 
 # shellcheck disable=SC2154
@@ -59,11 +54,19 @@ if [[ -n "${usage_passthru}" ]]; then
     pyinfra_cmd+=("${usage_passthru[@]}")
 fi
 
-if [[ -f .env ]]; then
-    set -a
-    # shellcheck disable=SC1091
-    source .env
-    set +a
+# shellcheck disable=SC2154
+if [[ "${usage_refresh}" == "true" ]]; then
+    rm -rf .pyinfra_cache/
+    rm -f "inventories/${usage_inventory}.env"
+fi
+
+if [[ ! -f "inventories/${usage_inventory}.env" ]]; then
+    if [[ -f .env ]]; then
+        set -a
+        # shellcheck disable=SC1091
+        source .env
+        set +a
+    fi
 
     if ! bws secret list --output env > "inventories/${usage_inventory}.env"; then
         echo "[ERROR] Failed to write inventory env file. Did you set BWS_ACCESS_TOKEN in .env?"
