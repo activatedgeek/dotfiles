@@ -13,6 +13,9 @@
   "diff_view_style": "unified",
   "file_types": {},
   "format_on_save": "off",
+  "git": {
+    "diff_base": "head"
+  },
   "icon_theme": {
     "mode": "system",
     "light": "Material Icon Theme",

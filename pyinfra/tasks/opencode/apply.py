@@ -34,7 +34,7 @@ class OpenCode(Binary):
 def apply_macos(teardown=False):
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        packages=["opencode"],
+        packages=["anomalyco/tap/opencode-v2"],
         present=not teardown,
     )
 
