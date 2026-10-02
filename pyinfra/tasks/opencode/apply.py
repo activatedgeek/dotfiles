@@ -49,16 +49,17 @@ def apply_macos(teardown=False):
 def apply_linux(arch, teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    binary = OpenCode(arch)
+    ## Temporarily disable until 2.0 releases on Github.
+    # binary = OpenCode(arch)
 
-    myfiles.download(
-        name=f"{'Uni' if teardown else 'I'}nstall",
-        src=binary.src,
-        dest=f"{remote_home}/.local/bin/opencode",
-        sha256sum=binary.sha256sum,
-        mode=755,
-        present=not teardown,
-    )
+    # myfiles.download(
+    #     name=f"{'Uni' if teardown else 'I'}nstall",
+    #     src=binary.src,
+    #     dest=f"{remote_home}/.local/bin/opencode",
+    #     sha256sum=binary.sha256sum,
+    #     mode=755,
+    #     present=not teardown,
+    # )
 
     files.directory(
         name="systemd User Units",
