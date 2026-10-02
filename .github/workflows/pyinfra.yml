@@ -23,6 +23,8 @@ jobs:
       - name: Install
         shell: bash
         run: uv sync --locked
+      - name: Prepare test inventory
+        run: touch pyinfra/inventories/test.env
       - name: Test pyinfra
         shell: bash
         run: mise deploy test -- --dry --debug-operations
