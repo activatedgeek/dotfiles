@@ -24,8 +24,15 @@ inventory = Inventory(
         dockerhub_username=inventory_env.get("DOCKERHUB_USERNAME"),
         dockerhub_password=inventory_env.get("DOCKERHUB_PASSWORD"),
         gitlab_token=inventory_env.get("GITLAB_TOKEN"),
+        hf_token=inventory_env.get("HF_TOKEN"),
+        ngc_api_key=inventory_env.get("NGC_API_KEY"),
+        nvinf_api_key=inventory_env.get("NVINF_API_KEY"),
+        openai_api_key=inventory_env.get("OPENAI_API_KEY"),
         s8k_access_key_id=inventory_env.get("S8K_ACCESS_KEY_ID"),
         s8k_secret_access_key=inventory_env.get("S8K_SECRET_ACCESS_KEY"),
+        wandb_api_key=inventory_env.get("WANDB_API_KEY"),
+        wandb_username=inventory_env.get("WANDB_USERNAME"),
+        wandb_entity=inventory_env.get("WANDB_ENTITY"),
     ),
     binary_versions=config.BINARY_VERSIONS,
 )
@@ -257,14 +264,6 @@ inventory.groups = [
         hosts=desktop_group.hosts | slurm_group.hosts,
         vars=dict(
             term="xterm-256color",
-            ## Secrets.
-            ngc_api_key=inventory_env.get("NGC_API_KEY"),
-            nvinf_api_key=inventory_env.get("NVINF_API_KEY"),
-            openai_api_key=inventory_env.get("OPENAI_API_KEY"),
-            hf_token=inventory_env.get("HF_TOKEN"),
-            wandb_api_key=inventory_env.get("WANDB_API_KEY"),
-            wandb_username=inventory_env.get("WANDB_USERNAME"),
-            wandb_entity=inventory_env.get("WANDB_ENTITY"),
         ),
     ),
 ]
