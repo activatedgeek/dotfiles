@@ -15,18 +15,18 @@ from pyinfra import host, inventory
 @dataclass
 class Rclone(Binary):
     gh_repo: ClassVar[str] = "rclone/rclone"
-    version: ClassVar[str] = "v1.75.1"
+    version: ClassVar[str] = "v1.75.2"
 
     @property
     def asset_map(self) -> dict[str, dict[str, str]]:
         return {
             "amd64": {
                 "name": f"rclone-{self.version}-linux-amd64.zip",
-                "sha256sum": "f66d8c1d552ad90296a11bc8b46d56a7fa5da1a7fa05e7ca522d95df92c4a4c0",
+                "sha256sum": "ed7ab1f17876bb006c3df3949a3044959671afd9112362dacaa5dd1647735bc1",
             },
             "arm64": {
                 "name": f"rclone-{self.version}-linux-arm64.zip",
-                "sha256sum": "d7ecfc17726b34f95c5f7ea9470862c2aef53dce1bb0677b83142ca38503f489",
+                "sha256sum": "5aa85195f836e62f76e9dbb94dada612bd08be892f8f4196ec54ed7fee01a3c0",
             },
         }
 
