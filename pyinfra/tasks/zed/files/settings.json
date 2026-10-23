@@ -1,4 +1,9 @@
 {
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
   "base_keymap": "VSCode",
   "buffer_font_fallbacks": [
     "Menlo",
