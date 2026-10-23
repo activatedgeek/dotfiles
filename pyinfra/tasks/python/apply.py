@@ -9,7 +9,7 @@ from pyinfra import host
 def apply_macos(teardown=False):
     brew.packages(
         name=f"{'Uni' if teardown else 'I'}nstall",
-        packages=["python@3.14"],
+        packages=["python@3"],
         present=not teardown,
     )
 
