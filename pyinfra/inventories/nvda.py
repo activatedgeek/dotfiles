@@ -182,9 +182,10 @@ inventory.hosts = [
         ),
     ),
     Inventory.Host(
-        name="lhr",
+        name="nsc-lhr",
         vars=dict(
             ssh_hostname="nsc-lhr-slurm-1-dc-02.nvidia.com",
+            ssh_aliases=["lhr"],
             ssh_code_hostname="nsc-lhr-slurm-1-vscode-02.nvidia.com",
             store_home="/scratch/fsw/portfolios/nemotron/users/${USER}",
             sbatch_account="nemotron_reason_math",
@@ -253,7 +254,7 @@ inventory.hosts = [
 desktop_group = Inventory.Group(name="desktop", hosts={"desk"})
 slurm_group = Inventory.Group(
     name="slurm",
-    hosts={"aws-cmh", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "lhr", "nrt", "ord", "svg"},
+    hosts={"aws-cmh", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "nsc-lhr", "nrt", "ord", "svg"},
     skip_tasks={"opencode"},
 )
 
