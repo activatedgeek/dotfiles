@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.sanyamkapoor.obsidian</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>set -eu; source_dir={{ source_dir | e }}; backup_path={{ backup_path | e }}; temp_path="$(/usr/bin/mktemp "${backup_path}.XXXXXX")"; trap '/bin/rm -f "$temp_path"' EXIT; /usr/bin/tar -czf "$temp_path" -C "$source_dir" .; /bin/mv -f "$temp_path" "$backup_path"</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Hour</key>
+            <integer>0</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <dict>
+            <key>Hour</key>
+            <integer>12</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+    </array>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+    <key>StandardOutPath</key>
+    <string>{{ stdout_path | e }}</string>
+    <key>StandardErrorPath</key>
+    <string>{{ stdout_path | e }}</string>
+    <key>Umask</key>
+    <string>077</string>
+</dict>
+</plist>

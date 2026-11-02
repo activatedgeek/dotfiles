@@ -157,7 +157,7 @@ def apply_backup(zone_id, teardown=False):
         cloudflare_global_api_key=host.data.cloudflare_global_api_key,
         zone_id=zone_id,
         cloudflare_email=host.data.cloudflare_email,
-        backup_path=f"{backup_dir}/sanyamkapoor.com.zone",
+        backup_path=f"{backup_dir}/Credentials/sanyamkapoor.com.zone",
     )
 
     if not teardown:

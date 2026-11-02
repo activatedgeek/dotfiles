@@ -21,7 +21,7 @@ inventory.hosts = [
     Inventory.Host(
         name="@local",
         vars=dict(
-            backup_dir="~/MegaDrive/Credentials",
+            backup_dir="~/MegaDrive",
             cloudflare_email=inventory_env["EMAIL"],
             cloudflare_global_api_key=inventory_env["CLOUDFLARE_GLOBAL_API_KEY"],
             discord_webhook_token=inventory_env.get("DISCORD_WEBHOOK_TOKEN"),

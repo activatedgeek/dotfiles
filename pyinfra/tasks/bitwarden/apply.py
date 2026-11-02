@@ -50,7 +50,7 @@ def apply_backup(teardown=False):
         stdout_path=f"{remote_home}/Library/Logs/Bitwarden/launchtl-export.log",
         bw_path=f"{brew_prefix}/bin/bw",
         password_path=f"{remote_home}/.config/bw/pass",
-        backup_path=f"{backup_dir}/bw-vault.zip",
+        backup_path=f"{backup_dir}/Credentials/bw-vault.zip",
     )
 
     if not teardown:
