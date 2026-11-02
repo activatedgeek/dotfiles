@@ -20,11 +20,13 @@
 	excludesfile = ~/.gitignore_global
 	autocrlf = input
 [diff]
-	tool = difftastic
+	tool = omnidiff
 [difftool]
 	prompt = false
 [difftool "difftastic"]
 	cmd = difft "$LOCAL" "$REMOTE"
+[difftool "omnidiff"]
+	cmd = "omnidiff \"$LOCAL\" \"$REMOTE\""
 [fetch]
 	prune = true
 	prunetags = true
@@ -41,8 +43,6 @@
     args = transfer
     concurrent = true
 {% endif %}
-[pager]
-	difftool = true
 [pull]
 	rebase = true
 [push]
