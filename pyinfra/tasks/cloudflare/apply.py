@@ -1,10 +1,8 @@
 from myinfra.facts import cloudflare as cf_facts
 from myinfra.operations import cloudflare
-from myinfra.operations import files as myfiles
+from myinfra.operations import launchd as mylaunchd
 from pyinfra.api import deploy
-from pyinfra.facts import launchd as launchd_facts
 from pyinfra.facts import server as server_facts
-from pyinfra.operations import files, server
 
 from pyinfra import host
 
@@ -126,32 +124,12 @@ def apply_txt_records(zone_id):
 def apply_backup(zone_id, teardown=False):
     remote_home = host.get_fact(server_facts.Home)
 
-    service_label = "com.sanyamkapoor.cloudflare"
-    plist_path = f"{remote_home}/Library/LaunchAgents/{service_label}.plist"
     backup_dir = host.data.backup_dir.replace("~/", f"{remote_home}/", 1).replace("\\ ", " ")
 
-    service_loaded = service_label in host.get_fact(launchd_facts.LaunchdStatus)
-    if teardown and service_loaded:
-        server.shell(
-            name="Bootout LaunchAgent",
-            commands=f'launchctl bootout "gui/$(id -u)/{service_label}"',
-        )
-
-    if not teardown:
-        files.directory(name="LaunchAgents Directory", path=f"{remote_home}/Library/LaunchAgents", mode=700)
-
-    files.directory(
-        name=f"{'Remove ' if teardown else ''}Log Directory",
-        path=f"{remote_home}/Library/Logs/Cloudflare",
-        mode=700,
-        present=not teardown,
-    )
-
-    launch_agent = myfiles.template(
+    mylaunchd.plist(
         name=f"{'Remove ' if teardown else ''}LaunchAgent",
         src="tasks/cloudflare/templates/com.sanyamkapoor.cloudflare.plist.j2",
-        dest=plist_path,
-        mode=600,
+        service="com.sanyamkapoor.cloudflare",
         present=not teardown,
         stdout_path=f"{remote_home}/Library/Logs/Cloudflare/launchctl-export.log",
         cloudflare_global_api_key=host.data.cloudflare_global_api_key,
@@ -159,17 +137,6 @@ def apply_backup(zone_id, teardown=False):
         cloudflare_email=host.data.cloudflare_email,
         backup_path=f"{backup_dir}/Credentials/sanyamkapoor.com.zone",
     )
-
-    if not teardown:
-        server.shell(
-            name="Bootstrap LaunchAgent",
-            commands=[
-                f'plutil -lint "{plist_path}"',
-                f'launchctl bootout "gui/$(id -u)/{service_label}" >/dev/null 2>&1 || true',
-                f'launchctl bootstrap "gui/$(id -u)" "{plist_path}"',
-            ],
-            _if=lambda: launch_agent.did_change() or not service_loaded,
-        )
 
 
 @deploy("Cloudflare")
