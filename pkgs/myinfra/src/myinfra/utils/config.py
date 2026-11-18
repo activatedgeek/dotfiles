@@ -15,7 +15,7 @@ def get_latest_binary_versions(
     tasks_dir = Path(tasks_dir)
 
     binary_cls_map = {}
-    for task in set(sorted([d.stem for d in tasks_dir.iterdir() if d.is_dir()])):
+    for task in sorted(d.stem for d in tasks_dir.iterdir() if d.is_dir()):
         task, _ = load_task_module(task, tasks_dir / task / "apply.py")
         for _, cls in inspect.getmembers(task, inspect.isclass):
             if cls is Binary or not issubclass(cls, Binary):
@@ -29,7 +29,13 @@ def get_latest_binary_versions(
     if latest_versions is None:
         logger.info("Fetching latest binary versions...")
 
-        latest_versions = {k: cls("amd64").latest for k, cls in binary_cls_map.items()}
+        releases = {}
+        latest_versions = {}
+        for k, cls in binary_cls_map.items():
+            release_key = cls.gh_repo or cls
+            if release_key not in releases:
+                releases[release_key] = cls("amd64").latest
+            latest_versions[k] = releases[release_key]
         cache.set("versions/latest", latest_versions, expire=cache_ttl)
 
     for k, cls in binary_cls_map.items():

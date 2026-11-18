@@ -35,18 +35,18 @@ class Difftastic(Binary):
 @dataclass
 class Omnidiff(Binary):
     gh_repo: ClassVar[str] = "ivankovic/omnidiff"
-    version: ClassVar[str] = "v0.3.0"
+    version: ClassVar[str] = "v0.5.0"
 
     @property
     def asset_map(self):
         return {
             "amd64": {
                 "name": "omnidiff-x86_64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "457e786735a784fb04ea0baede43acf2491d18a80937d4a5df450b0ecd306eda",
+                "sha256sum": "232d55a2cc563fc5915d786f806a545575b95e3479fda89ce79d51f60a332fde",
             },
             "arm64": {
                 "name": "omnidiff-aarch64-unknown-linux-gnu.tar.gz",
-                "sha256sum": "70c0203d9d5f85982b38cfca58f225e3fec293287e6665a9414af55bd85e6b45",
+                "sha256sum": "91824fa472c2e5feaec7985a5c870b0d694002eb6df81babfe8001a2999f5c7a",
             },
         }
 
