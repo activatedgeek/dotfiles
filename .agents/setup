@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+repo_root="$PWD"
+export PATH="$HOME/.local/bin:$PATH"
+
+echo "Installing mise if missing"
+if ! command -v mise >/dev/null 2>&1; then
+    time curl --fail --silent --show-error --location https://mise.run | sh
+fi
+
+echo "Installing tools from .mise/config.toml"
+mise trust .mise/config.toml
+time mise install
+
+echo "Running repository setup"
+# Let prek install repository-local hooks without replacing the orb's global hooks.
+time GIT_CONFIG_GLOBAL=/dev/null mise setup -- --locked
+
+echo "Deploying orb dotfiles"
+time mise deploy orb
+
+# Export the complete mise environment to future non-interactive login shells.
+# Keep activation scoped to this checkout, including commands run in subdirectories.
+profile_marker="# dotfiles orb mise environment"
+if ! grep -Fqx "$profile_marker" "$HOME/.bash_profile" 2>/dev/null; then
+    cat >> "$HOME/.bash_profile" <<EOF
+
+$profile_marker
+if [[ -z "\${DOTFILES_ORB_ENV:-}" && ( "\$PWD" == "$repo_root" || "\$PWD" == "$repo_root/"* ) ]]; then
+    DOTFILES_ORB_ENV=1
+    export PATH="\$HOME/.local/bin:\$PATH"
+    eval "\$(mise env --shell bash)"
+fi
+EOF
+fi
+
+echo "Orb setup ready (${SECONDS}s)"

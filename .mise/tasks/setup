@@ -17,7 +17,7 @@ if [[ -n "${usage_passthru}" ]]; then
     uv_cmd+=("${usage_passthru[@]}")
 fi
 
-"${uv_cmd[@]}"
+"${uv_cmd[@]}" || exit "$?"
 
 ## Install pre-commit hook.
 prek install

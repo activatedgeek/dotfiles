@@ -167,3 +167,6 @@ cython_debug/
 
 ## PyInfra
 .pyinfra_cache
+
+## Amp
+.amp/portals/*

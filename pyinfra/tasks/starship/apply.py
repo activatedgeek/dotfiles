@@ -39,7 +39,6 @@ def apply_config(teardown=False):
         path=f"{remote_home}/.config",
         mode=700,
         present=True,
-        recursive=True,
     )
 
     myfiles.copy(

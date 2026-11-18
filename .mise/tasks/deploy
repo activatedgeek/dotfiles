@@ -5,7 +5,7 @@
 #MISE dir="pyinfra"
 
 #USAGE arg "<inventory>" help="Name of inventory" {
-#USAGE  choices "home" "nvda" "dns" "test"
+#USAGE  choices "home" "nvda" "dns" "test" "orb"
 #USAGE }
 #USAGE flag "-r --refresh" help="Refresh deployment by cleaning cache."
 #USAGE flag "-d --diff" help="Show file diffs."
@@ -68,9 +68,13 @@ if [[ ! -f "inventories/${usage_inventory}.env" ]]; then
         set +a
     fi
 
-    if ! bws secret list --output env > "inventories/${usage_inventory}.env"; then
-        echo "[ERROR] Failed to write inventory env file. Did you set BWS_ACCESS_TOKEN in .env?"
-        exit 1
+    if [[ -n "${BWS_ACCESS_TOKEN:-}" ]]; then
+        if ! bws secret list --output env > "inventories/${usage_inventory}.env"; then
+            echo "[ERROR] Failed to write inventory env file."
+            exit 1
+        fi
+    else
+        echo "[WARNING] Skipping inventory env file. Did you set BWS_ACCESS_TOKEN in .env?"
     fi
 fi
 
