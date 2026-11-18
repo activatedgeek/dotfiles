@@ -101,3 +101,7 @@ def apply():
         apply_linux(arch, teardown=teardown)
 
     apply_config(teardown=teardown)
+
+
+def pre_check():
+    return False

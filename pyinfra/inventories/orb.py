@@ -6,7 +6,7 @@ inventory = Inventory(
         term="xterm-256color",
     ),
     # Preserve the orb's managed Git identity, authentication, and SSH configuration.
-    skip_tasks={"git", "micro", "micromamba", "opencode", "pueue", "ssh"},
+    skip_tasks={"git", "micro", "micromamba", "pueue", "ssh"},
     binary_versions=config.BINARY_VERSIONS,
 )
 

@@ -255,7 +255,6 @@ desktop_group = Inventory.Group(name="desktop", hosts={"desk"})
 slurm_group = Inventory.Group(
     name="slurm",
     hosts={"aws-cmh", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "nsc-lhr", "nrt", "ord", "svg"},
-    skip_tasks={"opencode"},
 )
 
 inventory.groups = [
