@@ -52,6 +52,13 @@ def apply_cname_records(zone_id):
         dict(record="clk._domainkey.oidc", value="dkim1.ddniet4lpbo0.clerk.services"),
         dict(record="clk2._domainkey.oidc", value="dkim2.ddniet4lpbo0.clerk.services"),
         dict(record="clkmail.oidc", value="mail.ddniet4lpbo0.clerk.services"),
+        ## Amp custom domain
+        dict(record="orb", value="custom-domain.ampcode.com"),
+        dict(record="*.orb", value="custom-domain.ampcode.com"),
+        dict(
+            record="_acme-challenge_g7k2v6l6lx7vbw24.orb",
+            value="50c5dee4-7388-4726-b4c2-e9218a73c52e.9.authorize.certificatemanager.goog",
+        ),
     ]
     for r in cname_records:
         cloudflare.dns(
@@ -109,6 +116,11 @@ def apply_txt_records(zone_id):
         dict(record="@", value="v=spf1 include:spf.messagingengine.com ?all"),
         dict(record="_dmarc", value="v=DMARC1; p=none;"),
         dict(record="_atproto", value="did=did:plc:r65ialxtka33wyid523oipsk"),
+        ## Amp custom domain ownership verification
+        dict(
+            record="_amp-challenge.orb",
+            value="amp-domain-verification=b49eb979244a4decb5330d374431c0c109eee087150b49139379e77af4f37bb1",
+        ),
     ]
     for r in txt_records:
         cloudflare.dns(
