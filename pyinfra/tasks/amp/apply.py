@@ -7,8 +7,14 @@ from pyinfra import host
 
 @deploy("MacOS")
 def apply_macos(teardown=False):
+    brew.packages(
+        name=f"{'Uni' if teardown else 'I'}nstall CLI",
+        packages=["ampcode/tap/ampcode"],
+        present=not teardown,
+    )
+
     brew.casks(
-        name=f"{'Uni' if teardown else 'I'}nstall",
+        name=f"{'Uni' if teardown else 'I'}nstall App",
         casks=["ampcode/tap/amp@beta"],
         present=not teardown,
     )
