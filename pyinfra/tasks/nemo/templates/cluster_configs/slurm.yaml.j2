@@ -8,6 +8,15 @@ ssh_tunnel:
 
 nmux:
   transport: direct
+{% if sbatch_partitions.gpu_interactive is defined %}
+  interactive:
+    partition: {{ sbatch_partitions.gpu_interactive.partition }}
+{% if sbatch_partitions.gpu_interactive.qos is defined %}
+    qos: {{ sbatch_partitions.gpu_interactive.qos }}
+{% endif %}
+    default_walltime: "{{ sbatch_partitions.gpu_interactive.time }}"
+    max_walltime: "{{ sbatch_partitions.gpu_interactive.time }}"
+{% endif %}
 
 executor: slurm
 account: {{ sbatch_account }}
@@ -22,20 +31,3 @@ timeouts:
 {% if sbatch_partitions.gpu.overrides is defined and sbatch_partitions.gpu.overrides.gpus_per_node == -1 %}
 disable_gpus_per_node: True
 {% endif %}
-
-containers:
-  nemo-rl: /home/{{ ssh_user }}/store/images/nemo-rl-{{ nemo_rl_version | d("latest") }}.sqsh
-  nemo-skills: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-{{ ns_version | d("latest")  }}.sqsh
-  sandbox: /home/{{ ssh_user }}/store/images/nemo-skills/nemo-skills-sandbox-{{ ns_sandbox_version | d("latest")  }}.sqsh
-  sglang: /home/{{ ssh_user }}/store/images/sglang-{{ sglang_version | d("latest")  }}.sqsh
-  vllm: /home/{{ ssh_user }}/store/images/vllm-openai-{{ vllm_version | d("latest")  }}.sqsh
-  edison:
-    hypotest: /home/{{ ssh_user }}/store/images/edison/bbh-server-latest.sqsh
-    gym: /home/{{ ssh_user }}/store/images/edison/nemo-gym-latest.sqsh
-
-mounts:
-  - /home/{{ ssh_user }}/store:/store
-
-env_vars:
-  - XDG_CACHE_HOME=/store/.cache
-  - HF_HOME=/store/.cache/huggingface

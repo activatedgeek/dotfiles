@@ -83,23 +83,6 @@ inventory.hosts = [
         ),
     ),
     Inventory.Host(
-        name="aws-iad",
-        vars=dict(
-            ssh_hostname="aws-iad-cs-002-dc-03.nvidia.com",
-            ssh_aliases=["aiad"],
-            store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
-            sbatch_account="nemotron_reason_math",
-            sbatch_gpus_per_node=8,
-            sbatch_partitions=dict(
-                gpu=dict(partition="pool0", time="04:00:00"),
-                gpu_interactive=dict(partition="interactive", time="09:00:00"),
-                cpu=dict(partition="cpu", time="1-00:00:00"),
-                cpu_interactive=dict(partition="cpu_interactive", time="1-00:00:00"),
-            ),
-            enroot_mounts=["/lustre/fsw"],
-        ),
-    ),
-    Inventory.Host(
         name="dfw",
         vars=dict(
             ssh_hostname="cw-dfw-cs-001-dc-03.cw-dfw-cs-001.hpc.nvidia.com",
@@ -130,9 +113,10 @@ inventory.hosts = [
         ),
     ),
     Inventory.Host(
-        name="hel",
+        name="nb-hel",
         vars=dict(
             ssh_hostname="nb-hel-cs-001-dc-02.nvidia.com",
+            ssh_aliases=["hel"],
             ssh_code_hostname="nb-hel-cs-001-vscode-02.nvidia.com",
             store_home="/lustre/fsw/portfolios/nemotron/users/${USER}",
             sbatch_account="nemotron_reason_math",
@@ -254,7 +238,7 @@ inventory.hosts = [
 desktop_group = Inventory.Group(name="desktop", hosts={"desk"})
 slurm_group = Inventory.Group(
     name="slurm",
-    hosts={"aws-cmh", "aws-iad", "dfw", "eos", "hel", "hsg", "iad", "nsc-lhr", "nrt", "ord", "svg"},
+    hosts={"aws-cmh", "dfw", "eos", "hsg", "iad", "nb-hel", "nsc-lhr", "nrt", "ord", "svg"},
 )
 
 inventory.groups = [
